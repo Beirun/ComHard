@@ -1,4 +1,4 @@
-# ComHard The PC Build Suggestion System
+# ComHard (Computer Hardware Suggestion System)
 
 
 ## The Start
