@@ -6,19 +6,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class RegisterPanel extends JPanel implements ActionListener {
-    JPanel signPane, signupBox;
+    JPanel signupBox;
     JTextField email, userName;
     JPasswordField password, confirmPassword;
     Font emailPass;
     Buttons signupButton;
 
     JButton aHAccount;
-    public RegisterPanel(){
+    JFrame frame;
+    public RegisterPanel(JFrame frame){
         this.setBounds(0,0,ComHard.WIDTH,ComHard.LENGTH);
         this.setBackground(new Color(162,221,164));
         this.setLayout(new BorderLayout());
         this.setFocusable(true);
         signupBox();
+        this.frame = frame;
     }
 
     public void signupBox(){
@@ -36,11 +38,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
         email.setMaximumSize(new Dimension(300, 75));
         email.setMinimumSize(new Dimension(300, 75));
         email.setPreferredSize(new Dimension(300, 75));
-        //email.setPreferredSize(new Dimension(250,30));
-        //email.setBackground(null);
         email.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        //email.setBorder(new LineBorder(new Color(255,255,255),30,true));
-        //email.addFocusListener(new TextFieldFocusListener(email));
         email.setFont(emailPass);
 
         userName = new JTextField(10);
@@ -48,11 +46,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
         userName.setMaximumSize(new Dimension(300, 75));
         userName.setMinimumSize(new Dimension(300, 75));
         userName.setPreferredSize(new Dimension(300, 75));
-        //email.setPreferredSize(new Dimension(250,30));
-        //email.setBackground(null);
         userName.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        //email.setBorder(new LineBorder(new Color(255,255,255),30,true));
-        //email.addFocusListener(new TextFieldFocusListener(email));
         userName.setFont(emailPass);
 
         password = new JPasswordField(10);
@@ -60,7 +54,6 @@ public class RegisterPanel extends JPanel implements ActionListener {
         password.setMaximumSize(new Dimension(300, 75));
         password.setMinimumSize(new Dimension(300, 75));
         password.setPreferredSize(new Dimension(300, 75));
-        //password.setBounds();
         password.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         password.setFont(emailPass);
 
@@ -69,7 +62,6 @@ public class RegisterPanel extends JPanel implements ActionListener {
         confirmPassword.setMaximumSize(new Dimension(300, 75));
         confirmPassword.setMinimumSize(new Dimension(300, 75));
         confirmPassword.setPreferredSize(new Dimension(300, 75));
-        //password.setBounds();
         confirmPassword.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         confirmPassword.setFont(emailPass);
 
@@ -105,15 +97,6 @@ public class RegisterPanel extends JPanel implements ActionListener {
         JPanel rightPanel = new JPanel();
         rightPanel.setBackground(null);
         rightPanel.setPreferredSize(new Dimension((signupBox.getWidth()-signupButton.getWidth())/2,20));
-        //inviPanel.setVisible(false);
-        //buttonPanel.setLayout(new FlowLayout());
-        //buttonPanel.add(loginButton);
-        //loginButton.setPreferredSize(new Dimension(100,50));
-        //loginBox.add(Box.createVerticalStrut(10));
-        //loginBox.add(Box.createRigidArea(new Dimension(50,10)));
-        //loginBox.add(loginButton);
-        //loginBox.add(Box.createHorizontalStrut(loginBox.getWidth()/2));
-
 
         JPanel signInPanel = new JPanel(new FlowLayout());
         signInPanel.setBackground(null);
@@ -130,8 +113,8 @@ public class RegisterPanel extends JPanel implements ActionListener {
         aHAccount.setPreferredSize(new Dimension(290,30));
         aHAccount.setCursor(new Cursor(Cursor.HAND_CURSOR));
         aHAccount.addMouseListener(new ListenerClasses.UnderlinedText(aHAccount.getText(), aHAccount));
+        aHAccount.addActionListener(this);
         signInPanel.add(aHAccount);
-        //loginBox.add(resetPassword);
         buttonPanel.add(leftPanel);
         buttonPanel.add(signupButton);
         buttonPanel.add(rightPanel);
@@ -160,10 +143,8 @@ public class RegisterPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==aHAccount){
-            ComHard.isLoginPanelClicked =true;
-            ComHard.isRegisterPanelClicked = false;
-            repaint();
-            validate();
+            this.setVisible(false);
+            frame.add(new LoginPanel(frame));
         }
     }
 }

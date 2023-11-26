@@ -54,13 +54,19 @@ public class Buttons extends JPanel {
         Rectangle(g);
     }
 
+    public void RectangleBorder(){
+
+    }
+
     public void Rectangle(Graphics g){
-        //g.fillRoundRect(112,0,width-45,height,12,12);
         g.fillRoundRect(buttonX,buttonY,width,height,arc,arc);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(2));
+        g.setColor(Color.LIGHT_GRAY);
+        g.drawRoundRect(buttonX+1,buttonY+1,width-2,height-2,arc,arc);
         g.setColor(new Color(38,38,38));
         g.setFont( new Font("",Font.BOLD, fontSize));
         FontMetrics metrics = getFontMetrics(g.getFont());
-        //
         g.drawString(Label,(width - metrics.stringWidth(Label))/2,height/2 + g.getFont().getSize()/2);
 
     }

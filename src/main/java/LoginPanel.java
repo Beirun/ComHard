@@ -4,18 +4,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginPanel extends JPanel implements ActionListener {
-    JPanel signPane, loginBox;
+    JPanel loginBox;
     JTextField email;
     JPasswordField password;
     Font emailPass;
     Buttons loginButton;
 
     JButton createAccount, resetPassword;
-    public LoginPanel(){
+    JFrame frame;
+    public LoginPanel(JFrame frame){
         this.setBounds(0,0,ComHard.WIDTH,ComHard.LENGTH);
         this.setBackground(new Color(162,221,164));
         this.setLayout(new BorderLayout());
         loginBox();
+        this.frame = frame;
     }
 
     public void loginBox(){
@@ -33,11 +35,7 @@ public class LoginPanel extends JPanel implements ActionListener {
         email.setMaximumSize(new Dimension(300, 75));
         email.setMinimumSize(new Dimension(300, 75));
         email.setPreferredSize(new Dimension(300, 75));
-        //email.setPreferredSize(new Dimension(250,30));
-        //email.setBackground(null);
         email.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        //email.setBorder(new LineBorder(new Color(255,255,255),30,true));
-        //email.addFocusListener(new TextFieldFocusListener(email));
         email.setFont(emailPass);
 
 
@@ -46,11 +44,8 @@ public class LoginPanel extends JPanel implements ActionListener {
         password.setMaximumSize(new Dimension(300, 75));
         password.setMinimumSize(new Dimension(300, 75));
         password.setPreferredSize(new Dimension(300, 75));
-        //password.setBounds();
         password.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         password.setFont(emailPass);
-        //password.addFocusListener(new TextFieldFocusListener(password));
-        //password.add(Box.createRigidArea(new Dimension(0,10)));
         loginBox.add(Box.createRigidArea(new Dimension(0,10)));
         loginBox.add(Box.createVerticalStrut(100));
         loginBox.add(email);
@@ -82,16 +77,6 @@ public class LoginPanel extends JPanel implements ActionListener {
         loginButton.setColor(new Color(password.getBackground().getRGB()));
         loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         loginButton.setDimension(100,50);
-        //loginButton.setSize(email.getWidth(),email.getHeight());
-
-        //inviPanel.setVisible(false);
-        //buttonPanel.setLayout(new FlowLayout());
-        //buttonPanel.add(loginButton);
-        //loginButton.setPreferredSize(new Dimension(100,50));
-        //loginBox.add(Box.createVerticalStrut(10));
-        //loginBox.add(Box.createRigidArea(new Dimension(50,10)));
-        //loginBox.add(loginButton);
-        //loginBox.add(Box.createHorizontalStrut(loginBox.getWidth()/2));
 
         resetPassword = new JButton("Forgot Password?");
         resetPassword.setFont(new Font("",Font.BOLD,14));
@@ -149,10 +134,8 @@ public class LoginPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==createAccount){
-            ComHard.isLoginPanelClicked =false;
-            ComHard.isRegisterPanelClicked = true;
-            this.repaint();
-            this.validate();
+            this.setVisible(false);
+            frame.add(new RegisterPanel(frame));
         }
     }
 

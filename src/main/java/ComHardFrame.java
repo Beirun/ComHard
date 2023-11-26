@@ -16,22 +16,8 @@ public class ComHardFrame extends JFrame {
       this.setResizable(false);
       //this.add(new RegisterPanel());
       //loginPanel();
-      panelSelector();
+      this.add(new LoginPanel(this));
       this.setVisible(true);
    }
 
-   public void panelSelector(){
-      RegisterPanel registerPanel = new RegisterPanel();
-      LoginPanel loginPanel = new LoginPanel();
-      this.add(registerPanel);
-      if(ComHard.isLoginPanelClicked){
-         this.add(loginPanel);
-         this.remove(registerPanel);
-      } else if(ComHard.isRegisterPanelClicked){
-         this.add(registerPanel);
-         registerPanel.setVisible(false);
-      }
-      this.validate();
-      this.repaint();
-   }
 }
