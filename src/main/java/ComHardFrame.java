@@ -14,10 +14,7 @@ public class ComHardFrame extends JFrame {
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.setTitle("ComHard");
       this.setResizable(false);
-      //this.add(new RegisterPanel());
-      //loginPanel();
       this.add(new LoginPanel(this));
       this.setVisible(true);
    }
-
 }

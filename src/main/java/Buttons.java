@@ -12,7 +12,7 @@ public class Buttons extends JPanel {
     private int buttonY = 0;
     private int fontSize = 13;
     private Color colorSelect = new Color(117,210,104);
-    boolean mousePressed = false, mouseReleased = false, mouseEntered = false;
+    boolean isMousePressed = false, isMouseReleased = false, isMouseEntered = false;
     public Buttons(String Label){
         this.Label = Label;
         this.setPreferredSize(new Dimension(width,height));
@@ -48,8 +48,8 @@ public class Buttons extends JPanel {
         Color colorPressed = new Color(colorSelect.getRed(), colorSelect.getGreen(), colorSelect.getBlue(), 125);
         Color colorEntered = new Color(colorSelect.getRed(), colorSelect.getGreen(), colorSelect.getBlue(), 175);
 
-        if(mouseEntered || mouseReleased) g.setColor(colorEntered);
-        else if(mousePressed) g.setColor(colorPressed);
+        if(isMouseEntered || isMouseReleased) g.setColor(colorEntered);
+        else if(isMousePressed) g.setColor(colorPressed);
         else g.setColor(colorNormal);
         Rectangle(g);
     }
@@ -75,33 +75,33 @@ public class Buttons extends JPanel {
 
         public ButtonChanger( ){}
         public void mousePressed(MouseEvent e) {
-            mousePressed = true;
-            mouseEntered = false;
-            mouseReleased = false;
+            isMousePressed = true;
+            isMouseEntered = false;
+            isMouseReleased = false;
             repaint();
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            mousePressed = false;
-            mouseEntered = false;
-            mouseReleased = true;
+            isMousePressed = false;
+            isMouseEntered = false;
+            isMouseReleased = true;
             repaint();
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
-            mousePressed = false;
-            mouseEntered = true;
-            mouseReleased = false;
+            isMousePressed = false;
+            isMouseEntered = true;
+            isMouseReleased = false;
             repaint();
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
-            mousePressed = false;
-            mouseEntered = false;
-            mouseReleased = false;
+            isMousePressed = false;
+            isMouseEntered = false;
+            isMouseReleased = false;
             repaint();
         }
     }
