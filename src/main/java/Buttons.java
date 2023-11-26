@@ -11,7 +11,7 @@ public class Buttons extends JPanel {
     private int buttonX = 0;
     private int buttonY = 0;
     private int fontSize = 13;
-    private Color colorSelect = new Color(117,210,104);
+    private Color colorSelect = new Color(117,210,104), colorNormal, colorPressed, colorEntered;
     boolean isMousePressed = false, isMouseReleased = false, isMouseEntered = false;
     public Buttons(String Label){
         this.Label = Label;
@@ -44,9 +44,9 @@ public class Buttons extends JPanel {
     }
 
     public void Draw(Graphics g){
-        Color colorNormal = new Color(colorSelect.getRed(), colorSelect.getGreen(), colorSelect.getBlue());
-        Color colorPressed = new Color(colorSelect.getRed(), colorSelect.getGreen(), colorSelect.getBlue(), 125);
-        Color colorEntered = new Color(colorSelect.getRed(), colorSelect.getGreen(), colorSelect.getBlue(), 175);
+        colorNormal = new Color(colorSelect.getRed(), colorSelect.getGreen(), colorSelect.getBlue());
+        colorPressed = new Color(colorSelect.getRed(), colorSelect.getGreen(), colorSelect.getBlue(), 125);
+        colorEntered = new Color(colorSelect.getRed(), colorSelect.getGreen(), colorSelect.getBlue(), 175);
 
         if(isMouseEntered || isMouseReleased) g.setColor(colorEntered);
         else if(isMousePressed) g.setColor(colorPressed);
@@ -54,15 +54,13 @@ public class Buttons extends JPanel {
         Rectangle(g);
     }
 
-    public void RectangleBorder(){
-
-    }
-
     public void Rectangle(Graphics g){
         g.fillRoundRect(buttonX,buttonY,width,height,arc,arc);
+        if(isMouseEntered || isMouseReleased)g.setColor(colorEntered);
+        else if(isMousePressed) g.setColor(Color.GRAY.brighter());
+        else g.setColor(colorSelect);
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(2));
-        g.setColor(Color.LIGHT_GRAY);
         g.drawRoundRect(buttonX+1,buttonY+1,width-2,height-2,arc,arc);
         g.setColor(new Color(38,38,38));
         g.setFont( new Font("",Font.BOLD, fontSize));
