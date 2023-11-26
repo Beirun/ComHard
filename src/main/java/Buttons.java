@@ -11,7 +11,7 @@ public class Buttons extends JPanel {
     private int buttonX = 0;
     private int buttonY = 0;
     private int fontSize = 13;
-    private Color colorSelect = new Color(117,210,104), colorNormal, colorPressed, colorEntered;
+    private Color colorSelect = new Color(117,210,104), colorNormal, colorEntered;
     boolean isMousePressed = false, isMouseReleased = false, isMouseEntered = false;
     public Buttons(String Label){
         this.Label = Label;
@@ -45,8 +45,8 @@ public class Buttons extends JPanel {
 
     public void Draw(Graphics g){
         colorNormal = new Color(colorSelect.getRed(), colorSelect.getGreen(), colorSelect.getBlue());
-        colorPressed = new Color(colorSelect.getRed(), colorSelect.getGreen(), colorSelect.getBlue(), 125);
         colorEntered = new Color(colorSelect.getRed(), colorSelect.getGreen(), colorSelect.getBlue(), 175);
+        Color colorPressed = new Color(colorSelect.getRed(), colorSelect.getGreen(), colorSelect.getBlue(), 125);
 
         if(isMouseEntered || isMouseReleased) g.setColor(colorEntered);
         else if(isMousePressed) g.setColor(colorPressed);
@@ -58,7 +58,7 @@ public class Buttons extends JPanel {
         g.fillRoundRect(buttonX,buttonY,width,height,arc,arc);
         if(isMouseEntered || isMouseReleased)g.setColor(colorEntered);
         else if(isMousePressed) g.setColor(Color.GRAY.brighter());
-        else g.setColor(colorSelect);
+        else g.setColor(colorNormal);
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(2));
         g.drawRoundRect(buttonX+1,buttonY+1,width-2,height-2,arc,arc);
