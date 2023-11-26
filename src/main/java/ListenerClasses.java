@@ -1,10 +1,12 @@
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class ListenerClasses {
+    static Font font;
     static class PlaceHolderListener implements DocumentListener {
         JTextField textField;
         JLabel placeholderLabel;
@@ -19,6 +21,17 @@ public class ListenerClasses {
         @Override
         public void changedUpdate(DocumentEvent e) {updatePlaceholder();}
         private void updatePlaceholder() {placeholderLabel.setVisible(textField.getText().isEmpty());}
+    }
+    public static void addPlaceholder(JTextField textField, String placeholder) {
+        JLabel placeholderLabel = new JLabel(placeholder);
+        placeholderLabel.setForeground(Color.GRAY);
+        placeholderLabel.setFont(new Font("",Font.PLAIN,16));
+
+        textField.setLayout(new BorderLayout());
+        textField.add(placeholderLabel);
+        font = placeholderLabel.getFont();
+
+        textField.getDocument().addDocumentListener(new ListenerClasses.PlaceHolderListener(textField, placeholderLabel));
     }
     static class UnderlinedText extends MouseAdapter {
         String text;
@@ -38,4 +51,17 @@ public class ListenerClasses {
         }
     }
 
+    static class SubmitButtonListener extends MouseAdapter{
+        JPanel panel;
+        JFrame frame;
+        public SubmitButtonListener(JPanel panel, JFrame frame){
+            this.frame = frame;
+            this.panel = panel;
+        }
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            panel.setVisible(false);
+            frame.add(new LoginPanel(frame));
+        }
+    }
 }

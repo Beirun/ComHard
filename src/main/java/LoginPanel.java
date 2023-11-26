@@ -90,6 +90,7 @@ public class LoginPanel extends JPanel implements ActionListener {
         resetPassword.setPreferredSize(new Dimension(135,30));
         resetPassword.setCursor(new Cursor(Cursor.HAND_CURSOR));
         resetPassword.addMouseListener(new ListenerClasses.UnderlinedText(resetPassword.getText(), resetPassword));
+        resetPassword.addActionListener(this);
 
         JPanel signInPanel = new JPanel(new FlowLayout());
         signInPanel.setBackground(null);
@@ -136,6 +137,9 @@ public class LoginPanel extends JPanel implements ActionListener {
         if(e.getSource()==createAccount){
             this.setVisible(false);
             frame.add(new RegisterPanel(frame));
+        } if(e.getSource()==resetPassword){
+            this.setVisible(false);
+            frame.add(new ForgotPassPanel(frame));
         }
     }
 

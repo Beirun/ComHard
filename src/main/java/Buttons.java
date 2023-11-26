@@ -5,12 +5,7 @@ import java.awt.event.MouseEvent;
 
 public class Buttons extends JPanel {
     final private String Label;
-    private int width = 100;
-    private int height = 50;
-    private int arc = 45;
-    private int buttonX = 0;
-    private int buttonY = 0;
-    private int fontSize = 13;
+    private int width = 100, height = 50, arc = 45, buttonX = 0, buttonY = 0, fontSize = 13;
     private Color colorSelect = new Color(117,210,104), colorNormal, colorEntered;
     boolean isMousePressed = false, isMouseReleased = false, isMouseEntered = false;
     public Buttons(String Label){
