@@ -7,4 +7,4 @@ as a Final output for the Object-Oriented Programming(`OOPROG-21`) course in the
 4th Group in the second-half of the semester.
 
 ## The Project
-This project uses basic Java GUI such as `JFrame`, `JPanel`, and etc. as a means of interface. 
+This project uses basic Java User Interface such as `JFrame`, `JPanel`, and etc. as a means of interface. 
