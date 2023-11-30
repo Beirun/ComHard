@@ -1,9 +1,12 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class RegisterPanel extends JPanel implements ActionListener {
     JPanel signupBox;
@@ -75,6 +78,11 @@ public class RegisterPanel extends JPanel implements ActionListener {
         signupBox.add(Box.createVerticalStrut(10));
         signupBox.add(confirmPassword);
         signupButtons();
+
+        //RegistrationB registrationB = new RegistrationB(frame, confirmPassword.getSelectedText(),
+          //      password.getSelectedText(), userName.getText(), email.getText());
+
+
     }
     public void signupButtons(){
         JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -89,6 +97,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
         signupButton.setColor(new Color(password.getBackground().getRGB()));
         signupButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         signupButton.setDimension(200,50);
+        signupButton.addMouseListener(new SubmitButton());
 
         JPanel leftPanel = new JPanel();
         leftPanel.setBackground(null);
@@ -147,4 +156,18 @@ public class RegisterPanel extends JPanel implements ActionListener {
             frame.add(new LoginPanel(frame));
         }
     }
+
+    class SubmitButton extends MouseAdapter {
+        public SubmitButton(){
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            RegistrationB registrationB = new RegistrationB(frame, password,confirmPassword,userName,
+                    userName.getText(),email.getText(),password.getSelectedText(),confirmPassword.getSelectedText());
+            registrationB.fileCreator();
+
+        }
+    }
+
 }
