@@ -2,10 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class LoginPanel extends JPanel implements ActionListener {
     JPanel loginBox;
-    JTextField email;
+    JTextField userName;
     JPasswordField password;
     Font emailPass;
     Buttons loginButton;
@@ -30,13 +32,13 @@ public class LoginPanel extends JPanel implements ActionListener {
     }
 
     public void textFields(){
-        email = new JTextField(10);
-        addPlaceholder(email,"Email");
-        email.setMaximumSize(new Dimension(300, 75));
-        email.setMinimumSize(new Dimension(300, 75));
-        email.setPreferredSize(new Dimension(300, 75));
-        email.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        email.setFont(emailPass);
+        userName = new JTextField(10);
+        addPlaceholder(userName,"Username");
+        userName.setMaximumSize(new Dimension(300, 75));
+        userName.setMinimumSize(new Dimension(300, 75));
+        userName.setPreferredSize(new Dimension(300, 75));
+        userName.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+        userName.setFont(emailPass);
 
 
         password = new JPasswordField(10);
@@ -48,7 +50,7 @@ public class LoginPanel extends JPanel implements ActionListener {
         password.setFont(emailPass);
         loginBox.add(Box.createRigidArea(new Dimension(0,10)));
         loginBox.add(Box.createVerticalStrut(100));
-        loginBox.add(email);
+        loginBox.add(userName);
         loginBox.add(Box.createVerticalStrut(10));
         loginBox.add(password);
         loginButtons();
@@ -77,6 +79,7 @@ public class LoginPanel extends JPanel implements ActionListener {
         loginButton.setColor(new Color(password.getBackground().getRGB()));
         loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         loginButton.setDimension(100,50);
+        loginButton.addMouseListener(new SubmitButton(this));
 
         resetPassword = new JButton("Forgot Password?");
         resetPassword.setFont(new Font("",Font.BOLD,14));
@@ -140,6 +143,24 @@ public class LoginPanel extends JPanel implements ActionListener {
         } if(e.getSource()==resetPassword){
             this.setVisible(false);
             frame.add(new ForgotPassPanel(frame));
+        }
+    }
+    class SubmitButton extends MouseAdapter {
+        JPanel panel;
+        public SubmitButton(JPanel panel){
+            this.panel = panel;
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            LoginOperation loginOperation = new LoginOperation(frame, panel, userName,
+                    password, userName.getText(),toString(password.getPassword()));
+            loginOperation.fileReader();
+        }
+        public String toString(char[] a) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < a.length; i++) sb.append(a[i]);
+            return sb.toString();
         }
     }
 

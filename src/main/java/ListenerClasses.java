@@ -14,13 +14,16 @@ public class ListenerClasses {
             this.textField = textField;
             this.placeholderLabel = placeholderLabel;
         }
+
         @Override
         public void insertUpdate(DocumentEvent e) {updatePlaceholder();}
         @Override
         public void removeUpdate(DocumentEvent e) {updatePlaceholder();}
         @Override
         public void changedUpdate(DocumentEvent e) {updatePlaceholder();}
-        private void updatePlaceholder() {placeholderLabel.setVisible(textField.getText().isEmpty());}
+        private void updatePlaceholder() {
+            textField.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+            placeholderLabel.setVisible(textField.getText().isEmpty());}
     }
     public static void addPlaceholder(JTextField textField, String placeholder) {
         JLabel placeholderLabel = new JLabel(placeholder);
@@ -64,4 +67,5 @@ public class ListenerClasses {
             frame.add(new LoginPanel(frame));
         }
     }
+
 }

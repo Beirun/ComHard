@@ -1,7 +1,4 @@
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -87,7 +84,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
     public void signupButtons(){
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.setBackground(null);
-        buttonPanel.setPreferredSize(new Dimension(175,100));
+        buttonPanel.setPreferredSize(new Dimension(200,100));
 
         JPanel inviPanel = new JPanel();
         inviPanel.setPreferredSize(new Dimension(200,150));
@@ -97,11 +94,13 @@ public class RegisterPanel extends JPanel implements ActionListener {
         signupButton.setColor(new Color(password.getBackground().getRGB()));
         signupButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         signupButton.setDimension(200,50);
-        signupButton.addMouseListener(new SubmitButton());
+        signupButton.addMouseListener(new SubmitButton(this){
+
+        });
 
         JPanel leftPanel = new JPanel();
         leftPanel.setBackground(null);
-        leftPanel.setPreferredSize(new Dimension((signupBox.getWidth()-signupButton.getWidth())/2,20));
+        leftPanel.setPreferredSize(new Dimension((signupBox.getWidth()-signupButton.getWidth())/2 - 20,20));
 
         JPanel rightPanel = new JPanel();
         rightPanel.setBackground(null);
@@ -144,6 +143,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
 
         textField.setLayout(new BorderLayout());
         textField.add(placeholderLabel);
+        textField.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         emailPass = placeholderLabel.getFont();
 
         textField.getDocument().addDocumentListener(new ListenerClasses.PlaceHolderListener(textField, placeholderLabel));
@@ -158,16 +158,25 @@ public class RegisterPanel extends JPanel implements ActionListener {
     }
 
     class SubmitButton extends MouseAdapter {
-        public SubmitButton(){
+        JPanel panel;
+        public SubmitButton(JPanel panel){
+        this.panel = panel;
         }
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            RegistrationB registrationB = new RegistrationB(frame, password,confirmPassword,userName,
-                    userName.getText(),email.getText(),password.getSelectedText(),confirmPassword.getSelectedText());
-            registrationB.fileCreator();
+
+            RegistrationOperation registrationOperation = new RegistrationOperation(frame, panel, password,confirmPassword,userName,
+                    userName.getText(),email.getText(),toString(password.getPassword()),toString(confirmPassword.getPassword()));
+            registrationOperation.fileCreator();
 
         }
+        public String toString(char[] a) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < a.length; i++) sb.append(a[i]);
+            return sb.toString();
+        }
     }
+
 
 }
