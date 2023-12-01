@@ -50,7 +50,6 @@ public class LoginOperation {
             }
         }catch (IOException ignored){}
     }
-
     public boolean isPasswordCorrect(){
         return passwordEntered.equals(password);
     }

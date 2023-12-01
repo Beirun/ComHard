@@ -14,7 +14,6 @@ public class ListenerClasses {
             this.textField = textField;
             this.placeholderLabel = placeholderLabel;
         }
-
         @Override
         public void insertUpdate(DocumentEvent e) {updatePlaceholder();}
         @Override

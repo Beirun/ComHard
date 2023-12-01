@@ -94,9 +94,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
         signupButton.setColor(new Color(password.getBackground().getRGB()));
         signupButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         signupButton.setDimension(200,50);
-        signupButton.addMouseListener(new SubmitButton(this){
-
-        });
+        signupButton.addMouseListener(new SubmitButton(this));
 
         JPanel leftPanel = new JPanel();
         leftPanel.setBackground(null);

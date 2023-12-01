@@ -23,10 +23,7 @@ public class RegistrationOperation {
         this.password = password;
         this.confirmPassword = confirmPassword;
         this.panel = panel;
-
-
     }
-
 
     public void fileCreator(){
         try {

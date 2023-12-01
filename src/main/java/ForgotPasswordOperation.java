@@ -43,7 +43,7 @@ public class ForgotPasswordOperation {
                 }
                 email = getEmail(tempString.split("\n"));
                 if(isEmailCorrect()){
-                   // if
+                   // if correct
 
                 }else{
                     //error email not correct

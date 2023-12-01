@@ -40,7 +40,6 @@ public class LoginPanel extends JPanel implements ActionListener {
         userName.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         userName.setFont(emailPass);
 
-
         password = new JPasswordField(10);
         addPlaceholder(password,"Password");
         password.setMaximumSize(new Dimension(300, 75));

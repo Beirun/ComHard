@@ -110,15 +110,11 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         buttonPanel.add(rightPanel);
         signupBox.add(Box.createVerticalStrut(15));
         signupBox.add(buttonPanel);
-
         signupBox.add(Box.createVerticalStrut(10));
         signupBox.add(signInPanel);
-
         signupBox.add(inviPanel);
 
     }
-
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
