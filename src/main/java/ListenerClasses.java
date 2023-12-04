@@ -53,18 +53,4 @@ public class ListenerClasses {
         }
     }
 
-    static class SubmitButtonListener extends MouseAdapter{
-        JPanel panel;
-        JFrame frame;
-        public SubmitButtonListener(JPanel panel, JFrame frame){
-            this.frame = frame;
-            this.panel = panel;
-        }
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            panel.setVisible(false);
-            frame.add(new LoginPanel(frame));
-        }
-    }
-
 }

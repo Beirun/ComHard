@@ -20,7 +20,7 @@ public class LoginOperation {
 
     public void fileReader(){
         try {
-            File fileCreated = new File("resources/"+userName+".txt");
+            File fileCreated = new File("assets/info/"+userName+".txt");
             if(!fileCreated.exists()){
                 //Error no account
                 userField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),

@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -7,18 +8,19 @@ import java.io.IOException;
 public class ForgotPasswordOperation {
     String userName, newPassword, tempString, confirmPassword, emailEntered, email;
     JFrame frame;
-    JPanel panel;
+    JPanel panel, signPanel;
     JTextField userField, emailField;
-    JPasswordField passField1, passField2;
+    JPasswordField newPasswordField, confirmPasswordField;
 
-    public ForgotPasswordOperation(JFrame frame, JPanel panel, JTextField userField, JTextField emailField, JPasswordField passField1,
-                                   JPasswordField passField2, String userName, String emailEntered, String newPassword, String confirmPassword){
+    public ForgotPasswordOperation(JFrame frame, JPanel signPanel, JPanel panel, JTextField userField, JTextField emailField, JPasswordField newPasswordField,
+                                   JPasswordField confirmPasswordField, String userName, String emailEntered, String newPassword, String confirmPassword){
         this.frame = frame;
+        this.signPanel = signPanel;
         this.panel = panel;
         this.userField = userField;
         this.emailField = emailField;
-        this.passField1 = passField1;
-        this.passField2 = passField2;
+        this.newPasswordField = newPasswordField;
+        this.confirmPasswordField = confirmPasswordField;
         this.userName = userName;
         this.emailEntered = emailEntered;
         this.newPassword = newPassword;
@@ -26,13 +28,23 @@ public class ForgotPasswordOperation {
     }
     public void fileReader(){
         try {
-            File fileCreated = new File("resources/"+userName+".txt");
-            if(!fileCreated.exists()){
-                //Error no account
-                /*userField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
+            File fileCreated = new File("assets/info/"+userName+".txt");
+            if(emailField.getText().isEmpty()){
+                emailField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
                         BorderFactory.createEmptyBorder(0,10,0,0)));
-                passField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
-                        BorderFactory.createEmptyBorder(0,10,0,0)));*/
+            }if(newPassword.isEmpty()){
+                newPasswordField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
+                        BorderFactory.createEmptyBorder(0,10,0,0)));
+            }if(confirmPassword.isEmpty()){
+                confirmPasswordField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
+                        BorderFactory.createEmptyBorder(0,10,0,0)));
+            } if(userField.getText().isEmpty()){
+                userField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
+                        BorderFactory.createEmptyBorder(0,10,0,0)));
+            } if(!fileCreated.exists()){
+                //Error no account
+                userField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
+                        BorderFactory.createEmptyBorder(0,10,0,0)));
             }else {
                 FileReader reader = new FileReader(fileCreated);
                 int data = reader.read();
@@ -49,13 +61,19 @@ public class ForgotPasswordOperation {
                         FileWriter writer = new FileWriter(fileCreated);
                         writer.write(email + "\n" + newPassword);
                         writer.close();
-                        frame.add(new LoginPanel(frame));
+                        signPanel.add(new LoginPanel(frame,signPanel), BorderLayout.EAST);
                         panel.setVisible(false);
                     }else{
-
+                        //Error password does not match
+                        newPasswordField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
+                                BorderFactory.createEmptyBorder(0,10,0,0)));
+                        confirmPasswordField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
+                                BorderFactory.createEmptyBorder(0,10,0,0)));
                     }
                 }else{
                     //error email not correct
+                    emailField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
+                            BorderFactory.createEmptyBorder(0,10,0,0)));
                 }
             }
         }catch (IOException ignored){}

@@ -8,15 +8,17 @@ public class RegistrationOperation {
 
     String confirmPassword, password, userName, email;
     JFrame frame;
-    JPanel panel;
-    JPasswordField passwordField1, passwordField2;
+    JPanel panel, signPanel;
+    JPasswordField passwordField;
+    JPasswordField confirmPasswordField;
     JTextField userField, emailField;
     File file = new File("resources/"+userName+".txt");
-    public RegistrationOperation(JFrame frame, JPanel panel, JPasswordField passwordField1, JPasswordField passwordField2, JTextField userField,
+    public RegistrationOperation(JFrame frame, JPanel signPanel, JPanel panel, JPasswordField passwordField, JPasswordField confirmPasswordField, JTextField userField,
                                  JTextField emailField, String userName, String email, String password, String confirmPassword){
         this.frame = frame;
-        this.passwordField1 = passwordField1;
-        this.passwordField2 = passwordField2;
+        this.signPanel = signPanel;
+        this.passwordField = passwordField;
+        this.confirmPasswordField = confirmPasswordField;
         this.userField = userField;
         this.emailField = emailField;
         this.userName = userName;
@@ -28,19 +30,16 @@ public class RegistrationOperation {
 
     public void fileCreator(){
         try {
-            File userString = new File("resources/" + userName + ".txt");
+            File userString = new File("assets/info/" + userName + ".txt");
             if(emailField.getText().isEmpty()){
                 emailField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
                         BorderFactory.createEmptyBorder(0,10,0,0)));
-                return;
             }if(password.isEmpty()){
-                passwordField1.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
+                passwordField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
                         BorderFactory.createEmptyBorder(0,10,0,0)));
-                return;
             }if(confirmPassword.isEmpty()){
-                passwordField2.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
+                confirmPasswordField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
                         BorderFactory.createEmptyBorder(0,10,0,0)));
-                return;
             } if(userField.getText().isEmpty()){
                 userField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
                         BorderFactory.createEmptyBorder(0,10,0,0)));
@@ -54,15 +53,15 @@ public class RegistrationOperation {
                     FileWriter writer = new FileWriter(userString);
                     writer.write(email + "\n" + password);
                     writer.close();
-                    frame.add(new LoginPanel(frame));
+                    signPanel.add(new LoginPanel(frame,signPanel), BorderLayout.EAST);
                     panel.setVisible(false);
 
                 }
                 else{
                     //Error password does not match
-                    passwordField1.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
+                    passwordField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
                             BorderFactory.createEmptyBorder(0,10,0,0)));
-                    passwordField2.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
+                    confirmPasswordField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
                             BorderFactory.createEmptyBorder(0,10,0,0)));
                 }
             }
