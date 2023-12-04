@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class ForgotPasswordOperation {
@@ -44,19 +45,18 @@ public class ForgotPasswordOperation {
                 email = getEmail(tempString.split("\n"));
                 if(isEmailCorrect()){
                    // if correct
+                    if(isPasswordCorrect()){
+                        FileWriter writer = new FileWriter(fileCreated);
+                        writer.write(email + "\n" + newPassword);
+                        writer.close();
+                        frame.add(new LoginPanel(frame));
+                        panel.setVisible(false);
+                    }else{
 
+                    }
                 }else{
                     //error email not correct
                 }
-                /*if(isPasswordCorrect()){
-                    //frame.add(new DashboardPanel(frame));
-                    //panel.setVisible(false);
-                }else{
-                    userField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
-                            BorderFactory.createEmptyBorder(0,10,0,0)));
-                    passField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
-                            BorderFactory.createEmptyBorder(0,10,0,0)));
-                }*/
             }
         }catch (IOException ignored){}
     }
@@ -67,4 +67,8 @@ public class ForgotPasswordOperation {
     public String getEmail(String[] string){
         return string[0];
     }
+    public boolean isPasswordCorrect(){
+        return newPassword.equals(confirmPassword);
+    }
+
 }

@@ -40,6 +40,14 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         userName.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         userName.setFont(ListenerClasses.font);
 
+        email = new JTextField(10);
+        ListenerClasses.addPlaceholder(email,"Email");
+        email.setMaximumSize(new Dimension(300, 75));
+        email.setMinimumSize(new Dimension(300, 75));
+        email.setPreferredSize(new Dimension(300, 75));
+        email.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+        email.setFont(ListenerClasses.font);
+
         newPassword = new JPasswordField(10);
         ListenerClasses.addPlaceholder(newPassword,"New Password");
         newPassword.setMaximumSize(new Dimension(300, 75));
@@ -60,6 +68,8 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         signupBox.add(Box.createVerticalStrut(100));
         signupBox.add(userName);
         signupBox.add(Box.createVerticalStrut(10));
+        signupBox.add(email);
+        signupBox.add(Box.createVerticalStrut(10));
         signupBox.add(newPassword);
         signupBox.add(Box.createVerticalStrut(10));
         signupBox.add(confirmPassword);
@@ -79,6 +89,7 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         signupButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         signupButton.setDimension(200,50);
         signupButton.addMouseListener(new ListenerClasses.SubmitButtonListener(this, frames));
+        signupButton.addMouseListener(new SubmitButton(this));
 
         JPanel leftPanel = new JPanel();
         leftPanel.setBackground(null);
@@ -121,6 +132,24 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         if(e.getSource()==aHAccount){
             this.setVisible(false);
             frames.add(new LoginPanel(frames));
+        }
+    }
+    class SubmitButton extends MouseAdapter {
+        JPanel panel;
+        public SubmitButton(JPanel panel){
+            this.panel = panel;
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            ForgotPasswordOperation forgotPasswordOperation = new ForgotPasswordOperation(frames, panel, userName, email, newPassword, confirmPassword,
+                    userName.getText(), email.getText(),toString(newPassword.getPassword()),toString(confirmPassword.getPassword()));
+            forgotPasswordOperation.fileReader();
+        }
+        public String toString(char[] a) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < a.length; i++) sb.append(a[i]);
+            return sb.toString();
         }
     }
 

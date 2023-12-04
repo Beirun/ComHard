@@ -164,7 +164,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
         @Override
         public void mouseClicked(MouseEvent e) {
 
-            RegistrationOperation registrationOperation = new RegistrationOperation(frame, panel, password,confirmPassword,userName,
+            RegistrationOperation registrationOperation = new RegistrationOperation(frame, panel, password,confirmPassword,userName, email,
                     userName.getText(),email.getText(),toString(password.getPassword()),toString(confirmPassword.getPassword()));
             registrationOperation.fileCreator();
 

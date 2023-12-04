@@ -10,14 +10,15 @@ public class RegistrationOperation {
     JFrame frame;
     JPanel panel;
     JPasswordField passwordField1, passwordField2;
-    JTextField userField;
+    JTextField userField, emailField;
     File file = new File("resources/"+userName+".txt");
     public RegistrationOperation(JFrame frame, JPanel panel, JPasswordField passwordField1, JPasswordField passwordField2, JTextField userField,
-                                 String userName, String email, String password, String confirmPassword){
+                                 JTextField emailField, String userName, String email, String password, String confirmPassword){
         this.frame = frame;
         this.passwordField1 = passwordField1;
         this.passwordField2 = passwordField2;
         this.userField = userField;
+        this.emailField = emailField;
         this.userName = userName;
         this.email = email;
         this.password = password;
@@ -28,7 +29,22 @@ public class RegistrationOperation {
     public void fileCreator(){
         try {
             File userString = new File("resources/" + userName + ".txt");
-            if(userString.exists()){
+            if(emailField.getText().isEmpty()){
+                emailField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
+                        BorderFactory.createEmptyBorder(0,10,0,0)));
+                return;
+            }if(password.isEmpty()){
+                passwordField1.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
+                        BorderFactory.createEmptyBorder(0,10,0,0)));
+                return;
+            }if(confirmPassword.isEmpty()){
+                passwordField2.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
+                        BorderFactory.createEmptyBorder(0,10,0,0)));
+                return;
+            } if(userField.getText().isEmpty()){
+                userField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
+                        BorderFactory.createEmptyBorder(0,10,0,0)));
+            } else if(userString.exists()){
                 //Error account already exists
                 userField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
                         BorderFactory.createEmptyBorder(0,10,0,0)));
