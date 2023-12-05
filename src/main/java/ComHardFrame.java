@@ -11,6 +11,7 @@ public class ComHardFrame extends JFrame {
    public ComHardFrame(){
       this.setSize(new Dimension(ComHard.WIDTH,ComHard.LENGTH));
       this.setLocationRelativeTo(null);
+      this.setIconImage(new ImageIcon("resources/img/logo.png").getImage());
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.setTitle("ComHard");
       this.setResizable(false);

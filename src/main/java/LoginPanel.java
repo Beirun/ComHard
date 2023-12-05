@@ -1,7 +1,11 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class LoginPanel extends JPanel implements ActionListener {
     JPanel panel;
@@ -13,13 +17,6 @@ public class LoginPanel extends JPanel implements ActionListener {
     JButton createAccount, resetPassword;
     JFrame frame;
     public LoginPanel(JFrame frame, JPanel panel){
-        /*
-        this.setBounds(0,0,ComHard.WIDTH,ComHard.LENGTH);
-        this.setBackground(new Color(162,221,164));
-        this.setLayout(new BorderLayout());
-        this.setFocusable(true);
-        this.add(new BackgroundClass(),BorderLayout.CENTER);
-        loginBox();*/
         this.frame = frame;
         this.panel = panel;
         this.setPreferredSize(new Dimension(ComHard.WIDTH/2-100,ComHard.LENGTH));
@@ -28,16 +25,8 @@ public class LoginPanel extends JPanel implements ActionListener {
         textFields();
     }
 
-    /*public void loginBox(){
-        loginBox = new JPanel();
-        loginBox.setPreferredSize(new Dimension(ComHard.WIDTH/2-100,ComHard.LENGTH));
-        loginBox.setBackground(new Color(236,236,236));
-        loginBox.setLayout(new BoxLayout(loginBox,BoxLayout.Y_AXIS));
-        textFields();
-        this.add(loginBox, BorderLayout.EAST);
-    }*/
-
     public void textFields(){
+
         userName = new JTextField(10);
         addPlaceholder(userName,"Username");
         userName.setMaximumSize(new Dimension(300, 75));
@@ -56,8 +45,8 @@ public class LoginPanel extends JPanel implements ActionListener {
         password.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         password.setFont(emailPass);
         password.addKeyListener(new TextFieldListener(panel));
-        this.add(Box.createRigidArea(new Dimension(0,10)));
-        this.add(Box.createVerticalStrut(100));
+        this.add(new LogoClass());
+        this.add(Box.createVerticalStrut(50));
         this.add(userName);
         this.add(Box.createVerticalStrut(10));
         this.add(password);

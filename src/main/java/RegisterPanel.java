@@ -17,26 +17,11 @@ public class RegisterPanel extends JPanel implements ActionListener {
     JFrame frame;
     public RegisterPanel(JFrame frame, JPanel panel){
         this.panel = panel;
-        /*this.setBounds(0,0,ComHard.WIDTH,ComHard.LENGTH);
-        this.setBackground(new Color(162,221,164));
-        this.setLayout(new BorderLayout());
-        this.setFocusable(true);
-        this.add(new BackgroundClass(),BorderLayout.CENTER);
-        signupBox();*/
         this.frame = frame;
         this.setPreferredSize(new Dimension(ComHard.WIDTH/2-100,ComHard.LENGTH));
         this.setBackground(new Color(236,236,236));
         this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
         textFields();
-    }
-
-    public void signupBox(){
-        signupBox = new JPanel();
-        signupBox.setPreferredSize(new Dimension(ComHard.WIDTH/2-100,ComHard.LENGTH));
-        signupBox.setBackground(new Color(236,236,236));
-        signupBox.setLayout(new BoxLayout(signupBox,BoxLayout.Y_AXIS));
-        textFields();
-        this.add(signupBox, BorderLayout.EAST);
     }
 
     public void textFields(){
@@ -72,8 +57,8 @@ public class RegisterPanel extends JPanel implements ActionListener {
         confirmPassword.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         confirmPassword.setFont(emailPass);
 
-        this.add(Box.createRigidArea(new Dimension(0,10)));
-        this.add(Box.createVerticalStrut(100));
+        this.add(new LogoClass());
+        this.add(Box.createVerticalStrut(25));
         this.add(email);
         this.add(Box.createVerticalStrut(10));
         this.add(userName);
@@ -82,11 +67,6 @@ public class RegisterPanel extends JPanel implements ActionListener {
         this.add(Box.createVerticalStrut(10));
         this.add(confirmPassword);
         signupButtons();
-
-        //RegistrationB registrationB = new RegistrationB(frame, confirmPassword.getSelectedText(),
-          //      password.getSelectedText(), userName.getText(), email.getText());
-
-
     }
     public void signupButtons(){
         JPanel buttonPanel = new JPanel(new FlowLayout());
@@ -94,7 +74,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
         buttonPanel.setPreferredSize(new Dimension(200,100));
 
         JPanel invisiblePanel = new JPanel();
-        invisiblePanel.setPreferredSize(new Dimension(200,150));
+        invisiblePanel.setPreferredSize(new Dimension(200,50));
         invisiblePanel.setBackground(null);
 
         signupButton = new Buttons("Sign Up");
@@ -133,10 +113,8 @@ public class RegisterPanel extends JPanel implements ActionListener {
         buttonPanel.add(rightPanel);
         this.add(Box.createVerticalStrut(15));
         this.add(buttonPanel);
-
         this.add(Box.createVerticalStrut(10));
         this.add(signInPanel);
-
         this.add(invisiblePanel);
 
     }
