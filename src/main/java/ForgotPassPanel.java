@@ -16,28 +16,12 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
     JFrame frame;
     public ForgotPassPanel(JFrame frame, JPanel panel){
         this.panel = panel;
-        /*this.setBounds(0,0,ComHard.WIDTH,ComHard.LENGTH);
-        this.setBackground(new Color(162,221,164));
-        this.setLayout(new BorderLayout());
-        this.add(new BackgroundClass(),BorderLayout.CENTER);
-        this.setFocusable(true);*/
         this.frame = frame;
-
         this.setPreferredSize(new Dimension(ComHard.WIDTH/2-100,ComHard.LENGTH));
         this.setBackground(new Color(236,236,236));
         this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
         textFields();
     }
-
-    /*public void this(){
-        this = new JPanel();
-        this.setPreferredSize(new Dimension(ComHard.WIDTH/2-100,ComHard.LENGTH));
-        this.setBackground(new Color(236,236,236));
-        this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-        textFields();
-        this.add(this, BorderLayout.EAST);
-    }*/
-
     public void textFields(){
         userName = new JTextField(10);
         ListenerClasses.addPlaceholder(userName,"Username");
@@ -71,8 +55,8 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         confirmPassword.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         confirmPassword.setFont(ListenerClasses.font);
 
-        this.add(Box.createRigidArea(new Dimension(0,10)));
-        this.add(Box.createVerticalStrut(100));
+        this.add(new LogoClass());
+        this.add(Box.createVerticalStrut(35));
         this.add(userName);
         this.add(Box.createVerticalStrut(10));
         this.add(email);
@@ -88,7 +72,7 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         buttonPanel.setPreferredSize(new Dimension(175,100));
 
         JPanel invisiblePanel = new JPanel();
-        invisiblePanel.setPreferredSize(new Dimension(200,150));
+        invisiblePanel.setPreferredSize(new Dimension(200,50));
         invisiblePanel.setBackground(null);
 
         signupButton = new Buttons("Submit");
