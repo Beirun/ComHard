@@ -6,30 +6,37 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class ForgotPassPanel extends JPanel implements ActionListener {
-    JPanel signupBox;
+    JPanel panel;
+    //JPanel this;
     JTextField email, userName;
     JPasswordField newPassword, confirmPassword;
     Buttons signupButton;
 
     JButton aHAccount;
-    JFrame frames;
-    public ForgotPassPanel(JFrame frames){
-        this.setBounds(0,0,ComHard.WIDTH,ComHard.LENGTH);
+    JFrame frame;
+    public ForgotPassPanel(JFrame frame, JPanel panel){
+        this.panel = panel;
+        /*this.setBounds(0,0,ComHard.WIDTH,ComHard.LENGTH);
         this.setBackground(new Color(162,221,164));
         this.setLayout(new BorderLayout());
-        this.setFocusable(true);
-        this.frames = frames;
-        signupBox();
+        this.add(new BackgroundClass(),BorderLayout.CENTER);
+        this.setFocusable(true);*/
+        this.frame = frame;
+
+        this.setPreferredSize(new Dimension(ComHard.WIDTH/2-100,ComHard.LENGTH));
+        this.setBackground(new Color(236,236,236));
+        this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+        textFields();
     }
 
-    public void signupBox(){
-        signupBox = new JPanel();
-        signupBox.setPreferredSize(new Dimension(ComHard.WIDTH/2-100,ComHard.LENGTH));
-        signupBox.setBackground(new Color(236,236,236));
-        signupBox.setLayout(new BoxLayout(signupBox,BoxLayout.Y_AXIS));
+    /*public void this(){
+        this = new JPanel();
+        this.setPreferredSize(new Dimension(ComHard.WIDTH/2-100,ComHard.LENGTH));
+        this.setBackground(new Color(236,236,236));
+        this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
         textFields();
-        this.add(signupBox, BorderLayout.EAST);
-    }
+        this.add(this, BorderLayout.EAST);
+    }*/
 
     public void textFields(){
         userName = new JTextField(10);
@@ -39,6 +46,14 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         userName.setPreferredSize(new Dimension(300, 75));
         userName.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         userName.setFont(ListenerClasses.font);
+
+        email = new JTextField(10);
+        ListenerClasses.addPlaceholder(email,"Email");
+        email.setMaximumSize(new Dimension(300, 75));
+        email.setMinimumSize(new Dimension(300, 75));
+        email.setPreferredSize(new Dimension(300, 75));
+        email.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+        email.setFont(ListenerClasses.font);
 
         newPassword = new JPasswordField(10);
         ListenerClasses.addPlaceholder(newPassword,"New Password");
@@ -56,13 +71,15 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         confirmPassword.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         confirmPassword.setFont(ListenerClasses.font);
 
-        signupBox.add(Box.createRigidArea(new Dimension(0,10)));
-        signupBox.add(Box.createVerticalStrut(100));
-        signupBox.add(userName);
-        signupBox.add(Box.createVerticalStrut(10));
-        signupBox.add(newPassword);
-        signupBox.add(Box.createVerticalStrut(10));
-        signupBox.add(confirmPassword);
+        this.add(Box.createRigidArea(new Dimension(0,10)));
+        this.add(Box.createVerticalStrut(100));
+        this.add(userName);
+        this.add(Box.createVerticalStrut(10));
+        this.add(email);
+        this.add(Box.createVerticalStrut(10));
+        this.add(newPassword);
+        this.add(Box.createVerticalStrut(10));
+        this.add(confirmPassword);
         signupButtons();
     }
     public void signupButtons(){
@@ -70,23 +87,23 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         buttonPanel.setBackground(null);
         buttonPanel.setPreferredSize(new Dimension(175,100));
 
-        JPanel inviPanel = new JPanel();
-        inviPanel.setPreferredSize(new Dimension(200,150));
-        inviPanel.setBackground(null);
+        JPanel invisiblePanel = new JPanel();
+        invisiblePanel.setPreferredSize(new Dimension(200,150));
+        invisiblePanel.setBackground(null);
 
         signupButton = new Buttons("Submit");
         signupButton.setColor(new Color(newPassword.getBackground().getRGB()));
         signupButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         signupButton.setDimension(200,50);
-        signupButton.addMouseListener(new ListenerClasses.SubmitButtonListener(this, frames));
+        signupButton.addMouseListener(new SubmitButton(panel, this));
 
         JPanel leftPanel = new JPanel();
         leftPanel.setBackground(null);
-        leftPanel.setPreferredSize(new Dimension((signupBox.getWidth()-signupButton.getWidth())/2,20));
+        leftPanel.setPreferredSize(new Dimension((this.getWidth()-signupButton.getWidth())/2,20));
 
         JPanel rightPanel = new JPanel();
         rightPanel.setBackground(null);
-        rightPanel.setPreferredSize(new Dimension((signupBox.getWidth()-signupButton.getWidth())/2,20));
+        rightPanel.setPreferredSize(new Dimension((this.getWidth()-signupButton.getWidth())/2,20));
 
         JPanel signInPanel = new JPanel(new FlowLayout());
         signInPanel.setBackground(null);
@@ -96,7 +113,7 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
 
         signupButton.setFont(aHAccount.getFont());
 
-        aHAccount.setBackground(new Color(signupBox.getBackground().getRGB()));
+        aHAccount.setBackground(new Color(this.getBackground().getRGB()));
         aHAccount.setFocusPainted(false);
         aHAccount.setBorderPainted(false);
         aHAccount.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
@@ -108,23 +125,37 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         buttonPanel.add(leftPanel);
         buttonPanel.add(signupButton);
         buttonPanel.add(rightPanel);
-        signupBox.add(Box.createVerticalStrut(15));
-        signupBox.add(buttonPanel);
-
-        signupBox.add(Box.createVerticalStrut(10));
-        signupBox.add(signInPanel);
-
-        signupBox.add(inviPanel);
-
+        this.add(Box.createVerticalStrut(15));
+        this.add(buttonPanel);
+        this.add(Box.createVerticalStrut(10));
+        this.add(signInPanel);
+        this.add(invisiblePanel);
     }
-
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==aHAccount){
             this.setVisible(false);
-            frames.add(new LoginPanel(frames));
+            panel.add(new LoginPanel(frame,panel), BorderLayout.EAST);
+        }
+    }
+    class SubmitButton extends MouseAdapter {
+        JPanel panel, signPanel;
+        public SubmitButton(JPanel signPanel, JPanel panel){
+            this.panel = panel;
+            this.signPanel = signPanel;
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            ForgotPasswordOperation forgotPasswordOperation = new ForgotPasswordOperation(frame, signPanel, panel, userName, email, newPassword, confirmPassword,
+                    userName.getText(), email.getText(),toString(newPassword.getPassword()),toString(confirmPassword.getPassword()));
+            forgotPasswordOperation.fileReader();
+        }
+        public String toString(char[] a) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < a.length; i++) sb.append(a[i]);
+            return sb.toString();
         }
     }
 

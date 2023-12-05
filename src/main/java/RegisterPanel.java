@@ -1,7 +1,4 @@
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class RegisterPanel extends JPanel implements ActionListener {
+    JPanel panel;
     JPanel signupBox;
     JTextField email, userName;
     JPasswordField password, confirmPassword;
@@ -17,13 +15,19 @@ public class RegisterPanel extends JPanel implements ActionListener {
 
     JButton aHAccount;
     JFrame frame;
-    public RegisterPanel(JFrame frame){
-        this.setBounds(0,0,ComHard.WIDTH,ComHard.LENGTH);
+    public RegisterPanel(JFrame frame, JPanel panel){
+        this.panel = panel;
+        /*this.setBounds(0,0,ComHard.WIDTH,ComHard.LENGTH);
         this.setBackground(new Color(162,221,164));
         this.setLayout(new BorderLayout());
         this.setFocusable(true);
-        signupBox();
+        this.add(new BackgroundClass(),BorderLayout.CENTER);
+        signupBox();*/
         this.frame = frame;
+        this.setPreferredSize(new Dimension(ComHard.WIDTH/2-100,ComHard.LENGTH));
+        this.setBackground(new Color(236,236,236));
+        this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+        textFields();
     }
 
     public void signupBox(){
@@ -68,15 +72,15 @@ public class RegisterPanel extends JPanel implements ActionListener {
         confirmPassword.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         confirmPassword.setFont(emailPass);
 
-        signupBox.add(Box.createRigidArea(new Dimension(0,10)));
-        signupBox.add(Box.createVerticalStrut(100));
-        signupBox.add(email);
-        signupBox.add(Box.createVerticalStrut(10));
-        signupBox.add(userName);
-        signupBox.add(Box.createVerticalStrut(10));
-        signupBox.add(password);
-        signupBox.add(Box.createVerticalStrut(10));
-        signupBox.add(confirmPassword);
+        this.add(Box.createRigidArea(new Dimension(0,10)));
+        this.add(Box.createVerticalStrut(100));
+        this.add(email);
+        this.add(Box.createVerticalStrut(10));
+        this.add(userName);
+        this.add(Box.createVerticalStrut(10));
+        this.add(password);
+        this.add(Box.createVerticalStrut(10));
+        this.add(confirmPassword);
         signupButtons();
 
         //RegistrationB registrationB = new RegistrationB(frame, confirmPassword.getSelectedText(),
@@ -87,25 +91,25 @@ public class RegisterPanel extends JPanel implements ActionListener {
     public void signupButtons(){
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.setBackground(null);
-        buttonPanel.setPreferredSize(new Dimension(175,100));
+        buttonPanel.setPreferredSize(new Dimension(200,100));
 
-        JPanel inviPanel = new JPanel();
-        inviPanel.setPreferredSize(new Dimension(200,150));
-        inviPanel.setBackground(null);
+        JPanel invisiblePanel = new JPanel();
+        invisiblePanel.setPreferredSize(new Dimension(200,150));
+        invisiblePanel.setBackground(null);
 
         signupButton = new Buttons("Sign Up");
         signupButton.setColor(new Color(password.getBackground().getRGB()));
         signupButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         signupButton.setDimension(200,50);
-        signupButton.addMouseListener(new SubmitButton());
+        signupButton.addMouseListener(new SubmitButton(panel,this));
 
         JPanel leftPanel = new JPanel();
         leftPanel.setBackground(null);
-        leftPanel.setPreferredSize(new Dimension((signupBox.getWidth()-signupButton.getWidth())/2,20));
+        leftPanel.setPreferredSize(new Dimension((this.getWidth()-signupButton.getWidth())/2 - 20,20));
 
         JPanel rightPanel = new JPanel();
         rightPanel.setBackground(null);
-        rightPanel.setPreferredSize(new Dimension((signupBox.getWidth()-signupButton.getWidth())/2,20));
+        rightPanel.setPreferredSize(new Dimension((this.getWidth()-signupButton.getWidth())/2,20));
 
         JPanel signInPanel = new JPanel(new FlowLayout());
         signInPanel.setBackground(null);
@@ -115,7 +119,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
 
         signupButton.setFont(aHAccount.getFont());
 
-        aHAccount.setBackground(new Color(signupBox.getBackground().getRGB()));
+        aHAccount.setBackground(new Color(this.getBackground().getRGB()));
         aHAccount.setFocusPainted(false);
         aHAccount.setBorderPainted(false);
         aHAccount.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
@@ -127,13 +131,13 @@ public class RegisterPanel extends JPanel implements ActionListener {
         buttonPanel.add(leftPanel);
         buttonPanel.add(signupButton);
         buttonPanel.add(rightPanel);
-        signupBox.add(Box.createVerticalStrut(15));
-        signupBox.add(buttonPanel);
+        this.add(Box.createVerticalStrut(15));
+        this.add(buttonPanel);
 
-        signupBox.add(Box.createVerticalStrut(10));
-        signupBox.add(signInPanel);
+        this.add(Box.createVerticalStrut(10));
+        this.add(signInPanel);
 
-        signupBox.add(inviPanel);
+        this.add(invisiblePanel);
 
     }
 
@@ -144,6 +148,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
 
         textField.setLayout(new BorderLayout());
         textField.add(placeholderLabel);
+        textField.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         emailPass = placeholderLabel.getFont();
 
         textField.getDocument().addDocumentListener(new ListenerClasses.PlaceHolderListener(textField, placeholderLabel));
@@ -153,21 +158,32 @@ public class RegisterPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==aHAccount){
             this.setVisible(false);
-            frame.add(new LoginPanel(frame));
+            panel.add(new LoginPanel(frame, panel), BorderLayout.EAST);
         }
     }
 
     class SubmitButton extends MouseAdapter {
-        public SubmitButton(){
+        JPanel signPanel;
+        JPanel panel;
+        public SubmitButton(JPanel signPanel,JPanel panel){
+            this.signPanel = signPanel;
+            this.panel = panel;
         }
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            RegistrationB registrationB = new RegistrationB(frame, password,confirmPassword,userName,
-                    userName.getText(),email.getText(),password.getSelectedText(),confirmPassword.getSelectedText());
-            registrationB.fileCreator();
+
+            RegistrationOperation registrationOperation = new RegistrationOperation(frame, signPanel, panel, password,confirmPassword,userName, email,
+                    userName.getText(),email.getText(),toString(password.getPassword()),toString(confirmPassword.getPassword()));
+            registrationOperation.fileCreator();
 
         }
+        public String toString(char[] a) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < a.length; i++) sb.append(a[i]);
+            return sb.toString();
+        }
     }
+
 
 }

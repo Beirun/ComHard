@@ -20,7 +20,9 @@ public class ListenerClasses {
         public void removeUpdate(DocumentEvent e) {updatePlaceholder();}
         @Override
         public void changedUpdate(DocumentEvent e) {updatePlaceholder();}
-        private void updatePlaceholder() {placeholderLabel.setVisible(textField.getText().isEmpty());}
+        private void updatePlaceholder() {
+            textField.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+            placeholderLabel.setVisible(textField.getText().isEmpty());}
     }
     public static void addPlaceholder(JTextField textField, String placeholder) {
         JLabel placeholderLabel = new JLabel(placeholder);
@@ -51,17 +53,4 @@ public class ListenerClasses {
         }
     }
 
-    static class SubmitButtonListener extends MouseAdapter{
-        JPanel panel;
-        JFrame frame;
-        public SubmitButtonListener(JPanel panel, JFrame frame){
-            this.frame = frame;
-            this.panel = panel;
-        }
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            panel.setVisible(false);
-            frame.add(new LoginPanel(frame));
-        }
-    }
 }
