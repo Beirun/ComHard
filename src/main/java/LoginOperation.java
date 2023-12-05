@@ -39,7 +39,7 @@ public class LoginOperation {
                 password = getPassword(tempString.split("\n"));
 
                 if(isPasswordCorrect()){
-                    frame.add(new DashboardPanel(frame));
+                    frame.add(new DashboardPanel(frame,panel,userName));
                     panel.setVisible(false);
                 }else{
                     userField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),

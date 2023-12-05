@@ -1,10 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 public class LoginPanel extends JPanel implements ActionListener {
     JPanel panel;
@@ -48,6 +45,8 @@ public class LoginPanel extends JPanel implements ActionListener {
         userName.setPreferredSize(new Dimension(300, 75));
         userName.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         userName.setFont(emailPass);
+        userName.addKeyListener(new TextFieldListener(panel));
+
 
         password = new JPasswordField(10);
         addPlaceholder(password,"Password");
@@ -56,6 +55,7 @@ public class LoginPanel extends JPanel implements ActionListener {
         password.setPreferredSize(new Dimension(300, 75));
         password.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         password.setFont(emailPass);
+        password.addKeyListener(new TextFieldListener(panel));
         this.add(Box.createRigidArea(new Dimension(0,10)));
         this.add(Box.createVerticalStrut(100));
         this.add(userName);
@@ -152,6 +152,23 @@ public class LoginPanel extends JPanel implements ActionListener {
             panel.add(new ForgotPassPanel(frame, panel), BorderLayout.EAST);
         }
     }
+
+    class TextFieldListener implements KeyListener{
+        JPanel panel;
+        public TextFieldListener(JPanel panel){this.panel = panel;}
+        @Override
+        public void keyTyped(KeyEvent e) {}
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if(e.getKeyCode()==KeyEvent.VK_ENTER){
+                LoginOperation loginOperation = new LoginOperation(frame, panel, userName,
+                        password, userName.getText(), ListenerClasses.toString(password.getPassword()));
+                loginOperation.fileReader();
+            }
+        }
+        @Override
+        public void keyReleased(KeyEvent e) {}
+    }
     class SubmitButton extends MouseAdapter {
         JPanel panel;
         public SubmitButton(JPanel panel){
@@ -161,14 +178,10 @@ public class LoginPanel extends JPanel implements ActionListener {
         @Override
         public void mouseClicked(MouseEvent e) {
             LoginOperation loginOperation = new LoginOperation(frame, panel, userName,
-                    password, userName.getText(),toString(password.getPassword()));
+                    password, userName.getText(),ListenerClasses.toString(password.getPassword()));
             loginOperation.fileReader();
         }
-        public String toString(char[] a) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < a.length; i++) sb.append(a[i]);
-            return sb.toString();
-        }
+
     }
 
 }

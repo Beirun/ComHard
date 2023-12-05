@@ -7,6 +7,11 @@ import java.awt.event.MouseEvent;
 
 public class ListenerClasses {
     static Font font;
+    public static String toString(char[] a) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < a.length; i++) sb.append(a[i]);
+        return sb.toString();
+    }
     static class PlaceHolderListener implements DocumentListener {
         JTextField textField;
         JLabel placeholderLabel;
