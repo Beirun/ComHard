@@ -18,7 +18,7 @@ public class BackgroundClass extends JPanel {
     }
     public void renderImage(Graphics g){
         try {
-            backgroundImage = ImageIO.read(new File("resources/img/whistle.jpg"));
+            backgroundImage = ImageIO.read(new File("resources/img/img.jpg"));
             //maintain aspect ratio
             if(backgroundImage.getWidth()>getWidth()) g.drawImage(backgroundImage,(getWidth()-backgroundImage.getWidth())/2,
                     0,backgroundImage.getWidth(),getHeight(), this);
