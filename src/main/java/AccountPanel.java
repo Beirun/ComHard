@@ -11,4 +11,5 @@ public class AccountPanel extends JPanel {
         this.setBackground(new Color(0,245,245));
 
     }
+
 }

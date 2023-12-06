@@ -58,7 +58,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
         confirmPassword.setFont(emailPass);
         confirmPassword.addKeyListener(new TextFieldListener(panel, this));
 
-        this.add(new LogoClass());
+        this.add(new LogoClass(ComHard.WIDTH/2-200,300, 360, 101,69,50));
         this.add(Box.createVerticalStrut(25));
         this.add(email);
         this.add(Box.createVerticalStrut(10));

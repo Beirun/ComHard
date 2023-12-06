@@ -20,12 +20,6 @@ public class BackgroundClass extends JPanel {
     public void renderImage(Graphics g){
         try {
             backgroundImage = ImageIO.read(new File("resources/img/background.png"));
-            //maintain aspect ratio
-            /*
-            if(backgroundImage.getWidth()>getWidth()) g.drawImage(backgroundImage,(getWidth()-backgroundImage.getWidth())/2,
-                    0,backgroundImage.getWidth(),getHeight(), this);
-            else g.drawImage(backgroundImage, (getWidth() - backgroundImage.getWidth()) / 2, 0, getWidth(),
-                    backgroundImage.getHeight(), this);*/
             g.drawImage(backgroundImage,-20,-15,backgroundImage.getWidth()/2-100, backgroundImage.getHeight()/2-100,this);
         } catch (IOException ignored) {}
     }

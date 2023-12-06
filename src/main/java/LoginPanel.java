@@ -45,7 +45,7 @@ public class LoginPanel extends JPanel implements ActionListener {
         password.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         password.setFont(emailPass);
         password.addKeyListener(new TextFieldListener(panel));
-        this.add(new LogoClass());
+        this.add(new LogoClass(ComHard.WIDTH/2-200,300, 360, 101,69,50));
         this.add(Box.createVerticalStrut(50));
         this.add(userName);
         this.add(Box.createVerticalStrut(10));

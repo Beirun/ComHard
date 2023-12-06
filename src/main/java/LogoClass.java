@@ -7,9 +7,14 @@ import java.io.IOException;
 
 public class LogoClass extends JPanel {
     BufferedImage logoImage;
-    public LogoClass(){
-        this.setBackground(new Color(236,236,236));
-        this.setPreferredSize(new Dimension(ComHard.WIDTH/2-200,300));}
+    int logoWidth, logoHeight, xCoordinate, yCoordinate;
+    public LogoClass(int width, int height, int LogoWidth, int LogoHeight, int xCoordinate, int yCoordinate){
+        logoWidth = LogoWidth;
+        logoHeight = LogoHeight;
+        this.xCoordinate = xCoordinate;
+        this.yCoordinate = yCoordinate;
+        this.setBackground(null);
+        this.setPreferredSize(new Dimension(width,height));}
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -19,7 +24,8 @@ public class LogoClass extends JPanel {
     public void renderLogo(Graphics g){
         try {
             logoImage = ImageIO.read(new File("resources/img/fullLogo.png"));
-            g.drawImage(logoImage,69,50,logoImage.getWidth()/5,logoImage.getHeight()/5,this);
+            g.drawImage(logoImage,xCoordinate,yCoordinate,logoWidth,logoHeight,this);
+            //System.out.println(logoImage.getWidth()/5+""+logoImage.getHeight()/5);
         } catch (IOException ignored) {}
     }
 }

@@ -1,17 +1,18 @@
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicButtonUI;
+import javax.swing.plaf.metal.MetalButtonUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class SidebarPanel extends JPanel implements ActionListener {
-    JButton home, account, logout;
+    JButton[] sidebarButtons = new JButton[5];
     JFrame frame;
     JPanel homePanel, accountPanel, dashboardPanel, signPanel;
-    JPanel buttonPanel;
-    JLabel accountLabel;
-    ImageIcon accountProfile;
     String userName;
+    Color buttonFontColor = new Color(245, 245, 245);
     public SidebarPanel(JFrame frame, JPanel homePanel, JPanel accountPanel, JPanel dashboardPanel, JPanel signPanel, String userName){
         this.frame = frame;
         this.homePanel = homePanel;
@@ -19,89 +20,73 @@ public class SidebarPanel extends JPanel implements ActionListener {
         this.dashboardPanel = dashboardPanel;
         this.signPanel = signPanel;
         this.userName = userName;
-        this.setBackground(new Color(215,215,215));
+        this.setBackground(new Color(53,118,172));
         this.setPreferredSize(new Dimension(ComHard.WIDTH/6,ComHard.LENGTH));
         this.setVisible(true);
-        this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+        this.setLayout(new FlowLayout(FlowLayout.CENTER,0,0));
         listButtons();
     }
-
-    public void accountLabel(){
-        accountLabel = new JLabel();
-        accountLabel.setIcon(accountProfile);
-        accountLabel.setText(userName);
-        accountLabel.setFont(new Font("", Font.BOLD, 30));
-    }
     public void listButtons(){
-        accountLabel();
-        this.add(Box.createVerticalStrut(50));
-        this.add(accountLabel);
-        this.add(Box.createVerticalStrut(50));
-        buttonPanel = new JPanel();
-        buttonPanel.setAlignmentX(CENTER_ALIGNMENT);
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.setBackground(null);
-
-        home = new JButton("Home");
-        home.setFont(new Font("", Font.BOLD, 20));
-        home.setBorder(null);
-        home.setAlignmentX(CENTER_ALIGNMENT);
-        home.setPreferredSize(new Dimension(home.getWidth(),home.getHeight()+10));
-        home.setBackground(null);
-        home.setFocusPainted(false);
-        home.addMouseListener(new ListenerClasses.UnderlinedText(home.getText(),home));
-        home.addActionListener(this);
-
-        account = new JButton("Account");
-        account.setFont(new Font("", Font.BOLD, 20));
-        account.setBorder(null);
-        account.setAlignmentX(CENTER_ALIGNMENT);
-        account.setPreferredSize(new Dimension(account.getWidth(),account.getHeight()+10));
-        account.setBackground(null);
-        account.setFocusPainted(false);
-        account.addMouseListener(new ListenerClasses.UnderlinedText(account.getText(),account));
-        account.addActionListener(this);
-
-        logout = new JButton("Logout");
-        logout.setFont(new Font("", Font.BOLD, 20));
-        logout.setBorder(null);
-        logout.setAlignmentX(CENTER_ALIGNMENT);
-        logout.setBackground(null);
-        logout.setPreferredSize(new Dimension(logout.getWidth(),logout.getHeight()+10));
-        logout.setFocusPainted(false);
-        logout.addMouseListener(new ListenerClasses.UnderlinedText(logout.getText(),logout));
-        logout.addActionListener(this);
-
-        buttonPanel.add(home);
-        buttonPanel.add(Box.createVerticalStrut(45));
-        buttonPanel.add(account);
-        buttonPanel.add(Box.createVerticalStrut(45));
-        buttonPanel.add(logout);
-        this.add(buttonPanel);
-
+        this.add(new LogoClass(164,51,164,46, 0,5));
+        this.add(new AccountLabel(userName));
+        for (int i = 0; i< sidebarButtons.length; i++){
+            sidebarButtons[i] = new JButton();
+            sidebarButtons[i].setFont(new Font("", Font.BOLD, 20));
+            sidebarButtons[i].setUI(new DisabledButton());
+            sidebarButtons[i].setBorder(null);
+            sidebarButtons[i].setAlignmentX(CENTER_ALIGNMENT);
+            sidebarButtons[i].setPreferredSize(new Dimension(300, 90));
+            sidebarButtons[i].setBackground(null);
+            sidebarButtons[i].setFocusPainted(false);
+            sidebarButtons[i].setForeground(buttonFontColor);
+            sidebarButtons[i].addActionListener(this);
+            sidebarButtons[i].addMouseListener(new ChangeColorButton(sidebarButtons[i]));
+            this.add(sidebarButtons[i]);
+        }
+        sidebarButtons[0].setText("Dashboard");
+        sidebarButtons[1].setText("Account");
+        sidebarButtons[2].setText("Favorites");
+        sidebarButtons[3].setText("Associates");
+        sidebarButtons[4].setText("Sign Out");
+        sidebarButtons[0].setBackground(new Color(23,88,142));
+        sidebarButtons[0].setEnabled(false);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==home){
-            //dashboardPanel.add()
+        if(e.getSource()==sidebarButtons[0]){
             homePanel.setVisible(true);
             accountPanel.setVisible(false);
-        }if(e.getSource()==logout){
+            sidebarButtons[0].setEnabled(false);
+            sidebarButtons[1].setEnabled(true);
+            sidebarButtons[1].setBackground(null);
+        }if(e.getSource()== sidebarButtons[4]){
             frame.add(new SignPanel(frame));
             dashboardPanel.setVisible(false);
-        }if(e.getSource()==account){
+        }if(e.getSource()==sidebarButtons[1]){
             homePanel.setVisible(false);
             dashboardPanel.add(accountPanel, BorderLayout.CENTER);
             accountPanel.setVisible(true);
+            sidebarButtons[1].setEnabled(false);
+            sidebarButtons[0].setEnabled(true);
+            sidebarButtons[0].setBackground(null);
         }
-
+    }
+    class DisabledButton extends MetalButtonUI{
+        @Override
+        protected Color getDisabledTextColor() {return buttonFontColor;}
+        @Override
+        protected void paintButtonPressed(Graphics g, AbstractButton b) {}
     }
 
-    class ChangeColorButton extends MouseAdapter{
-        public ChangeColorButton(){
-
-        }
-
+    static class ChangeColorButton extends MouseAdapter{
+        JButton button;
+        public ChangeColorButton(JButton button){this.button = button;}
+        @Override
+        public void mouseClicked(MouseEvent e) {button.setBackground(new Color(23,88,142));}
+        @Override
+        public void mouseEntered(MouseEvent e) {if(button.isEnabled()) button.setBackground(new Color(43,108,162));}
+        @Override
+        public void mouseExited(MouseEvent e) {if(button.isEnabled()) button.setBackground(null);}
     }
 }
