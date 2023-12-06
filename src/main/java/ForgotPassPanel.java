@@ -1,9 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 public class ForgotPassPanel extends JPanel implements ActionListener {
     JPanel panel;
@@ -30,6 +27,7 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         userName.setPreferredSize(new Dimension(300, 75));
         userName.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         userName.setFont(ListenerClasses.font);
+        userName.addKeyListener(new TextFieldListener(panel, this));
 
         email = new JTextField(10);
         ListenerClasses.addPlaceholder(email,"Email");
@@ -38,6 +36,7 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         email.setPreferredSize(new Dimension(300, 75));
         email.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         email.setFont(ListenerClasses.font);
+        email.addKeyListener(new TextFieldListener(panel, this));
 
         newPassword = new JPasswordField(10);
         ListenerClasses.addPlaceholder(newPassword,"New Password");
@@ -46,6 +45,7 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         newPassword.setPreferredSize(new Dimension(300, 75));
         newPassword.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         newPassword.setFont(ListenerClasses.font);
+        newPassword.addKeyListener(new TextFieldListener(panel, this));
 
         confirmPassword = new JPasswordField(10);
         ListenerClasses.addPlaceholder(confirmPassword,"Confirm Password");
@@ -54,6 +54,7 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         confirmPassword.setPreferredSize(new Dimension(300, 75));
         confirmPassword.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         confirmPassword.setFont(ListenerClasses.font);
+        confirmPassword.addKeyListener(new TextFieldListener(panel, this));
 
         this.add(new LogoClass());
         this.add(Box.createVerticalStrut(35));
@@ -133,14 +134,27 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         @Override
         public void mouseClicked(MouseEvent e) {
             ForgotPasswordOperation forgotPasswordOperation = new ForgotPasswordOperation(frame, signPanel, panel, userName, email, newPassword, confirmPassword,
-                    userName.getText(), email.getText(),toString(newPassword.getPassword()),toString(confirmPassword.getPassword()));
+                    userName.getText(), email.getText(),ListenerClasses.toString(newPassword.getPassword()),ListenerClasses.toString(confirmPassword.getPassword()));
             forgotPasswordOperation.fileReader();
         }
-        public String toString(char[] a) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < a.length; i++) sb.append(a[i]);
-            return sb.toString();
+    }
+    class TextFieldListener implements KeyListener {
+        JPanel signPanel, panel;
+        public TextFieldListener(JPanel signPanel, JPanel panel){
+            this.signPanel = signPanel;
+            this.panel = panel;}
+        @Override
+        public void keyTyped(KeyEvent e) {}
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if(e.getKeyCode()==KeyEvent.VK_ENTER){
+                ForgotPasswordOperation forgotPasswordOperation = new ForgotPasswordOperation(frame, signPanel, panel, userName, email, newPassword, confirmPassword,
+                        userName.getText(), email.getText(),ListenerClasses.toString(newPassword.getPassword()),ListenerClasses.toString(confirmPassword.getPassword()));
+                forgotPasswordOperation.fileReader();
+            }
         }
+        @Override
+        public void keyReleased(KeyEvent e) {}
     }
 
 }

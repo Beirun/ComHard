@@ -1,9 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 public class RegisterPanel extends JPanel implements ActionListener {
     JPanel panel;
@@ -32,6 +29,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
         email.setPreferredSize(new Dimension(300, 75));
         email.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         email.setFont(emailPass);
+        email.addKeyListener(new TextFieldListener(panel, this));
 
         userName = new JTextField(10);
         addPlaceholder(userName,"Username");
@@ -40,6 +38,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
         userName.setPreferredSize(new Dimension(300, 75));
         userName.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         userName.setFont(emailPass);
+        userName.addKeyListener(new TextFieldListener(panel, this));
 
         password = new JPasswordField(10);
         addPlaceholder(password,"Password");
@@ -48,6 +47,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
         password.setPreferredSize(new Dimension(300, 75));
         password.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         password.setFont(emailPass);
+        password.addKeyListener(new TextFieldListener(panel, this));
 
         confirmPassword = new JPasswordField(10);
         addPlaceholder(confirmPassword,"Confirm Password");
@@ -56,6 +56,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
         confirmPassword.setPreferredSize(new Dimension(300, 75));
         confirmPassword.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
         confirmPassword.setFont(emailPass);
+        confirmPassword.addKeyListener(new TextFieldListener(panel, this));
 
         this.add(new LogoClass());
         this.add(Box.createVerticalStrut(25));
@@ -152,16 +153,28 @@ public class RegisterPanel extends JPanel implements ActionListener {
         public void mouseClicked(MouseEvent e) {
 
             RegistrationOperation registrationOperation = new RegistrationOperation(frame, signPanel, panel, password,confirmPassword,userName, email,
-                    userName.getText(),email.getText(),toString(password.getPassword()),toString(confirmPassword.getPassword()));
+                    userName.getText(),email.getText(),ListenerClasses.toString(password.getPassword()),ListenerClasses.toString(confirmPassword.getPassword()));
             registrationOperation.fileCreator();
-
-        }
-        public String toString(char[] a) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < a.length; i++) sb.append(a[i]);
-            return sb.toString();
         }
     }
 
+    class TextFieldListener implements KeyListener {
+        JPanel signPanel, panel;
+        public TextFieldListener(JPanel signPanel, JPanel panel){
+            this.signPanel = signPanel;
+            this.panel = panel;}
+        @Override
+        public void keyTyped(KeyEvent e) {}
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if(e.getKeyCode()==KeyEvent.VK_ENTER){
+                RegistrationOperation registrationOperation = new RegistrationOperation(frame, signPanel, panel, password,confirmPassword,userName, email,
+                        userName.getText(),email.getText(),ListenerClasses.toString(password.getPassword()),ListenerClasses.toString(confirmPassword.getPassword()));
+                registrationOperation.fileCreator();
+            }
+        }
+        @Override
+        public void keyReleased(KeyEvent e) {}
+    }
 
 }

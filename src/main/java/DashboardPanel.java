@@ -9,7 +9,6 @@ public class DashboardPanel extends JPanel {
         this.signPanel = signPanel;
         this.setBounds(0,0,ComHard.WIDTH,ComHard.LENGTH);
         this.setBackground(new Color(162,221,164));
-        this.setLayout(new BorderLayout());
         this.frame = frame;
         this.userName = userName;
         this.setLayout(new BorderLayout());
@@ -17,6 +16,10 @@ public class DashboardPanel extends JPanel {
     }
 
     public void panels(){
-        this.add(new SidebarPanel(frame,this, this, signPanel,userName),BorderLayout.WEST);
+        HomePanel homePanel = new HomePanel(this,userName);
+        AccountPanel accountPanel = new AccountPanel(this, userName);
+        SidebarPanel sidebarPanel = new SidebarPanel(frame, homePanel,  accountPanel,this, signPanel,userName);
+        this.add(sidebarPanel,BorderLayout.WEST);
+        this.add(homePanel,BorderLayout.CENTER);
     }
 }
