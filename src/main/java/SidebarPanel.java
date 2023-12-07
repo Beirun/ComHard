@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.plaf.metal.MetalButtonUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,6 +8,7 @@ import java.awt.event.MouseEvent;
 
 public class SidebarPanel extends JPanel implements ActionListener {
     JButton[] sidebarButtons = new JButton[5];
+    String[] buttonNames = {"Dashboard","Account","Favorites","Associates","Sign Out"};
     JFrame frame;
     JPanel homePanel, accountPanel, dashboardPanel, signPanel;
     String userName;
@@ -31,6 +31,7 @@ public class SidebarPanel extends JPanel implements ActionListener {
         this.add(new AccountLabel(userName));
         for (int i = 0; i< sidebarButtons.length; i++){
             sidebarButtons[i] = new JButton();
+            sidebarButtons[i].setText(buttonNames[i]);
             sidebarButtons[i].setFont(new Font("", Font.BOLD, 20));
             sidebarButtons[i].setUI(new DisabledButton());
             sidebarButtons[i].setBorder(null);
@@ -43,14 +44,10 @@ public class SidebarPanel extends JPanel implements ActionListener {
             sidebarButtons[i].addMouseListener(new ChangeColorButton(sidebarButtons[i]));
             this.add(sidebarButtons[i]);
         }
-        sidebarButtons[0].setText("Dashboard");
-        sidebarButtons[1].setText("Account");
-        sidebarButtons[2].setText("Favorites");
-        sidebarButtons[3].setText("Associates");
-        sidebarButtons[4].setText("Sign Out");
         sidebarButtons[0].setBackground(new Color(23,88,142));
         sidebarButtons[0].setEnabled(false);
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
