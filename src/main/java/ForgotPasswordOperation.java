@@ -57,18 +57,17 @@ public class ForgotPasswordOperation {
                 email = getEmail(tempString.split("\n"));
                 if(isEmailCorrect()){
                    // if correct
-                    if(isPasswordCorrect()){
+                    if(newPassword.length()<8 || !isPasswordCorrect()){
+                        newPasswordField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
+                                BorderFactory.createEmptyBorder(0,10,0,0)));
+                        confirmPasswordField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
+                                BorderFactory.createEmptyBorder(0,10,0,0)));
+                    } else if(isPasswordCorrect()){
                         FileWriter writer = new FileWriter(fileCreated);
-                        writer.write(email + "\n" + newPassword);
+                        writer.write(userName+"\n"+email + "\n" + newPassword+"\n"+getDateCreated(tempString.split("\n")));
                         writer.close();
                         signPanel.add(new LoginPanel(frame,signPanel), BorderLayout.EAST);
                         panel.setVisible(false);
-                    }else{
-                        //Error password does not match
-                        newPasswordField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
-                                BorderFactory.createEmptyBorder(0,10,0,0)));
-                        confirmPasswordField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
-                                BorderFactory.createEmptyBorder(0,10,0,0)));
                     }
                 }else{
                     //error email not correct
@@ -83,8 +82,9 @@ public class ForgotPasswordOperation {
     }
     //public boolean is
     public String getEmail(String[] string){
-        return string[0];
+        return string[1];
     }
+    public String getDateCreated(String[] string){return string[3];}
     public boolean isPasswordCorrect(){
         return newPassword.equals(confirmPassword);
     }

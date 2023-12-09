@@ -49,9 +49,7 @@ public class ListenerClasses {
         }
 
         @Override
-        public void mouseEntered(MouseEvent e) {
-            button.setText("<html><u>"+text+"</u></html>");
-        }
+        public void mouseEntered(MouseEvent e) {button.setText("<html><u>"+text+"</u></html>");}
         @Override
         public void mouseExited(MouseEvent e) {
             button.setText(text);

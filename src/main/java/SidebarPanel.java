@@ -27,8 +27,8 @@ public class SidebarPanel extends JPanel implements ActionListener {
         listButtons();
     }
     public void listButtons(){
-        this.add(new LogoClass(164,51,164,46, 0,5));
-        this.add(new AccountLabel(userName));
+        this.add(new LogoClass(164,71,164,46, 0,15));
+        this.add(new AccountLabel(userName,this,200,100,50,0,1,true));
         for (int i = 0; i< sidebarButtons.length; i++){
             sidebarButtons[i] = new JButton();
             sidebarButtons[i].setText(buttonNames[i]);
@@ -36,7 +36,7 @@ public class SidebarPanel extends JPanel implements ActionListener {
             sidebarButtons[i].setUI(new DisabledButton());
             sidebarButtons[i].setBorder(null);
             sidebarButtons[i].setAlignmentX(CENTER_ALIGNMENT);
-            sidebarButtons[i].setPreferredSize(new Dimension(300, 90));
+            sidebarButtons[i].setPreferredSize(new Dimension(300, 89));
             sidebarButtons[i].setBackground(null);
             sidebarButtons[i].setFocusPainted(false);
             sidebarButtons[i].setForeground(buttonFontColor);
@@ -46,6 +46,7 @@ public class SidebarPanel extends JPanel implements ActionListener {
         }
         sidebarButtons[0].setBackground(new Color(23,88,142));
         sidebarButtons[0].setEnabled(false);
+
     }
 
 

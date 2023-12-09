@@ -11,7 +11,6 @@ public class LoginPanel extends JPanel implements ActionListener {
     JPanel panel;
     JTextField userName;
     JPasswordField password;
-    Font emailPass;
     Buttons loginButton;
 
     JButton createAccount, resetPassword;
@@ -28,22 +27,22 @@ public class LoginPanel extends JPanel implements ActionListener {
     public void textFields(){
 
         userName = new JTextField(10);
-        addPlaceholder(userName,"Username");
+        ListenerClasses.addPlaceholder(userName,"Username");
         userName.setMaximumSize(new Dimension(300, 75));
         userName.setMinimumSize(new Dimension(300, 75));
         userName.setPreferredSize(new Dimension(300, 75));
         userName.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        userName.setFont(emailPass);
+        userName.setFont(ListenerClasses.font);
         userName.addKeyListener(new TextFieldListener(panel));
 
 
         password = new JPasswordField(10);
-        addPlaceholder(password,"Password");
+        ListenerClasses.addPlaceholder(password,"Password");
         password.setMaximumSize(new Dimension(300, 75));
         password.setMinimumSize(new Dimension(300, 75));
         password.setPreferredSize(new Dimension(300, 75));
         password.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        password.setFont(emailPass);
+        password.setFont(ListenerClasses.font);
         password.addKeyListener(new TextFieldListener(panel));
         this.add(new LogoClass(ComHard.WIDTH/2-200,300, 360, 101,69,50));
         this.add(Box.createVerticalStrut(50));
@@ -111,26 +110,10 @@ public class LoginPanel extends JPanel implements ActionListener {
         buttonPanel.add(rightPanel);
         this.add(Box.createVerticalStrut(15));
         this.add(buttonPanel);
-
         this.add(Box.createVerticalStrut(10));
         this.add(signInPanel);
-
         this.add(invisiblePanel);
-
     }
-
-    public void addPlaceholder(JTextField textField, String placeholder) {
-        JLabel placeholderLabel = new JLabel(placeholder);
-        placeholderLabel.setForeground(Color.GRAY);
-        placeholderLabel.setFont(new Font("",Font.PLAIN,16));
-
-        textField.setLayout(new BorderLayout());
-        textField.add(placeholderLabel);
-        emailPass = placeholderLabel.getFont();
-
-        textField.getDocument().addDocumentListener(new ListenerClasses.PlaceHolderListener(textField, placeholderLabel));
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==createAccount){

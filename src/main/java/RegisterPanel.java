@@ -4,10 +4,8 @@ import java.awt.event.*;
 
 public class RegisterPanel extends JPanel implements ActionListener {
     JPanel panel;
-    JPanel signupBox;
     JTextField email, userName;
     JPasswordField password, confirmPassword;
-    Font emailPass;
     Buttons signupButton;
 
     JButton aHAccount;
@@ -23,39 +21,39 @@ public class RegisterPanel extends JPanel implements ActionListener {
 
     public void textFields(){
         email = new JTextField(10);
-        addPlaceholder(email,"Email");
+        ListenerClasses.addPlaceholder(email,"Email");
         email.setMaximumSize(new Dimension(300, 75));
         email.setMinimumSize(new Dimension(300, 75));
         email.setPreferredSize(new Dimension(300, 75));
         email.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        email.setFont(emailPass);
+        email.setFont(ListenerClasses.font);
         email.addKeyListener(new TextFieldListener(panel, this));
 
         userName = new JTextField(10);
-        addPlaceholder(userName,"Username");
+        ListenerClasses.addPlaceholder(userName,"Username");
         userName.setMaximumSize(new Dimension(300, 75));
         userName.setMinimumSize(new Dimension(300, 75));
         userName.setPreferredSize(new Dimension(300, 75));
         userName.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        userName.setFont(emailPass);
+        userName.setFont(ListenerClasses.font);
         userName.addKeyListener(new TextFieldListener(panel, this));
 
         password = new JPasswordField(10);
-        addPlaceholder(password,"Password");
+        ListenerClasses.addPlaceholder(password,"Password");
         password.setMaximumSize(new Dimension(300, 75));
         password.setMinimumSize(new Dimension(300, 75));
         password.setPreferredSize(new Dimension(300, 75));
         password.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        password.setFont(emailPass);
+        password.setFont(ListenerClasses.font);
         password.addKeyListener(new TextFieldListener(panel, this));
 
         confirmPassword = new JPasswordField(10);
-        addPlaceholder(confirmPassword,"Confirm Password");
+        ListenerClasses.addPlaceholder(confirmPassword,"Confirm Password");
         confirmPassword.setMaximumSize(new Dimension(300, 75));
         confirmPassword.setMinimumSize(new Dimension(300, 75));
         confirmPassword.setPreferredSize(new Dimension(300, 75));
         confirmPassword.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        confirmPassword.setFont(emailPass);
+        confirmPassword.setFont(ListenerClasses.font);
         confirmPassword.addKeyListener(new TextFieldListener(panel, this));
 
         this.add(new LogoClass(ComHard.WIDTH/2-200,300, 360, 101,69,50));
@@ -117,20 +115,6 @@ public class RegisterPanel extends JPanel implements ActionListener {
         this.add(Box.createVerticalStrut(10));
         this.add(signInPanel);
         this.add(invisiblePanel);
-
-    }
-
-    public void addPlaceholder(JTextField textField, String placeholder) {
-        JLabel placeholderLabel = new JLabel(placeholder);
-        placeholderLabel.setForeground(Color.GRAY);
-        placeholderLabel.setFont(new Font("",Font.PLAIN,16));
-
-        textField.setLayout(new BorderLayout());
-        textField.add(placeholderLabel);
-        textField.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        emailPass = placeholderLabel.getFont();
-
-        textField.getDocument().addDocumentListener(new ListenerClasses.PlaceHolderListener(textField, placeholderLabel));
     }
 
     @Override

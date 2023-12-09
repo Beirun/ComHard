@@ -39,7 +39,7 @@ public class LoginOperation {
                 password = getPassword(tempString.split("\n"));
 
                 if(isPasswordCorrect()){
-                    frame.add(new DashboardPanel(frame,panel,userName));
+                    frame.add(new DashboardPanel(frame,panel,getUserName(tempString.split("\n"))));
                     panel.setVisible(false);
                 }else{
                     userField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
@@ -54,6 +54,7 @@ public class LoginOperation {
         return passwordEntered.equals(password);
     }
     public String getPassword(String[] string){
-        return string[1];
+        return string[2];
     }
+    public String getUserName(String[] string){return string[0];}
 }
