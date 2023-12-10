@@ -10,13 +10,21 @@ public class SidebarPanel extends JPanel implements ActionListener {
     JButton[] sidebarButtons = new JButton[5];
     String[] buttonNames = {"Dashboard","Account","Favorites","Associates","Sign Out"};
     JFrame frame;
-    JPanel homePanel, accountPanel, dashboardPanel, signPanel;
+    JPanel homePanel;
+    JPanel accountPanel;
+    JPanel favoritesPanel;
+    JPanel associatesPanel;
+    JPanel dashboardPanel;
+    JPanel signPanel;
+    JPanel[] panels = new JPanel[4];
     String userName;
     Color buttonFontColor = new Color(245, 245, 245);
-    public SidebarPanel(JFrame frame, JPanel homePanel, JPanel accountPanel, JPanel dashboardPanel, JPanel signPanel, String userName){
+    public SidebarPanel(JFrame frame, JPanel homePanel, JPanel accountPanel, JPanel favoritesPanel, JPanel associatesPanel, JPanel dashboardPanel, JPanel signPanel, String userName){
         this.frame = frame;
         this.homePanel = homePanel;
         this.accountPanel = accountPanel;
+        this.favoritesPanel = favoritesPanel;
+        this.associatesPanel = associatesPanel;
         this.dashboardPanel = dashboardPanel;
         this.signPanel = signPanel;
         this.userName = userName;
@@ -27,6 +35,10 @@ public class SidebarPanel extends JPanel implements ActionListener {
         listButtons();
     }
     public void listButtons(){
+        panels[0] = homePanel;
+        panels[1] = accountPanel;
+        panels[2] = favoritesPanel;
+        panels[3] = associatesPanel;
         this.add(new LogoClass(164,71,164,46, 0,15));
         this.add(new AccountLabel(userName,this,200,100,50,0,1,true));
         for (int i = 0; i< sidebarButtons.length; i++){
@@ -44,30 +56,30 @@ public class SidebarPanel extends JPanel implements ActionListener {
             sidebarButtons[i].addMouseListener(new ChangeColorButton(sidebarButtons[i]));
             this.add(sidebarButtons[i]);
         }
-        sidebarButtons[0].setBackground(new Color(23,88,142));
         sidebarButtons[0].setEnabled(false);
-
+        sidebarButtons[0].setBackground(new Color(23,88,142));
     }
 
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==sidebarButtons[0]){
-            homePanel.setVisible(true);
-            accountPanel.setVisible(false);
-            sidebarButtons[0].setEnabled(false);
-            sidebarButtons[1].setEnabled(true);
-            sidebarButtons[1].setBackground(null);
-        }if(e.getSource()== sidebarButtons[4]){
-            frame.add(new SignPanel(frame));
-            dashboardPanel.setVisible(false);
-        }if(e.getSource()==sidebarButtons[1]){
-            homePanel.setVisible(false);
-            dashboardPanel.add(accountPanel, BorderLayout.CENTER);
-            accountPanel.setVisible(true);
-            sidebarButtons[1].setEnabled(false);
-            sidebarButtons[0].setEnabled(true);
-            sidebarButtons[0].setBackground(null);
+        for(int i = 0; i < sidebarButtons.length;i++){
+            if(e.getSource()==sidebarButtons[i]){
+                if(i!=4) {
+                    dashboardPanel.add(panels[i], BorderLayout.CENTER);
+                    panels[i].setVisible(true);
+                    dashboardPanel.repaint();
+                }else{
+                    dashboardPanel.setVisible(false);
+                    frame.add(new SignPanel(frame));
+                }
+                sidebarButtons[i].setEnabled(false);
+            }
+            else{
+                if(i!=4) panels[i].setVisible(false);
+                sidebarButtons[i].setEnabled(true);
+                sidebarButtons[i].setBackground(null);
+            }
         }
     }
     class DisabledButton extends MetalButtonUI{

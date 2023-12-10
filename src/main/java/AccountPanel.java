@@ -9,26 +9,31 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class AccountPanel extends JPanel implements ActionListener {
+    Component box;
+    JFrame frame;
     UpdatePasswordPanel updatePasswordPanel;
-    JButton[] buttons = new JButton[2];
-    JLabel[] labels = new JLabel[2];
-    String[] Texts = {"Email","Password","Change Email","Update Password"};
-    JPanel dashboardPanel;
-    JPanel[] panels = new JPanel[2];
-    JTextField emailField;
+    JButton[] buttons = new JButton[3];
+    JLabel[] labels = new JLabel[3];
+    JLabel dateCreated;
+    String[] Texts = {"Email","Password","Account Created","Change Email","Update Password", "Edit"};
+    JPanel dashboardPanel, signPanel, invisiblePanel, editPanel;
+    JPanel[] panels = new JPanel[4];
+    JTextField emailField, userNameField;
     JPasswordField passwordField;
     String userName;
-    int textFieldWidth, passwordFieldWidth, textFieldHeight = 22, emptySpace;
+    int textFieldWidth, userNameFieldWidth, passwordFieldWidth, textFieldHeight = 22, emptySpace;
     Graphics graphics;
     FontMetrics fontMetrics;
-    char passwordCharacter;
+    Color color;
+    DuplicateClasses.UserFile user;
 
-    public AccountPanel(JPanel dashboardPanel, String userName){
+    public AccountPanel(JFrame frame, JPanel signPanel, JPanel dashboardPanel, String userName){
+        this.frame = frame;
+        this.signPanel = signPanel;
         this.dashboardPanel = dashboardPanel;
         this.userName = userName;
         this.setPreferredSize(new Dimension(ComHard.WIDTH,ComHard.LENGTH));
@@ -38,28 +43,30 @@ public class AccountPanel extends JPanel implements ActionListener {
     }
 
     public void profilePanel(){
+        user = new DuplicateClasses.UserFile(userName);
         graphics = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).getGraphics();
         graphics.setFont(new Font("",Font.BOLD,16));
         fontMetrics = graphics.getFontMetrics();
-        textFieldWidth = fontMetrics.stringWidth(getEmail(fileContent()))+15;
-        this.add(Box.createVerticalStrut(25));
-        AccountLabel accountLabel = new AccountLabel(userName,this,500,225,
-                155,10,2, false);
+        textFieldWidth = fontMetrics.stringWidth(user.getEmail(user.fileContent()))+15;
+        this.add(Box.createVerticalStrut(20));
+        AccountLabel accountLabel = new AccountLabel(userName,this,500,210,
+                155,7,2, false);
         accountLabel.panel.setAlignmentX(CENTER_ALIGNMENT);
+        accountLabel.setCircularColor(new Color(53,118,172));
         emailField = new JTextField();
         emailField.setMaximumSize(new Dimension(textFieldWidth, textFieldHeight));
         emailField.setMinimumSize(new Dimension(textFieldWidth, textFieldHeight));
         emailField.setPreferredSize(new Dimension(textFieldWidth, textFieldHeight));
+        emailField.setFont(new Font("",Font.BOLD,16));
         emailField.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK),
                 BorderFactory.createEmptyBorder(0,5,0,0)));
         emailField.setEditable(false);
         emailField.setBackground(null);
         emailField.setFocusable(false);
-        emailField.setText(getEmail(fileContent()));
-        emailField.addKeyListener(new EmailListener(this, emailField,userName, getPassword(fileContent())));
-        emailField.setFont(new Font("",Font.BOLD,16));
-        this.add(Box.createVerticalStrut(30));
+        emailField.setText(user.getEmail(user.fileContent()));
+        color = emailField.getForeground();
+        emailField.addKeyListener(new EmailListener(user.fileContent(),this, emailField,userName, user.getPassword(user.fileContent())));
 
         for(int i = 0; i < panels.length; i++){
             panels[i] = new JPanel();
@@ -76,7 +83,7 @@ public class AccountPanel extends JPanel implements ActionListener {
             labels[i].setBackground(null);
         }
         for(int i = 0; i < buttons.length; i++){
-            buttons[i] = new JButton(Texts[i+2]);
+            buttons[i] = new JButton(Texts[i+3]);
             buttons[i].setUI(new DisableButtonPress());
             buttons[i].setBackground(null);
             buttons[i].setFocusPainted(false);
@@ -85,11 +92,54 @@ public class AccountPanel extends JPanel implements ActionListener {
             buttons[i].setMaximumSize(new Dimension(100,30));
             buttons[i].setBorder(null);
             buttons[i].setFont(new Font("",Font.BOLD,12));
-            buttons[i].addMouseListener(new ListenerClasses.UnderlinedText(buttons[i].getText(),buttons[i]));
+            buttons[i].addMouseListener(new DuplicateClasses.UnderlinedText(buttons[i].getText(),buttons[i]));
             buttons[i].addActionListener(this);
             buttons[i].setCursor(new Cursor(Cursor.HAND_CURSOR));
         }
+        panels[3].setMaximumSize(new Dimension(1050, textFieldHeight+40));
+        panels[3].setMinimumSize(new Dimension(1050, textFieldHeight+40));
+        panels[3].setPreferredSize(new Dimension(1050, textFieldHeight+40));
+        panels[3].setLayout(new FlowLayout(FlowLayout.LEFT));
 
+        userNameField = new JTextField();
+        graphics.setFont(new Font("",Font.BOLD,32));
+        fontMetrics = graphics.getFontMetrics();
+        userNameFieldWidth = fontMetrics.stringWidth(userName)+10;
+
+        invisiblePanel = new JPanel();
+        invisiblePanel.setBackground(null);
+        invisiblePanel.setPreferredSize(new Dimension(510-userNameFieldWidth/2,5));
+        invisiblePanel.setMinimumSize(new Dimension(510-userNameFieldWidth/2,5));
+        invisiblePanel.setMaximumSize(new Dimension(510-userNameFieldWidth/2,5));
+
+        userNameField.setMaximumSize(new Dimension(userNameFieldWidth, textFieldHeight+25));
+        userNameField.setMinimumSize(new Dimension(userNameFieldWidth, textFieldHeight+25));
+        userNameField.setPreferredSize(new Dimension(userNameFieldWidth, textFieldHeight+25));
+        userNameField.setBorder(BorderFactory.createEmptyBorder(0,5,0,0));
+        userNameField.setText(userName);
+        userNameField.setEditable(false);
+        userNameField.setBackground(null);
+        userNameField.setFocusable(false);
+        userNameField.setFont(new Font("",Font.BOLD,32));
+
+        editPanel = new JPanel();
+        editPanel.setBackground(null);
+        editPanel.setMaximumSize(new Dimension(30, textFieldHeight+40));
+        editPanel.setMinimumSize(new Dimension(30, textFieldHeight+40));
+        editPanel.setPreferredSize(new Dimension(30, textFieldHeight+40));
+        editPanel.setLayout(new BoxLayout(editPanel,BoxLayout.Y_AXIS));
+        editPanel.add(Box.createVerticalStrut(26));
+
+        buttons[2].setPreferredSize(new Dimension(30,20));
+        buttons[2].setMinimumSize(new Dimension(30,20));
+        buttons[2].setMaximumSize(new Dimension(30,20));
+        panels[3].add(invisiblePanel);
+        panels[3].add(userNameField);
+        editPanel.add(buttons[2]);
+        panels[3].add(editPanel);
+        this.add(panels[3]);
+
+        this.add(Box.createVerticalStrut(25));
         panels[0].add(Box.createHorizontalStrut(420-textFieldWidth/2));
         panels[0].add(labels[0]);
         panels[0].add(Box.createHorizontalStrut(20));
@@ -98,8 +148,10 @@ public class AccountPanel extends JPanel implements ActionListener {
         panels[0].add(buttons[0]);
         this.add(panels[0]);
 
+        graphics.setFont(new Font("",Font.BOLD,16));
+        fontMetrics = graphics.getFontMetrics();
         emptySpace = textFieldWidth;
-        passwordFieldWidth = fontMetrics.stringWidth(getPassword(fileContent()))+10;
+        passwordFieldWidth = fontMetrics.stringWidth(user.getPassword(user.fileContent()))+10;
         passwordField = new JPasswordField();
         passwordField.setMaximumSize(new Dimension(passwordFieldWidth, textFieldHeight));
         passwordField.setMinimumSize(new Dimension(passwordFieldWidth, textFieldHeight));
@@ -110,12 +162,10 @@ public class AccountPanel extends JPanel implements ActionListener {
         passwordField.setEditable(false);
         passwordField.setBackground(null);
         passwordField.setFocusable(false);
-        passwordField.setText(getPassword(fileContent()));
-        passwordCharacter = passwordField.getEchoChar();
+        passwordField.setText(user.getPassword(user.fileContent()));
         passwordField.setFont(new Font("",Font.BOLD,20));
         passwordField.setEchoChar('*');
-        this.add(Box.createVerticalStrut(30));
-
+        this.add(Box.createVerticalStrut(25));
         panels[1].add(Box.createHorizontalStrut(379-emptySpace/2));
         panels[1].add(labels[1]);
         panels[1].add(Box.createHorizontalStrut(20));
@@ -133,33 +183,19 @@ public class AccountPanel extends JPanel implements ActionListener {
         invisibleButton.setMaximumSize(new Dimension(100,30));
         invisibleButton.setBorder(null);
         panels[1].add(invisibleButton);
-
         this.add(panels[1]);
-        updatePasswordPanel = new UpdatePasswordPanel(fileContent(),ListenerClasses.toString(passwordField.getPassword()),userName, this,dashboardPanel,passwordFieldWidth,textFieldHeight, 493-emptySpace/2);
-        updatePasswordPanel.setVisible(false);
-        this.add(updatePasswordPanel);
+        box = Box.createVerticalStrut(25);
+        this.add(box);
 
-
+        dateCreated = new JLabel(user.getDateCreated(user.fileContent()));
+        dateCreated.setFont(new Font("",Font.BOLD,16));
+        dateCreated.setBorder(null);
+        panels[2].add(Box.createHorizontalStrut(315-emptySpace/2));
+        panels[2].add(labels[2]);
+        panels[2].add(Box.createHorizontalStrut(20));
+        panels[2].add(dateCreated);
+        this.add(panels[2]);
     }
-    public String[] fileContent(){
-        String[] content = new String[0];
-        try{
-            File fileCreated = new File("assets/info/"+userName+".txt");
-            FileReader reader = new FileReader(fileCreated);
-            int data = reader.read();
-            String string = Character.toString ((char) data);
-            data = reader.read();
-            while(data != -1){
-                string += Character.toString((char) data);
-                data = reader.read();
-            }
-            content = string.split("\n");
-        }catch (IOException ignored){}
-        return content;
-    }
-    public String getEmail(String[] string){return string[1];}
-    public String getPassword(String[] string){return string[2];}
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==buttons[0]){
@@ -173,21 +209,40 @@ public class AccountPanel extends JPanel implements ActionListener {
             graphics.setFont(new Font("",Font.PLAIN,14));
             if(passwordFieldWidth<fontMetrics.stringWidth("Current Password")+15)
                 passwordFieldWidth = fontMetrics.stringWidth("Current Password")+15;
-            updatePasswordPanel = new UpdatePasswordPanel(fileContent(),ListenerClasses.toString(passwordField.getPassword()),userName,
-                    this,dashboardPanel,passwordFieldWidth,textFieldHeight,493-emptySpace/2);
+            updatePasswordPanel = new UpdatePasswordPanel(user.fileContent(),userName, frame,
+                    this,signPanel,dashboardPanel, passwordField,passwordFieldWidth,textFieldHeight,493-emptySpace/2);
+            panels[2].setVisible(false);
+            box.setVisible(false);
             this.add(updatePasswordPanel);
+            this.add(box);
+            this.add(panels[2]);
+            panels[2].setVisible(true);
             updatePasswordPanel.setVisible(true);
             buttons[1].setVisible(false);
-            updatePasswordPanel.setPasswordFieldDimension(passwordFieldWidth,22);
-            passwordField.setMaximumSize(new Dimension(passwordFieldWidth, 22));
-            passwordField.setMinimumSize(new Dimension(passwordFieldWidth, 22));
-            passwordField.setPreferredSize(new Dimension(passwordFieldWidth, 22));
+            updatePasswordPanel.setPasswordFieldDimension(passwordFieldWidth,textFieldHeight);
+            passwordField.setMaximumSize(new Dimension(passwordFieldWidth, textFieldHeight));
+            passwordField.setMinimumSize(new Dimension(passwordFieldWidth, textFieldHeight));
+            passwordField.setPreferredSize(new Dimension(passwordFieldWidth, textFieldHeight));
             passwordField.setEditable(true);
             passwordField.setFocusable(true);
             passwordField.setText("");
             passwordField.requestFocus();
             passwordField.setBackground(new Color(220,220,220));
             addPlaceholder(passwordField,"Current Password");
+        }
+        if(e.getSource()==buttons[2]){
+            userNameField.setEditable(true);
+            userNameField.setFocusable(true);
+            userNameField.requestFocus();
+            panels[3].validate();
+            panels[3].repaint();
+            userNameField.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createMatteBorder(0,0,1,0,userNameField.getForeground()),
+                    BorderFactory.createEmptyBorder(0,5,0,0)));
+            userNameField.addKeyListener(new UpdateUserNameOperation(frame,dashboardPanel,panels[3],signPanel,
+                    invisiblePanel,userNameField,userName));
+            userNameField.getDocument().addDocumentListener(new UserNameListener(userNameField,panels[3],invisiblePanel, color));
+            buttons[2].setVisible(false);
         }
     }
 
@@ -202,14 +257,17 @@ public class AccountPanel extends JPanel implements ActionListener {
                 BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK),
                 BorderFactory.createEmptyBorder(0,5,0,0)));
 
-        textField.getDocument().addDocumentListener(new PlaceHolderListener(textField, placeholderLabel));
+        textField.getDocument().addDocumentListener(new PlaceHolderListener(textField, placeholderLabel,color));
     }
     static class PlaceHolderListener implements DocumentListener {
         JTextField textField;
         JLabel placeholderLabel;
-        public PlaceHolderListener(JTextField textField, JLabel placeholderLabel){
+        Color color;
+
+        public PlaceHolderListener(JTextField textField, JLabel placeholderLabel, Color color){
             this.textField = textField;
             this.placeholderLabel = placeholderLabel;
+            this.color = color;
         }
         @Override
         public void insertUpdate(DocumentEvent e) {updatePlaceholder();}
@@ -218,10 +276,54 @@ public class AccountPanel extends JPanel implements ActionListener {
         @Override
         public void changedUpdate(DocumentEvent e) {updatePlaceholder();}
         private void updatePlaceholder() {
+            textField.setForeground(color);
             textField.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK),
                     BorderFactory.createEmptyBorder(0,5,0,0)));
             placeholderLabel.setVisible(textField.getText().isEmpty());}
+    }
+
+    static class UserNameListener implements DocumentListener {
+        JTextField userNameField;
+        JPanel userPanel;
+        JPanel box;
+        Color color;
+
+        public UserNameListener(JTextField userNameField,JPanel userPanel, JPanel box, Color color){
+            this.userNameField = userNameField;
+            this.userPanel = userPanel;
+            this.box = box;
+            this.color = color;
+        }
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            updateLength();}
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            updateLength();}
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            updateLength();}
+        private void updateLength() {
+            userNameField.setForeground(color);
+            Graphics graphics = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).getGraphics();
+            graphics.setFont(new Font("", Font.BOLD, 32));
+            FontMetrics fontMetrics = graphics.getFontMetrics();
+            int userNameFieldWidth = fontMetrics.stringWidth(userNameField.getText()) + 10, textFieldHeight = 22;
+            userNameField.setMaximumSize(new Dimension(userNameFieldWidth, textFieldHeight + 25));
+            userNameField.setMinimumSize(new Dimension(userNameFieldWidth, textFieldHeight + 25));
+            userNameField.setPreferredSize(new Dimension(userNameFieldWidth, textFieldHeight + 25));
+            userNameField.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createMatteBorder(0, 0, 1, 0, userNameField.getForeground()),
+                    BorderFactory.createEmptyBorder(0, 5, 0, 0)));
+            box.setMaximumSize(new Dimension(510 - userNameFieldWidth / 2, 5));
+            box.setPreferredSize(new Dimension(510 - userNameFieldWidth / 2, 5));
+            box.setMinimumSize(new Dimension(510 - userNameFieldWidth / 2, 5));
+            box.validate();
+            box.repaint();
+            userPanel.validate();
+            userPanel.repaint();
+        }
     }
 
     static class DisableButtonPress extends MetalButtonUI{
@@ -231,15 +333,16 @@ public class AccountPanel extends JPanel implements ActionListener {
 
     class EmailListener extends KeyAdapter{
         JTextField emailField;
+       String[] fileContent;
         JPanel panel;
         String userName, password;
-        public EmailListener(JPanel panel, JTextField emailField, String userName, String password){
+        public EmailListener(String[] fileContent, JPanel panel, JTextField emailField, String userName, String password){
+            this.fileContent = fileContent;
             this.panel = panel;
             this.emailField = emailField;
             this.userName = userName;
             this.password = password;
         }
-
         @Override
         public void keyPressed(KeyEvent e) {
             addPlaceholder(emailField,"New Email");
@@ -251,11 +354,11 @@ public class AccountPanel extends JPanel implements ActionListener {
                 try {
                     File userFile = new File("assets/info/"+userName+".txt");
                     FileWriter writer = new FileWriter(userFile);
-                    writer.write(userName + "\n" + emailField.getText() + "\n" + password);
+                    writer.write(userName + "\n" + emailField.getText() + "\n" + password+"\n"+ user.getDateCreated(fileContent));
                     writer.close();
                 }catch(IOException ignored){}
                 panel.setVisible(false);
-                dashboardPanel.add(new AccountPanel(dashboardPanel,userName), BorderLayout.CENTER);
+                dashboardPanel.add(new AccountPanel(frame,signPanel,dashboardPanel,userName), BorderLayout.CENTER);
             }
         }
     }

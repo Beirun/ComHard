@@ -10,8 +10,8 @@ public class AccountLabel extends JLabel {
     BufferedImage bufferedImage;
     JPanel panel;
     int panelWidth, panelHeight, xCoordinate, yCoordinate, imageRatio;
-
-
+    String userName;
+    Color color = new Color(51,51,51);
 
     public AccountLabel(String userName, JPanel panel,int panelWidth, int panelHeight, int xCoordinate, int yCoordinate, int imageRatio, boolean isSidebar){
         this.panel = panel;
@@ -19,26 +19,37 @@ public class AccountLabel extends JLabel {
         this.panelHeight = panelHeight;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
-        this.imageRatio = imageRatio;
-        this.setPreferredSize(new Dimension(80,50));
+        this.userName = userName;
+        this.imageRatio = imageRatio*5;
         this.setAlignmentX(CENTER_ALIGNMENT);
         this.setText(userName);
-        this.setFont(new Font("", Font.BOLD, 30));
+        this.setBackground(Color.GREEN);
+        this.setFont(new Font("", Font.BOLD, 25));
         panel.add(imageSection());
-        if(isSidebar) panel.add(this);
+        if(isSidebar){
+            Graphics graphics = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).getGraphics();
+            graphics.setFont(new Font("",Font.BOLD,25));
+            FontMetrics fontMetrics = graphics.getFontMetrics();
+            int textWidth = fontMetrics.stringWidth(userName)+5, fontSize = 25;
+            while(textWidth>200) {
+                graphics.setFont(new Font("",Font.BOLD,fontSize--));
+                fontMetrics = graphics.getFontMetrics();
+                textWidth = fontMetrics.stringWidth(userName);
+            }
+            this.setFont(new Font("",Font.BOLD,fontSize));
+            this.setPreferredSize(new Dimension(textWidth,50));
+            this.setMinimumSize(new Dimension(textWidth,50));
+            this.setMaximumSize(new Dimension(textWidth,50));
+            panel.add(this);
+        }
     }
-    public void profileSection(){
-
-    }
-
     public JPanel imageSection(){
         JPanel panel = new JPanel(){
-
             @Override
             public void paintComponent(Graphics g){
                 super.paintComponent(g);
                 Graphics2D g2 = (Graphics2D) g.create();
-                g2.drawImage(imageIcon(),xCoordinate,yCoordinate,null);
+                g2.drawImage(imageIcon(),xCoordinate,yCoordinate,imageIcon().getWidth()/5,imageIcon().getHeight()/5,null);
             }
         };
         panel.setPreferredSize(new Dimension(panelWidth,panelHeight));
@@ -50,9 +61,22 @@ public class AccountLabel extends JLabel {
         return panel;
     }
 
+    public void setCircularColor(Color color){
+
+        this.color = color;
+    }
     public BufferedImage imageIcon(){
         try {
-            bufferedImage = ImageIO.read(new File("resources/img/whistle.jpg"));
+            String[] fileExtension = {".png",".jpeg",".jpg"};
+            boolean isBufferedImageNull = true;
+            for(int i = 0; i < fileExtension.length; i++){
+                if(new File("resources/profiles/"+userName+fileExtension[i]).exists()){
+                    bufferedImage = ImageIO.read(new File("resources/profiles/"+userName+fileExtension[i]));
+                    isBufferedImageNull = false;
+                }
+            }
+            if (isBufferedImageNull) bufferedImage = ImageIO.read(new File("resources/profiles/default.jpg"));
+
         }catch (IOException ignored){}
         int diameter = 100, width, height;
         double ratio;
@@ -82,10 +106,14 @@ public class AccountLabel extends JLabel {
         g2.setColor(new Color(230,230,230));
         g2.setStroke(new BasicStroke(10*imageRatio));
         g2.setClip(new Ellipse2D.Float(0, 0, diameter, diameter));
-        g2.drawImage(bufferedImage, 0, 5, width, height, null);
+        if(width/imageRatio==100 && height/imageRatio==100) g2.drawImage(bufferedImage,0,0,width,height,null);
+        else if(width/imageRatio==100) g2.drawImage(bufferedImage, 7*imageRatio-imageRatio*2,
+                (-height/2+diameter/2)+2*imageRatio, width-7*imageRatio, height-7*imageRatio, null);
+        else if(height/imageRatio==100) g2.drawImage(bufferedImage, (-width/2+diameter/2)+2*imageRatio,
+                7*imageRatio-imageRatio*2, width-7*imageRatio, height-7*imageRatio, null);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.draw(new Ellipse2D.Float(0, 0, diameter, diameter));
-        g2.setColor(new Color(51,51,51));
+        g2.setColor(color);
         g2.setStroke(new BasicStroke(7*imageRatio));
         g2.draw(new Ellipse2D.Float(0, 0, diameter, diameter));
         g2.dispose();

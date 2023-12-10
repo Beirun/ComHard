@@ -1,11 +1,6 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class LoginPanel extends JPanel implements ActionListener {
     JPanel panel;
@@ -27,22 +22,22 @@ public class LoginPanel extends JPanel implements ActionListener {
     public void textFields(){
 
         userName = new JTextField(10);
-        ListenerClasses.addPlaceholder(userName,"Username");
+        DuplicateClasses.addPlaceholder(userName,"Username");
         userName.setMaximumSize(new Dimension(300, 75));
         userName.setMinimumSize(new Dimension(300, 75));
         userName.setPreferredSize(new Dimension(300, 75));
         userName.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        userName.setFont(ListenerClasses.font);
+        userName.setFont(DuplicateClasses.font);
         userName.addKeyListener(new TextFieldListener(panel));
 
 
         password = new JPasswordField(10);
-        ListenerClasses.addPlaceholder(password,"Password");
+        DuplicateClasses.addPlaceholder(password,"Password");
         password.setMaximumSize(new Dimension(300, 75));
         password.setMinimumSize(new Dimension(300, 75));
         password.setPreferredSize(new Dimension(300, 75));
         password.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        password.setFont(ListenerClasses.font);
+        password.setFont(DuplicateClasses.font);
         password.addKeyListener(new TextFieldListener(panel));
         this.add(new LogoClass(ComHard.WIDTH/2-200,300, 360, 101,69,50));
         this.add(Box.createVerticalStrut(50));
@@ -88,7 +83,7 @@ public class LoginPanel extends JPanel implements ActionListener {
         resetPassword.setBorder(null);
         resetPassword.setPreferredSize(new Dimension(135,30));
         resetPassword.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        resetPassword.addMouseListener(new ListenerClasses.UnderlinedText(resetPassword.getText(), resetPassword));
+        resetPassword.addMouseListener(new DuplicateClasses.UnderlinedText(resetPassword.getText(), resetPassword));
         resetPassword.addActionListener(this);
 
         JPanel signInPanel = new JPanel(new FlowLayout());
@@ -102,7 +97,7 @@ public class LoginPanel extends JPanel implements ActionListener {
         createAccount.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
         createAccount.setPreferredSize(new Dimension(275,30));
         createAccount.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        createAccount.addMouseListener(new ListenerClasses.UnderlinedText(createAccount.getText(), createAccount));
+        createAccount.addMouseListener(new DuplicateClasses.UnderlinedText(createAccount.getText(), createAccount));
         createAccount.addActionListener(this);
         signInPanel.add(createAccount);
         buttonPanel.add(leftPanel);
@@ -134,7 +129,7 @@ public class LoginPanel extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e) {
             if(e.getKeyCode()==KeyEvent.VK_ENTER){
                 LoginOperation loginOperation = new LoginOperation(frame, panel, userName,
-                        password, userName.getText(), ListenerClasses.toString(password.getPassword()));
+                        password, userName.getText(), DuplicateClasses.toString(password.getPassword()));
                 loginOperation.fileReader();
             }
         }
@@ -150,7 +145,7 @@ public class LoginPanel extends JPanel implements ActionListener {
         @Override
         public void mouseClicked(MouseEvent e) {
             LoginOperation loginOperation = new LoginOperation(frame, panel, userName,
-                    password, userName.getText(),ListenerClasses.toString(password.getPassword()));
+                    password, userName.getText(), DuplicateClasses.toString(password.getPassword()));
             loginOperation.fileReader();
         }
 

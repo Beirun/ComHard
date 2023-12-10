@@ -3,11 +3,12 @@ import java.awt.*;
 import java.io.*;
 
 public class LoginOperation {
-    String userName, password, tempString, passwordEntered;
+    String userName, password, passwordEntered;
     JFrame frame;
     JPanel panel;
     JTextField userField;
     JPasswordField passField;
+    DuplicateClasses.UserFile user;
     public LoginOperation(JFrame frame, JPanel panel, JTextField userField,
                           JPasswordField passField, String userName, String passwordEntered){
         this.frame = frame;
@@ -19,42 +20,28 @@ public class LoginOperation {
     }
 
     public void fileReader(){
-        try {
-            File fileCreated = new File("assets/info/"+userName+".txt");
-            if(!fileCreated.exists()){
-                //Error no account
+        user = new DuplicateClasses.UserFile(userName);
+        File fileCreated = new File("assets/info/"+userName+".txt");
+        if(!fileCreated.exists()){
+            //Error no account
+            userField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
+                    BorderFactory.createEmptyBorder(0,10,0,0)));
+            passField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
+                    BorderFactory.createEmptyBorder(0,10,0,0)));
+        }else {
+            password = user.getPassword(user.fileContent());
+            if(isPasswordCorrect()){
+                frame.add(new DashboardPanel(frame,panel,user.getUserName(user.fileContent())));
+                panel.setVisible(false);
+            }else{
                 userField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
                         BorderFactory.createEmptyBorder(0,10,0,0)));
                 passField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
                         BorderFactory.createEmptyBorder(0,10,0,0)));
-            }else {
-                FileReader reader = new FileReader(fileCreated);
-                int data = reader.read();
-                tempString = Character.toString ((char) data);
-                data = reader.read();
-                while(data != -1){
-                    tempString += Character.toString((char) data);
-                    data = reader.read();
-                }
-                password = getPassword(tempString.split("\n"));
-
-                if(isPasswordCorrect()){
-                    frame.add(new DashboardPanel(frame,panel,getUserName(tempString.split("\n"))));
-                    panel.setVisible(false);
-                }else{
-                    userField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
-                            BorderFactory.createEmptyBorder(0,10,0,0)));
-                    passField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
-                            BorderFactory.createEmptyBorder(0,10,0,0)));
-                }
             }
-        }catch (IOException ignored){}
+        }
     }
     public boolean isPasswordCorrect(){
         return passwordEntered.equals(password);
     }
-    public String getPassword(String[] string){
-        return string[2];
-    }
-    public String getUserName(String[] string){return string[0];}
 }

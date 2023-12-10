@@ -8,6 +8,9 @@ public class Buttons extends JPanel {
     private int width = 100, height = 50, arc = 45, buttonX = 0, buttonY = 0, fontSize = 13;
     private Color colorSelect = new Color(117,210,104), colorNormal, colorEntered;
     boolean isMousePressed = false, isMouseReleased = false, isMouseEntered = false;
+    int xTextCoordinate;
+    int yTextCoordinate;
+
     public Buttons(String Label){
         this.Label = Label;
         this.setPreferredSize(new Dimension(width,height));
@@ -33,6 +36,10 @@ public class Buttons extends JPanel {
         super.paintComponent(g);
         Draw(g);
 
+    }
+    public void addTextPosition(int xTextCoordinate, int yTextCoordinate){
+        this.xTextCoordinate = xTextCoordinate;
+        this.yTextCoordinate = yTextCoordinate;
     }
     public void setFontSize(int fontSize) {
         this.fontSize = fontSize;
@@ -60,7 +67,7 @@ public class Buttons extends JPanel {
         g.setColor(new Color(38,38,38));
         g.setFont( new Font("",Font.BOLD, fontSize));
         FontMetrics metrics = getFontMetrics(g.getFont());
-        g.drawString(Label,(width - metrics.stringWidth(Label))/2,height/2 + g.getFont().getSize()/2);
+        g.drawString(Label,(width - metrics.stringWidth(Label))/2+xTextCoordinate,height/2 + g.getFont().getSize()/2+yTextCoordinate);
 
     }
 

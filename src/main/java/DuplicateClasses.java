@@ -4,8 +4,11 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
-public class ListenerClasses {
+public class DuplicateClasses {
     static Font font;
     public static String toString(char[] a) {
         StringBuilder sb = new StringBuilder();
@@ -38,7 +41,7 @@ public class ListenerClasses {
         textField.add(placeholderLabel);
         font = placeholderLabel.getFont();
 
-        textField.getDocument().addDocumentListener(new ListenerClasses.PlaceHolderListener(textField, placeholderLabel));
+        textField.getDocument().addDocumentListener(new DuplicateClasses.PlaceHolderListener(textField, placeholderLabel));
     }
     static class UnderlinedText extends MouseAdapter {
         String text;
@@ -47,13 +50,37 @@ public class ListenerClasses {
             this.text = text;
             this.button = button;
         }
-
         @Override
         public void mouseEntered(MouseEvent e) {button.setText("<html><u>"+text+"</u></html>");}
         @Override
         public void mouseExited(MouseEvent e) {
             button.setText(text);
         }
+    }
+    static class UserFile {
+        String userName;
+        public UserFile(String userName){this.userName = userName;}
+        public String[] fileContent(){
+            String[] content = new String[0];
+            try{
+                File fileCreated = new File("assets/info/"+userName+".txt");
+                FileReader reader = new FileReader(fileCreated);
+                int data = reader.read();
+                String string = Character.toString ((char) data);
+                data = reader.read();
+                while(data != -1){
+                    string += Character.toString((char) data);
+                    data = reader.read();
+                }
+                reader.close();
+                content = string.split("\n");
+            }catch (IOException ignored){}
+            return content;
+        }
+        public String getUserName(String[] string){return string[0];}
+        public String getEmail(String[] string){return string[1];}
+        public String getPassword(String[] string){return string[2];}
+        public String getDateCreated(String[] string){return string[3];}
     }
 
 }

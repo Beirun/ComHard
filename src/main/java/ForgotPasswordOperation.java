@@ -1,16 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class ForgotPasswordOperation {
-    String userName, newPassword, tempString, confirmPassword, emailEntered, email;
+    String userName, newPassword, confirmPassword, emailEntered, email;
     JFrame frame;
     JPanel panel, signPanel;
     JTextField userField, emailField;
     JPasswordField newPasswordField, confirmPasswordField;
+    DuplicateClasses.UserFile user;
 
     public ForgotPasswordOperation(JFrame frame, JPanel signPanel, JPanel panel, JTextField userField, JTextField emailField, JPasswordField newPasswordField,
                                    JPasswordField confirmPasswordField, String userName, String emailEntered, String newPassword, String confirmPassword){
@@ -28,6 +28,7 @@ public class ForgotPasswordOperation {
     }
     public void fileReader(){
         try {
+            user = new DuplicateClasses.UserFile(userName);
             File fileCreated = new File("assets/info/"+userName+".txt");
             if(emailField.getText().isEmpty()){
                 emailField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
@@ -46,15 +47,7 @@ public class ForgotPasswordOperation {
                 userField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
                         BorderFactory.createEmptyBorder(0,10,0,0)));
             }else {
-                FileReader reader = new FileReader(fileCreated);
-                int data = reader.read();
-                tempString = Character.toString ((char) data);
-                data = reader.read();
-                while(data != -1){
-                    tempString += Character.toString((char) data);
-                    data = reader.read();
-                }
-                email = getEmail(tempString.split("\n"));
+                email = user.getEmail(user.fileContent());
                 if(isEmailCorrect()){
                    // if correct
                     if(newPassword.length()<8 || !isPasswordCorrect()){
@@ -64,7 +57,7 @@ public class ForgotPasswordOperation {
                                 BorderFactory.createEmptyBorder(0,10,0,0)));
                     } else if(isPasswordCorrect()){
                         FileWriter writer = new FileWriter(fileCreated);
-                        writer.write(userName+"\n"+email + "\n" + newPassword+"\n"+getDateCreated(tempString.split("\n")));
+                        writer.write(userName+"\n"+email + "\n" + newPassword+"\n"+user.getDateCreated(user.fileContent()));
                         writer.close();
                         signPanel.add(new LoginPanel(frame,signPanel), BorderLayout.EAST);
                         panel.setVisible(false);
@@ -81,10 +74,6 @@ public class ForgotPasswordOperation {
         return email.equals(emailEntered);
     }
     //public boolean is
-    public String getEmail(String[] string){
-        return string[1];
-    }
-    public String getDateCreated(String[] string){return string[3];}
     public boolean isPasswordCorrect(){
         return newPassword.equals(confirmPassword);
     }

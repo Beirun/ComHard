@@ -21,39 +21,39 @@ public class RegisterPanel extends JPanel implements ActionListener {
 
     public void textFields(){
         email = new JTextField(10);
-        ListenerClasses.addPlaceholder(email,"Email");
+        DuplicateClasses.addPlaceholder(email,"Email");
         email.setMaximumSize(new Dimension(300, 75));
         email.setMinimumSize(new Dimension(300, 75));
         email.setPreferredSize(new Dimension(300, 75));
         email.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        email.setFont(ListenerClasses.font);
+        email.setFont(DuplicateClasses.font);
         email.addKeyListener(new TextFieldListener(panel, this));
 
         userName = new JTextField(10);
-        ListenerClasses.addPlaceholder(userName,"Username");
+        DuplicateClasses.addPlaceholder(userName,"Username");
         userName.setMaximumSize(new Dimension(300, 75));
         userName.setMinimumSize(new Dimension(300, 75));
         userName.setPreferredSize(new Dimension(300, 75));
         userName.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        userName.setFont(ListenerClasses.font);
+        userName.setFont(DuplicateClasses.font);
         userName.addKeyListener(new TextFieldListener(panel, this));
 
         password = new JPasswordField(10);
-        ListenerClasses.addPlaceholder(password,"Password");
+        DuplicateClasses.addPlaceholder(password,"Password");
         password.setMaximumSize(new Dimension(300, 75));
         password.setMinimumSize(new Dimension(300, 75));
         password.setPreferredSize(new Dimension(300, 75));
         password.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        password.setFont(ListenerClasses.font);
+        password.setFont(DuplicateClasses.font);
         password.addKeyListener(new TextFieldListener(panel, this));
 
         confirmPassword = new JPasswordField(10);
-        ListenerClasses.addPlaceholder(confirmPassword,"Confirm Password");
+        DuplicateClasses.addPlaceholder(confirmPassword,"Confirm Password");
         confirmPassword.setMaximumSize(new Dimension(300, 75));
         confirmPassword.setMinimumSize(new Dimension(300, 75));
         confirmPassword.setPreferredSize(new Dimension(300, 75));
         confirmPassword.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        confirmPassword.setFont(ListenerClasses.font);
+        confirmPassword.setFont(DuplicateClasses.font);
         confirmPassword.addKeyListener(new TextFieldListener(panel, this));
 
         this.add(new LogoClass(ComHard.WIDTH/2-200,300, 360, 101,69,50));
@@ -104,7 +104,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
         aHAccount.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
         aHAccount.setPreferredSize(new Dimension(290,30));
         aHAccount.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        aHAccount.addMouseListener(new ListenerClasses.UnderlinedText(aHAccount.getText(), aHAccount));
+        aHAccount.addMouseListener(new DuplicateClasses.UnderlinedText(aHAccount.getText(), aHAccount));
         aHAccount.addActionListener(this);
         signInPanel.add(aHAccount);
         buttonPanel.add(leftPanel);
@@ -137,7 +137,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
         public void mouseClicked(MouseEvent e) {
 
             RegistrationOperation registrationOperation = new RegistrationOperation(frame, signPanel, panel, password,confirmPassword,userName, email,
-                    userName.getText(),email.getText(),ListenerClasses.toString(password.getPassword()),ListenerClasses.toString(confirmPassword.getPassword()));
+                    userName.getText(),email.getText(), DuplicateClasses.toString(password.getPassword()), DuplicateClasses.toString(confirmPassword.getPassword()));
             registrationOperation.fileCreator();
         }
     }
@@ -153,7 +153,7 @@ public class RegisterPanel extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e) {
             if(e.getKeyCode()==KeyEvent.VK_ENTER){
                 RegistrationOperation registrationOperation = new RegistrationOperation(frame, signPanel, panel, password,confirmPassword,userName, email,
-                        userName.getText(),email.getText(),ListenerClasses.toString(password.getPassword()),ListenerClasses.toString(confirmPassword.getPassword()));
+                        userName.getText(),email.getText(), DuplicateClasses.toString(password.getPassword()), DuplicateClasses.toString(confirmPassword.getPassword()));
                 registrationOperation.fileCreator();
             }
         }

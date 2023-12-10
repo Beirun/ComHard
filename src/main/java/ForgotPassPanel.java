@@ -21,39 +21,39 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
     }
     public void textFields(){
         userName = new JTextField(10);
-        ListenerClasses.addPlaceholder(userName,"Username");
+        DuplicateClasses.addPlaceholder(userName,"Username");
         userName.setMaximumSize(new Dimension(300, 75));
         userName.setMinimumSize(new Dimension(300, 75));
         userName.setPreferredSize(new Dimension(300, 75));
         userName.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        userName.setFont(ListenerClasses.font);
+        userName.setFont(DuplicateClasses.font);
         userName.addKeyListener(new TextFieldListener(panel, this));
 
         email = new JTextField(10);
-        ListenerClasses.addPlaceholder(email,"Email");
+        DuplicateClasses.addPlaceholder(email,"Email");
         email.setMaximumSize(new Dimension(300, 75));
         email.setMinimumSize(new Dimension(300, 75));
         email.setPreferredSize(new Dimension(300, 75));
         email.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        email.setFont(ListenerClasses.font);
+        email.setFont(DuplicateClasses.font);
         email.addKeyListener(new TextFieldListener(panel, this));
 
         newPassword = new JPasswordField(10);
-        ListenerClasses.addPlaceholder(newPassword,"New Password");
+        DuplicateClasses.addPlaceholder(newPassword,"New Password");
         newPassword.setMaximumSize(new Dimension(300, 75));
         newPassword.setMinimumSize(new Dimension(300, 75));
         newPassword.setPreferredSize(new Dimension(300, 75));
         newPassword.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        newPassword.setFont(ListenerClasses.font);
+        newPassword.setFont(DuplicateClasses.font);
         newPassword.addKeyListener(new TextFieldListener(panel, this));
 
         confirmPassword = new JPasswordField(10);
-        ListenerClasses.addPlaceholder(confirmPassword,"Confirm Password");
+        DuplicateClasses.addPlaceholder(confirmPassword,"Confirm Password");
         confirmPassword.setMaximumSize(new Dimension(300, 75));
         confirmPassword.setMinimumSize(new Dimension(300, 75));
         confirmPassword.setPreferredSize(new Dimension(300, 75));
         confirmPassword.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
-        confirmPassword.setFont(ListenerClasses.font);
+        confirmPassword.setFont(DuplicateClasses.font);
         confirmPassword.addKeyListener(new TextFieldListener(panel, this));
 
         this.add(new LogoClass(ComHard.WIDTH/2-200,300,360, 101,69,50));
@@ -104,7 +104,7 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         aHAccount.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
         aHAccount.setPreferredSize(new Dimension(290,30));
         aHAccount.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        aHAccount.addMouseListener(new ListenerClasses.UnderlinedText(aHAccount.getText(), aHAccount));
+        aHAccount.addMouseListener(new DuplicateClasses.UnderlinedText(aHAccount.getText(), aHAccount));
         aHAccount.addActionListener(this);
         signInPanel.add(aHAccount);
         buttonPanel.add(leftPanel);
@@ -134,7 +134,7 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         @Override
         public void mouseClicked(MouseEvent e) {
             ForgotPasswordOperation forgotPasswordOperation = new ForgotPasswordOperation(frame, signPanel, panel, userName, email, newPassword, confirmPassword,
-                    userName.getText(), email.getText(),ListenerClasses.toString(newPassword.getPassword()),ListenerClasses.toString(confirmPassword.getPassword()));
+                    userName.getText(), email.getText(), DuplicateClasses.toString(newPassword.getPassword()), DuplicateClasses.toString(confirmPassword.getPassword()));
             forgotPasswordOperation.fileReader();
         }
     }
@@ -149,7 +149,7 @@ public class ForgotPassPanel extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e) {
             if(e.getKeyCode()==KeyEvent.VK_ENTER){
                 ForgotPasswordOperation forgotPasswordOperation = new ForgotPasswordOperation(frame, signPanel, panel, userName, email, newPassword, confirmPassword,
-                        userName.getText(), email.getText(),ListenerClasses.toString(newPassword.getPassword()),ListenerClasses.toString(confirmPassword.getPassword()));
+                        userName.getText(), email.getText(), DuplicateClasses.toString(newPassword.getPassword()), DuplicateClasses.toString(confirmPassword.getPassword()));
                 forgotPasswordOperation.fileReader();
             }
         }

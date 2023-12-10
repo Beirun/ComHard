@@ -5,6 +5,13 @@ public class DashboardPanel extends JPanel {
     JFrame frame;
     JPanel signPanel;
     String userName;
+    SidebarPanel sidebarPanel;
+    AccountPanel accountPanel;
+    HomePanel homePanel;
+    FavoritesPanel favoritesPanel;
+    AssociatesPanel associatesPanel;
+
+
     public DashboardPanel(JFrame frame, JPanel signPanel, String userName){
         this.signPanel = signPanel;
         this.setBounds(0,0,ComHard.WIDTH,ComHard.LENGTH);
@@ -16,10 +23,16 @@ public class DashboardPanel extends JPanel {
     }
 
     public void panels(){
-        HomePanel homePanel = new HomePanel(this,userName);
-        AccountPanel accountPanel = new AccountPanel(this, userName);
-        SidebarPanel sidebarPanel = new SidebarPanel(frame, homePanel,  accountPanel,this, signPanel,userName);
+        associatesPanel = new AssociatesPanel(this, userName);
+        favoritesPanel = new FavoritesPanel(this,userName);
+        homePanel = new HomePanel(this,userName);
+        accountPanel = new AccountPanel(frame,signPanel,this,userName);
+        sidebarPanel = new SidebarPanel(frame, homePanel,  accountPanel, favoritesPanel, associatesPanel, this, signPanel,userName);
         this.add(sidebarPanel,BorderLayout.WEST);
         this.add(homePanel,BorderLayout.CENTER);
+        homePanel.setVisible(true);
+        accountPanel.setVisible(false);
+        favoritesPanel.setVisible(false);
+        associatesPanel.setVisible(false);
     }
 }

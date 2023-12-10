@@ -49,7 +49,6 @@ public class RegistrationOperation {
                 //Error account already exists
                 userField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.red),
                         BorderFactory.createEmptyBorder(0,10,0,0)));
-
             }else {
                 if(password.length()<8  || !isPasswordCorrect()){
                     //Error password is less than 8 or does not match
