@@ -1,8 +1,11 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,6 +17,8 @@ public class AssociatesPanel extends JPanel {
     ArrayList<String> storeName;
     ArrayList<String> storeAddress;
     JPanel[] stores;
+    BufferedImage bufferedImage;
+
 
     public AssociatesPanel(JPanel dashboardPanel, String userName){
         this.dashboardPanel = dashboardPanel;
@@ -32,14 +37,24 @@ public class AssociatesPanel extends JPanel {
         stores = new JPanel[getStoreName().size()];
         storeName = getStoreName();
         storeAddress = getStoreAddress();
+        ScrollPane scrollPane = new ScrollPane();
         for (int i = 0; i < stores.length; i++) {
-            stores[i] = new JPanel();
+            int finalI = i;
+            stores[i] = new JPanel(){
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    g.drawImage(storeImage(storeName.get(finalI)), 0,5,storeImage(storeName.get(finalI)).getWidth()/10,
+                            storeImage(storeName.get(finalI)).getHeight()/10, null);
+                }
+            };
             stores[i].setBackground(Color.green);
-            stores[i].setPreferredSize(new Dimension(200, 300));
-            stores[i].setLayout(new FlowLayout(FlowLayout.CENTER));
-
+            stores[i].setPreferredSize(new Dimension(264, 176+300));
+            stores[i].setLayout(new BoxLayout(stores[i],BoxLayout.Y_AXIS));
+            stores[i].add(Box.createVerticalStrut(storeImage(storeName.get(finalI)).getHeight()/10+10));
             JTextPane[] storeNames = new JTextPane[getStoreName().size()];
             storeNames[i] = new JTextPane();
+            storeNames[i].add(Box.createHorizontalGlue());
             storeNames[i].setText(storeName.get(i));
             StyledDocument documentStyle = storeNames[i].getStyledDocument();
             SimpleAttributeSet centerAttribute = new SimpleAttributeSet();
@@ -48,7 +63,6 @@ public class AssociatesPanel extends JPanel {
 
             storeNames[i].setFocusable(false);
             storeNames[i].setEditable(false);
-            storeNames[i].setLayout(new FlowLayout(FlowLayout.CENTER));
             storeNames[i].setFont(new Font("",Font.BOLD,14));
             storeNames[i].setPreferredSize(new Dimension(190, 50));
             stores[i].add(storeNames[i]);
@@ -103,5 +117,19 @@ public class AssociatesPanel extends JPanel {
             arrayList.add(storeData.split(":")[1]);
         }
         return arrayList;
+    }
+    public BufferedImage storeImage(String storeName){
+        int width = 10, height = 10;
+        try{
+            bufferedImage = ImageIO.read(new File("resources/Associates/"+storeName+".jpg"));
+            width = bufferedImage.getWidth()*5;
+            height = bufferedImage.getHeight()*5;
+        }catch (IOException ignored){}
+        BufferedImage imageBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = imageBuffer.createGraphics();
+        g2.setClip(new RoundRectangle2D.Float(0,0, width, height,250,250));
+        g2.drawImage(bufferedImage,0,0,width,height,null);
+        g2.dispose();
+        return imageBuffer;
     }
 }

@@ -51,6 +51,10 @@ public class UpdateUserNameOperation extends KeyAdapter {
                 AccountPanel accountPanel = new AccountPanel(frame,signPanel, newDashboardPanel,userNameField.getText());
                 newDashboardPanel.sidebarPanel.setVisible(false);
                 SidebarPanel newSideBarPanel = new SidebarPanel(frame, newDashboardPanel.homePanel,accountPanel,newDashboardPanel.favoritesPanel,newDashboardPanel.associatesPanel,newDashboardPanel,signPanel,userNameField.getText());
+                newSideBarPanel.sidebarButtons[0].setEnabled(true);
+                newSideBarPanel.sidebarButtons[0].setBackground(null);
+                newSideBarPanel.sidebarButtons[1].setBackground(new Color(23,88,142));
+                newSideBarPanel.sidebarButtons[1].setEnabled(false);
                 newDashboardPanel.add(newSideBarPanel,BorderLayout.WEST);
                 newDashboardPanel.add(accountPanel,BorderLayout.CENTER);
                 frame.add(newDashboardPanel);
