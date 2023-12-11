@@ -39,7 +39,7 @@ public class AccountPanel extends JPanel implements ActionListener {
         this.setPreferredSize(new Dimension(ComHard.WIDTH,ComHard.LENGTH));
         this.setBackground(new Color(236, 234, 236));
         this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-        profilePanel();
+        SwingUtilities.invokeLater(this::profilePanel);
     }
 
     public void profilePanel(){
@@ -195,6 +195,7 @@ public class AccountPanel extends JPanel implements ActionListener {
         panels[2].add(Box.createHorizontalStrut(20));
         panels[2].add(dateCreated);
         this.add(panels[2]);
+        graphics.dispose();
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -229,6 +230,7 @@ public class AccountPanel extends JPanel implements ActionListener {
             passwordField.requestFocus();
             passwordField.setBackground(new Color(220,220,220));
             addPlaceholder(passwordField,"Current Password");
+            graphics.dispose();
         }
         if(e.getSource()==buttons[2]){
             userNameField.setEditable(true);
@@ -319,10 +321,11 @@ public class AccountPanel extends JPanel implements ActionListener {
             box.setMaximumSize(new Dimension(510 - userNameFieldWidth / 2, 5));
             box.setPreferredSize(new Dimension(510 - userNameFieldWidth / 2, 5));
             box.setMinimumSize(new Dimension(510 - userNameFieldWidth / 2, 5));
+            graphics.dispose();
+            userPanel.repaint();
+            userPanel.validate();
             box.validate();
             box.repaint();
-            userPanel.validate();
-            userPanel.repaint();
         }
     }
 

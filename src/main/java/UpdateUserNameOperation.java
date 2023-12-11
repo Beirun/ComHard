@@ -82,6 +82,7 @@ public class UpdateUserNameOperation extends KeyAdapter {
             Graphics graphics = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).getGraphics();
             graphics.setFont(new Font("", Font.BOLD, 32));
             FontMetrics fontMetrics = graphics.getFontMetrics();
+            graphics.dispose();
             int userNameFieldWidth = fontMetrics.stringWidth(userNameField.getText()) + 25, textFieldHeight = 22;
             userNameField.setMaximumSize(new Dimension(userNameFieldWidth, textFieldHeight + 25));
             userNameField.setMinimumSize(new Dimension(userNameFieldWidth, textFieldHeight + 25));

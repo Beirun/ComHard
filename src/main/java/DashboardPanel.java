@@ -23,16 +23,19 @@ public class DashboardPanel extends JPanel {
     }
 
     public void panels(){
-        associatesPanel = new AssociatesPanel(this, userName);
-        favoritesPanel = new FavoritesPanel(this,userName);
-        homePanel = new HomePanel(this,userName);
-        accountPanel = new AccountPanel(frame,signPanel,this,userName);
-        sidebarPanel = new SidebarPanel(frame, homePanel,  accountPanel, favoritesPanel, associatesPanel, this, signPanel,userName);
-        this.add(sidebarPanel,BorderLayout.WEST);
-        this.add(homePanel,BorderLayout.CENTER);
-        homePanel.setVisible(true);
-        accountPanel.setVisible(false);
-        favoritesPanel.setVisible(false);
-        associatesPanel.setVisible(false);
+        SwingUtilities.invokeLater(() -> {
+                associatesPanel = new AssociatesPanel(this, userName);
+                favoritesPanel = new FavoritesPanel(this,userName);
+                homePanel = new HomePanel(this,userName);
+                accountPanel = new AccountPanel(frame,signPanel,this,userName);
+                sidebarPanel = new SidebarPanel(frame, homePanel,  accountPanel, favoritesPanel, associatesPanel, this, signPanel,userName);
+                this.add(sidebarPanel,BorderLayout.WEST);
+                this.add(homePanel,BorderLayout.CENTER);
+                homePanel.setVisible(true);
+                accountPanel.setVisible(false);
+                favoritesPanel.setVisible(false);
+                associatesPanel.setVisible(false);
+            });
+
     }
 }

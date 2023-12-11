@@ -36,6 +36,7 @@ public class AccountLabel extends JLabel {
                 fontMetrics = graphics.getFontMetrics();
                 textWidth = fontMetrics.stringWidth(userName);
             }
+            graphics.dispose();
             this.setFont(new Font("",Font.BOLD,fontSize));
             this.setPreferredSize(new Dimension(textWidth,50));
             this.setMinimumSize(new Dimension(textWidth,50));
@@ -50,6 +51,8 @@ public class AccountLabel extends JLabel {
                 super.paintComponent(g);
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.drawImage(imageIcon(),xCoordinate,yCoordinate,imageIcon().getWidth()/5,imageIcon().getHeight()/5,null);
+                g2.dispose();
+                g.dispose();
             }
         };
         panel.setPreferredSize(new Dimension(panelWidth,panelHeight));
@@ -94,15 +97,6 @@ public class AccountLabel extends JLabel {
         height*=imageRatio;
         BufferedImage circleBuffer = new BufferedImage(width, height , BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = circleBuffer.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-        g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-        g2.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
-        g2.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
-
         g2.setColor(new Color(230,230,230));
         g2.setStroke(new BasicStroke(10*imageRatio));
         g2.setClip(new Ellipse2D.Float(0, 0, diameter, diameter));
@@ -111,7 +105,6 @@ public class AccountLabel extends JLabel {
                 (-height/2+diameter/2)+2*imageRatio, width-7*imageRatio, height-7*imageRatio, null);
         else if(height/imageRatio==100) g2.drawImage(bufferedImage, (-width/2+diameter/2)+2*imageRatio,
                 7*imageRatio-imageRatio*2, width-7*imageRatio, height-7*imageRatio, null);
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.draw(new Ellipse2D.Float(0, 0, diameter, diameter));
         g2.setColor(color);
         g2.setStroke(new BasicStroke(7*imageRatio));

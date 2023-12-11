@@ -63,24 +63,24 @@ public class SidebarPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        for(int i = 0; i < sidebarButtons.length;i++){
-            if(e.getSource()==sidebarButtons[i]){
-                if(i!=4) {
-                    dashboardPanel.add(panels[i], BorderLayout.CENTER);
-                    panels[i].setVisible(true);
-                    dashboardPanel.repaint();
-                }else{
-                    dashboardPanel.setVisible(false);
-                    frame.add(new SignPanel(frame));
+        SwingUtilities.invokeLater(() -> {
+            for(int i = 0; i < sidebarButtons.length;i++){
+                if (e.getSource() != sidebarButtons[i]) {
+                    if(i!=4) panels[i].setVisible(false);
+                    sidebarButtons[i].setEnabled(true);
+                    sidebarButtons[i].setBackground(null);
+                } else {
+                    if(i!=4) {
+                        dashboardPanel.add(panels[i], BorderLayout.CENTER);
+                        panels[i].setVisible(true);
+                    }else{
+                        dashboardPanel.setVisible(false);
+                        frame.add(new SignPanel(frame));
+                    }
+                    sidebarButtons[i].setEnabled(false);
                 }
-                sidebarButtons[i].setEnabled(false);
             }
-            else{
-                if(i!=4) panels[i].setVisible(false);
-                sidebarButtons[i].setEnabled(true);
-                sidebarButtons[i].setBackground(null);
-            }
-        }
+        });
     }
     class DisabledButton extends MetalButtonUI{
         @Override

@@ -25,7 +25,7 @@ public class LogoClass extends JPanel {
         try {
             logoImage = ImageIO.read(new File("resources/img/fullLogo.png"));
             g.drawImage(logoImage,xCoordinate,yCoordinate,logoWidth,logoHeight,this);
-            //System.out.println(logoImage.getWidth()/5+""+logoImage.getHeight()/5);
+            g.dispose();
         } catch (IOException ignored) {}
     }
 }

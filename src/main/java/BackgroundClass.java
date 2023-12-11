@@ -21,6 +21,7 @@ public class BackgroundClass extends JPanel {
         try {
             backgroundImage = ImageIO.read(new File("resources/img/background.png"));
             g.drawImage(backgroundImage,-20,-15,backgroundImage.getWidth()/2-100, backgroundImage.getHeight()/2-100,this);
+            g.dispose();
         } catch (IOException ignored) {}
     }
 

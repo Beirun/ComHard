@@ -35,7 +35,7 @@ public class Buttons extends JPanel {
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Draw(g);
-
+        g.dispose();
     }
     public void addTextPosition(int xTextCoordinate, int yTextCoordinate){
         this.xTextCoordinate = xTextCoordinate;
@@ -54,6 +54,7 @@ public class Buttons extends JPanel {
         else if(isMousePressed) g.setColor(colorPressed);
         else g.setColor(colorNormal);
         Rectangle(g);
+        g.dispose();
     }
 
     public void Rectangle(Graphics g){
@@ -68,7 +69,8 @@ public class Buttons extends JPanel {
         g.setFont( new Font("",Font.BOLD, fontSize));
         FontMetrics metrics = getFontMetrics(g.getFont());
         g.drawString(Label,(width - metrics.stringWidth(Label))/2+xTextCoordinate,height/2 + g.getFont().getSize()/2+yTextCoordinate);
-
+        g.dispose();
+        g2.dispose();
     }
 
     class ButtonChanger extends MouseAdapter{

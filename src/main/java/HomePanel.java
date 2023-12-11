@@ -32,6 +32,8 @@ public class HomePanel extends JPanel {
             g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
             g.drawImage(backgroundImage,0,0,backgroundImage.getWidth()/2, backgroundImage.getHeight()/2,this);
+            g.dispose();
+            g2.dispose();
         } catch (IOException ignored) {}
     }
 }
