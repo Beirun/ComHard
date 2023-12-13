@@ -63,10 +63,12 @@ public class SidebarPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        SwingUtilities.invokeLater(() -> {
             for(int i = 0; i < sidebarButtons.length;i++){
                 if (e.getSource() != sidebarButtons[i]) {
-                    if(i!=4) panels[i].setVisible(false);
+                    if(i!=4){
+                        panels[i].setVisible(false);
+                        dashboardPanel.remove(panels[i]);
+                    }
                     sidebarButtons[i].setEnabled(true);
                     sidebarButtons[i].setBackground(null);
                 } else {
@@ -80,7 +82,6 @@ public class SidebarPanel extends JPanel implements ActionListener {
                     sidebarButtons[i].setEnabled(false);
                 }
             }
-        });
     }
     class DisabledButton extends MetalButtonUI{
         @Override

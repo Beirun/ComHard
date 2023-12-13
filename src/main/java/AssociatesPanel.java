@@ -61,7 +61,6 @@ public class AssociatesPanel extends JPanel {
 
                 stores[i].add(imageLabels[i]);
 
-
                 JTextPane[] storeNames = new JTextPane[getStoreName().size()];
                 storeNames[i] = new JTextPane();
                 storeNames[i].add(Box.createHorizontalGlue());

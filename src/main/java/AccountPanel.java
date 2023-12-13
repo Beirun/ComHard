@@ -39,7 +39,7 @@ public class AccountPanel extends JPanel implements ActionListener {
         this.setPreferredSize(new Dimension(ComHard.WIDTH,ComHard.LENGTH));
         this.setBackground(new Color(236, 234, 236));
         this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-        SwingUtilities.invokeLater(this::profilePanel);
+        profilePanel();
     }
 
     public void profilePanel(){
