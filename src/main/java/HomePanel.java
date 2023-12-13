@@ -1,39 +1,135 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.AbstractBorder;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.metal.MetalButtonUI;
 import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 public class HomePanel extends JPanel {
     JPanel dashboardPanel;
+    Buttons button;
     String userName;
-    BufferedImage backgroundImage;
+    JComboBox<String> purpose, budget;
+    JLabel backgroundImage;
 
     public HomePanel(JPanel dashboardPanel, String userName){
         this.dashboardPanel = dashboardPanel;
         this.userName = userName;
         this.setPreferredSize(new Dimension(ComHard.WIDTH,ComHard.LENGTH));
         this.setBackground(new Color(245,245,245));
+        this.setLayout(null);
+        searchBox();
+        this.setDoubleBuffered(true);
+        backGround();
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        backGround(g);
+
+    public void backGround(){
+        backgroundImage = new JLabel();
+        backgroundImage.setIcon(new ImageIcon(new ImageIcon("resources/img/dashboard.jpg").
+                getImage().getScaledInstance(1082, 700,Image.SCALE_SMOOTH)));
+        backgroundImage.setBounds(0,0,ComHard.WIDTH/2*3,ComHard.LENGTH);
+
+
+        this.add(backgroundImage);
     }
-    public void backGround(Graphics g){
-        try {
-            backgroundImage = ImageIO.read(new File("resources/img/dashboard.jpg"));
-            Graphics2D g2 = backgroundImage.createGraphics();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-            g2.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-            g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-            g.drawImage(backgroundImage,0,0,backgroundImage.getWidth()/2, backgroundImage.getHeight()/2,this);
-            g.dispose();
-            g2.dispose();
-        } catch (IOException ignored) {}
+
+    public void searchBox(){
+        JPanel searchBox = new JPanel();
+        searchBox.setLayout(new FlowLayout(FlowLayout.CENTER));
+        searchBox.setBounds(365,180,300,300);
+        searchBox.setBorder(new RoundedBorder(50));
+        searchBox.setBackground(new Color(236,236,236,0));
+        searchBox.setOpaque(true);
+        JLabel label = new JLabel("  Filter Items  ");
+        label.setFont(new Font("",Font.BOLD,32));
+        label.setForeground(new Color(53,118,172));
+        searchBox.add(label);
+        searchBox.add(Box.createRigidArea(new Dimension(150,15)));
+
+        purpose = new JComboBox<>();
+        purpose.setPreferredSize(new Dimension(230,50));
+        purpose.addItem("Item 1");
+        purpose.addItem("Item 2");
+        purpose.addItem("Item 3");
+        purpose.setFocusable(false);
+        purpose.setBackground(Color.WHITE);
+        purpose.setOpaque(true);
+        purpose.setUI(new ComboBox());
+        purpose.setBorder(BorderFactory.createMatteBorder(1,1,1,1,new Color(53,118,172)));
+
+        budget = new JComboBox<>();
+        budget.setPreferredSize(new Dimension(230,50));
+        budget.setFocusable(false);
+        budget.setBackground(Color.WHITE);
+        budget.setOpaque(true);
+
+        budget.addItem("Item 1");
+        budget.addItem("Item 2");
+        budget.addItem("Item 3");
+
+        searchBox.add(purpose);
+        searchBox.add(Box.createRigidArea(new Dimension(150,25)));
+        searchBox.add(budget);
+        button = new Buttons("Apply");
+        button.setColor(new Color(250,250,250));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setDimension(125,45);
+        button.setColor(new Color(53,118,172));
+        button.setFontSize(14);
+        button.setBorderRadius(30);
+        button.setOpaque(false);
+        button.setTextColor(new Color(236,236,236));
+        searchBox.add(Box.createRigidArea(new Dimension(200,25)));
+        searchBox.add(button);
+        searchBox.revalidate();
+        searchBox.repaint();
+        this.add(searchBox);
+        System.out.println(searchBox.getWidth());
+    }
+
+    static class RoundedBorder extends AbstractBorder {
+        private final int cornerRadius;
+
+        public RoundedBorder(int cornerRadius) {
+            this.cornerRadius = cornerRadius;
+        }
+
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            Graphics2D g2d = (Graphics2D) g.create();
+
+            // Set rendering hints for smoother edges
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // Draw a rounded rectangle border
+            g2d.setColor(new Color(236,236,236,225));
+            g2d.setClip(new RoundRectangle2D.Float(x-25,y-25,width+50,height+50,cornerRadius,cornerRadius));
+            g2d.fillRoundRect(x-25, y-25, width+50, height+50, cornerRadius, cornerRadius);
+
+            g2d.dispose();
+        }
+
+    }
+    class ComboBox extends BasicComboBoxUI{
+        public ComboBox(){
+
+        }
+
+        @Override
+        protected JButton createArrowButton() {
+            JButton button = new JButton();
+            button.setUI(new MetalButtonUI(){
+                @Override
+                protected void paintButtonPressed(Graphics g, AbstractButton b) {
+                }
+            });
+            button.setBackground(Color.WHITE);
+            return button;
+        }
     }
 }

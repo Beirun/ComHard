@@ -6,7 +6,7 @@ import java.awt.event.MouseEvent;
 public class Buttons extends JPanel {
     final private String Label;
     private int width = 100, height = 50, arc = 45, buttonX = 0, buttonY = 0, fontSize = 13;
-    private Color colorSelect = new Color(117,210,104), colorNormal, colorEntered;
+    private Color colorSelect = new Color(117,210,104), colorNormal, colorEntered, foreground = new Color(38,38,38);
     boolean isMousePressed = false, isMouseReleased = false, isMouseEntered = false;
     int xTextCoordinate;
     int yTextCoordinate;
@@ -24,6 +24,9 @@ public class Buttons extends JPanel {
         this.buttonX = buttonX;
         this.buttonY = buttonY;
     }
+    public void setTextColor(Color foreground){
+        this.foreground = foreground;
+    }
     public void setDimension(int width, int height){
         this.width = width;
         this.height = height;
@@ -35,7 +38,6 @@ public class Buttons extends JPanel {
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Draw(g);
-        g.dispose();
     }
     public void addTextPosition(int xTextCoordinate, int yTextCoordinate){
         this.xTextCoordinate = xTextCoordinate;
@@ -54,7 +56,6 @@ public class Buttons extends JPanel {
         else if(isMousePressed) g.setColor(colorPressed);
         else g.setColor(colorNormal);
         Rectangle(g);
-        g.dispose();
     }
 
     public void Rectangle(Graphics g){
@@ -65,11 +66,10 @@ public class Buttons extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(2));
         g.drawRoundRect(buttonX+1,buttonY+1,width-2,height-2,arc,arc);
-        g.setColor(new Color(38,38,38));
+        g.setColor(foreground);
         g.setFont( new Font("",Font.BOLD, fontSize));
         FontMetrics metrics = getFontMetrics(g.getFont());
         g.drawString(Label,(width - metrics.stringWidth(Label))/2+xTextCoordinate,height/2 + g.getFont().getSize()/2+yTextCoordinate);
-        g.dispose();
         g2.dispose();
     }
 

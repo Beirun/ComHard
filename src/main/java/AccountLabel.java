@@ -55,6 +55,7 @@ public class AccountLabel extends JLabel {
                 g.dispose();
             }
         };
+        panel.setDoubleBuffered(true);
         panel.setPreferredSize(new Dimension(panelWidth,panelHeight));
         panel.setMaximumSize(new Dimension(panelWidth,panelHeight));
         panel.setMinimumSize(new Dimension(panelWidth,panelHeight));

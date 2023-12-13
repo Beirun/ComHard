@@ -47,6 +47,7 @@ public class UpdateUserNameOperation extends KeyAdapter {
                 writer.close();
                 dashboardPanel.setVisible(false);
                 DashboardPanel newDashboardPanel = new DashboardPanel(frame,signPanel,userNameField.getText());
+                frame.add(new DashboardPanel(frame,signPanel,userNameField.getText()));
                 newDashboardPanel.homePanel.setVisible(false);
                 AccountPanel accountPanel = new AccountPanel(frame,signPanel, newDashboardPanel,userNameField.getText());
                 newDashboardPanel.sidebarPanel.setVisible(false);
@@ -57,7 +58,6 @@ public class UpdateUserNameOperation extends KeyAdapter {
                 newSideBarPanel.sidebarButtons[1].setEnabled(false);
                 newDashboardPanel.add(newSideBarPanel,BorderLayout.WEST);
                 newDashboardPanel.add(accountPanel,BorderLayout.CENTER);
-                frame.add(newDashboardPanel);
                 File oldUser = new File("assets/info/"+userName+".txt");
                 Files.delete(Paths.get(oldUser.getPath()));
                 String[] fileExtension = {".png",".jpeg",".jpg"};

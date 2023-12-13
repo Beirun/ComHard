@@ -1,3 +1,4 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalButtonUI;
 import java.awt.*;
@@ -5,10 +6,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class SidebarPanel extends JPanel implements ActionListener {
     JButton[] sidebarButtons = new JButton[5];
+    String[] iconName = {"homeIcon", "accountIcon", "favoritesIcon", "associatesIcon", "signOutIcon"};
     String[] buttonNames = {"Dashboard","Account","Favorites","Associates","Sign Out"};
+    int[] xCoordinateAdd = {2,15,7,0,15};
     JFrame frame;
     JPanel homePanel;
     JPanel accountPanel;
@@ -42,8 +48,22 @@ public class SidebarPanel extends JPanel implements ActionListener {
         this.add(new LogoClass(164,71,164,46, 0,15));
         this.add(new AccountLabel(userName,this,200,100,50,0,1,true));
         for (int i = 0; i< sidebarButtons.length; i++){
-            sidebarButtons[i] = new JButton();
-            sidebarButtons[i].setText(buttonNames[i]);
+            int finalI = i;
+            sidebarButtons[i] = new JButton(){
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    BufferedImage bufferedImage;
+                    try {
+                        bufferedImage = ImageIO.read(new File("resources/img/" + iconName[finalI] + ".png"));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    g.drawImage(bufferedImage,75+xCoordinateAdd[finalI],34,bufferedImage.getWidth()/5,bufferedImage.getHeight()/5,null);
+                    g.dispose();
+                }
+            };
+            sidebarButtons[i].setText("  "+buttonNames[i]);
             sidebarButtons[i].setFont(new Font("", Font.BOLD, 20));
             sidebarButtons[i].setUI(new DisabledButton());
             sidebarButtons[i].setBorder(null);
@@ -52,6 +72,8 @@ public class SidebarPanel extends JPanel implements ActionListener {
             sidebarButtons[i].setBackground(null);
             sidebarButtons[i].setFocusPainted(false);
             sidebarButtons[i].setForeground(buttonFontColor);
+            //sidebarButtons[i].setIcon(new ImageIcon(new ImageIcon("resources/img/"+iconName[i]+".png").getImage().getScaledInstance(20,20,Image.SCALE_AREA_AVERAGING)));
+            sidebarButtons[i].setIconTextGap(7);
             sidebarButtons[i].addActionListener(this);
             sidebarButtons[i].addMouseListener(new ChangeColorButton(sidebarButtons[i]));
             this.add(sidebarButtons[i]);

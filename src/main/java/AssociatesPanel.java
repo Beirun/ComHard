@@ -39,7 +39,7 @@ public class AssociatesPanel extends JPanel {
         SwingUtilities.invokeLater(() -> {
             JPanel insidePanel = new JPanel();
             insidePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 50 , 30));
-            insidePanel.setPreferredSize(new Dimension(ComHard.WIDTH/3,ComHard.LENGTH));
+            insidePanel.setPreferredSize(new Dimension(ComHard.WIDTH/3,ComHard.LENGTH*3));
 
             stores = new JPanel[getStoreName().size()];
             storeName = getStoreName();
@@ -51,7 +51,6 @@ public class AssociatesPanel extends JPanel {
                 stores[i].setBackground(Color.green);
                 stores[i].setPreferredSize(new Dimension(264, 176+300));
                 stores[i].setLayout(new FlowLayout(FlowLayout.CENTER));
-                //stores[i].add(Box.createVerticalStrut(10));
                 imageLabels[i] = new JLabel();
                 imageLabels[i].setIcon(new ImageIcon(storeImage(storeName.get(i))));
                 imageLabels[i].setHorizontalAlignment(SwingConstants.LEFT);
@@ -100,6 +99,7 @@ public class AssociatesPanel extends JPanel {
             scrollPane = new JScrollPane(insidePanel,
                     ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                     ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            scrollPane.getVerticalScrollBar().setUnitIncrement(5);
             this.add(scrollPane);
         });
     }

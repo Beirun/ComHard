@@ -23,7 +23,7 @@ public class DashboardPanel extends JPanel {
     }
 
     public void panels(){
-        SwingUtilities.invokeLater(() -> {
+
                 associatesPanel = new AssociatesPanel(this, userName);
                 favoritesPanel = new FavoritesPanel(this,userName);
                 homePanel = new HomePanel(this,userName);
@@ -35,7 +35,6 @@ public class DashboardPanel extends JPanel {
                 accountPanel.setVisible(false);
                 favoritesPanel.setVisible(false);
                 associatesPanel.setVisible(false);
-            });
 
     }
 }

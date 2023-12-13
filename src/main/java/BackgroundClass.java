@@ -16,6 +16,7 @@ public class BackgroundClass extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         renderImage(g);
+        g.dispose();
     }
     public void renderImage(Graphics g){
         try {
