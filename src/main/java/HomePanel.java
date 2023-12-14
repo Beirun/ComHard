@@ -1,13 +1,11 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.AbstractBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.metal.MetalButtonUI;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class HomePanel extends JPanel {
     JPanel dashboardPanel;
@@ -39,38 +37,49 @@ public class HomePanel extends JPanel {
     }
 
     public void searchBox(){
+        SwingUtilities.invokeLater(() -> {
+
+        });
         JPanel searchBox = new JPanel();
         searchBox.setLayout(new FlowLayout(FlowLayout.CENTER));
         searchBox.setBounds(365,180,300,300);
         searchBox.setBorder(new RoundedBorder(50));
         searchBox.setBackground(new Color(236,236,236,0));
         searchBox.setOpaque(true);
-        JLabel label = new JLabel("  Filter Items  ");
-        label.setFont(new Font("",Font.BOLD,32));
+        JLabel label = new JLabel("What are you looking for?");
+        label.setFont(new Font("",Font.BOLD,30));
         label.setForeground(new Color(53,118,172));
         searchBox.add(label);
         searchBox.add(Box.createRigidArea(new Dimension(150,15)));
 
         purpose = new JComboBox<>();
         purpose.setPreferredSize(new Dimension(230,50));
-        purpose.addItem("Item 1");
-        purpose.addItem("Item 2");
-        purpose.addItem("Item 3");
+        purpose.addItem("Gaming");
+        purpose.addItem("Work / School");
+        purpose.addItem("Graphics Design");
+        purpose.addItem("Video Editing");
         purpose.setFocusable(false);
         purpose.setBackground(Color.WHITE);
         purpose.setOpaque(true);
         purpose.setUI(new ComboBox());
-        purpose.setBorder(BorderFactory.createMatteBorder(1,1,1,1,new Color(53,118,172)));
+        purpose.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1,1,1,1,new Color(53,118,172)),BorderFactory.createEmptyBorder(0,5,0,0)));
 
         budget = new JComboBox<>();
         budget.setPreferredSize(new Dimension(230,50));
         budget.setFocusable(false);
         budget.setBackground(Color.WHITE);
         budget.setOpaque(true);
+        budget.setUI(new ComboBox());
+        //budget.setBorder(BorderFactory.createMatteBorder(1,1,1,1,new Color(53,118,172)));
+        budget.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1,1,1,1,new Color(53,118,172)),BorderFactory.createEmptyBorder(0,5,0,0)));
 
-        budget.addItem("Item 1");
-        budget.addItem("Item 2");
-        budget.addItem("Item 3");
+
+        budget.addItem("40,000 and Below");
+        budget.addItem("41,000 - 60,000");
+        budget.addItem("61,000 - 80,000");
+        budget.addItem("81,000 - 100,000");
+        budget.addItem("100,000 Above");
+
 
         searchBox.add(purpose);
         searchBox.add(Box.createRigidArea(new Dimension(150,25)));
@@ -84,12 +93,41 @@ public class HomePanel extends JPanel {
         button.setBorderRadius(30);
         button.setOpaque(false);
         button.setTextColor(new Color(236,236,236));
+        button.addMouseListener(new ApplyButtonListener(dashboardPanel,this,userName,purpose,budget));
         searchBox.add(Box.createRigidArea(new Dimension(200,25)));
         searchBox.add(button);
         searchBox.revalidate();
         searchBox.repaint();
         this.add(searchBox);
         System.out.println(searchBox.getWidth());
+    }
+
+    class ApplyButtonListener extends MouseAdapter{
+        JPanel dashboardPanel;
+        JPanel homePanel;
+        String userName;
+        JComboBox<String> purpose;
+        JComboBox<String> budget;
+
+        public ApplyButtonListener(JPanel dashboardPanel, JPanel homePanel, String userName, JComboBox<String> purpose, JComboBox<String> budget){
+            this.dashboardPanel = dashboardPanel;
+            this.homePanel = homePanel;
+            this.userName = userName;
+            this.purpose = purpose;
+            this.budget = budget;
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            System.out.println(purpose.getItemAt(purpose.getSelectedIndex()));
+            System.out.println(budget.getItemAt(budget.getSelectedIndex()));
+            SwingUtilities.invokeLater(() -> {
+                homePanel.setVisible(false);
+                dashboardPanel.add(new ItemListPanel(dashboardPanel, userName, purpose.getItemAt(purpose.getSelectedIndex()),budget.getItemAt(budget.getSelectedIndex())));
+
+            });
+
+        }
     }
 
     static class RoundedBorder extends AbstractBorder {
@@ -128,6 +166,7 @@ public class HomePanel extends JPanel {
                 protected void paintButtonPressed(Graphics g, AbstractButton b) {
                 }
             });
+            button.setBorder(null);
             button.setBackground(Color.WHITE);
             return button;
         }
