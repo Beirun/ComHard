@@ -46,7 +46,6 @@ public class AssociatesPanel extends JPanel {
             storeAddress = getStoreAddress();
             imageLabels = new JLabel[getStoreName().size()];
             for (int i = 0; i < stores.length; i++) {
-                int finalI = i;
                 stores[i] = new JPanel();
                 stores[i].setBackground(Color.green);
                 stores[i].setPreferredSize(new Dimension(264, 176+300));
@@ -54,8 +53,8 @@ public class AssociatesPanel extends JPanel {
                 imageLabels[i] = new JLabel();
                 imageLabels[i].setIcon(new ImageIcon(storeImage(storeName.get(i))));
                 imageLabels[i].setHorizontalAlignment(SwingConstants.LEFT);
-                imageLabels[i].setPreferredSize(new Dimension(storeImage(storeName.get(finalI)).getWidth(),
-                        storeImage(storeName.get(finalI)).getHeight()));
+                imageLabels[i].setPreferredSize(new Dimension(storeImage(storeName.get(i)).getWidth(),
+                        storeImage(storeName.get(i)).getHeight()));
                 imageLabels[i].add(Box.createHorizontalGlue());
 
                 stores[i].add(imageLabels[i]);
@@ -88,12 +87,7 @@ public class AssociatesPanel extends JPanel {
                 storeAddresses[i].setFont(new Font("",Font.PLAIN,14));
                 storeAddresses[i].setPreferredSize(new Dimension(190, 70));
                 stores[i].add(storeAddresses[i]);
-                storeAddresses[i].revalidate();
-                storeAddresses[i].repaint();
                 insidePanel.add(stores[i]);
-                storeNames[i].revalidate();
-                storeNames[i].repaint();
-
             }
             scrollPane = new JScrollPane(insidePanel,
                     ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -137,13 +131,13 @@ public class AssociatesPanel extends JPanel {
     public BufferedImage storeImage(String storeName){
         int width = 10, height = 10;
         try{
-            bufferedImage = ImageIO.read(new File("resources/Associates/"+storeName+".jpg"));
+            bufferedImage = ImageIO.read(new File("resources/associates/"+storeName+".jpg"));
             width = bufferedImage.getWidth()/2;
             height = bufferedImage.getHeight()/2;
         }catch (IOException ignored){}
         BufferedImage imageBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = imageBuffer.createGraphics();
-        g2.setClip(new RoundRectangle2D.Float(0,0, width, height,25,25));
+        g2.setClip(0,0, width, height);
         g2.drawImage(bufferedImage,0,0,width,height,null);
         g2.dispose();
         return imageBuffer;

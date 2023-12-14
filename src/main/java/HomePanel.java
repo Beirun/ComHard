@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
+import java.io.File;
 
 public class HomePanel extends JPanel {
     JPanel dashboardPanel;
@@ -47,7 +48,7 @@ public class HomePanel extends JPanel {
         searchBox.setBackground(new Color(236,236,236,0));
         searchBox.setOpaque(true);
         JLabel label = new JLabel("What are you looking for?");
-        label.setFont(new Font("",Font.BOLD,30));
+        label.setFont(new Font("",Font.BOLD,24));
         label.setForeground(new Color(53,118,172));
         searchBox.add(label);
         searchBox.add(Box.createRigidArea(new Dimension(150,15)));
@@ -55,7 +56,7 @@ public class HomePanel extends JPanel {
         purpose = new JComboBox<>();
         purpose.setPreferredSize(new Dimension(230,50));
         purpose.addItem("Gaming");
-        purpose.addItem("Work / School");
+        purpose.addItem("School or Work");
         purpose.addItem("Graphics Design");
         purpose.addItem("Video Editing");
         purpose.setFocusable(false);
@@ -78,7 +79,7 @@ public class HomePanel extends JPanel {
         budget.addItem("41,000 - 60,000");
         budget.addItem("61,000 - 80,000");
         budget.addItem("81,000 - 100,000");
-        budget.addItem("100,000 Above");
+        budget.addItem("100k above");
 
 
         searchBox.add(purpose);
@@ -123,7 +124,7 @@ public class HomePanel extends JPanel {
             System.out.println(budget.getItemAt(budget.getSelectedIndex()));
             SwingUtilities.invokeLater(() -> {
                 homePanel.setVisible(false);
-                dashboardPanel.add(new ItemListPanel(dashboardPanel, userName, purpose.getItemAt(purpose.getSelectedIndex()),budget.getItemAt(budget.getSelectedIndex())));
+                dashboardPanel.add(new ItemListPanel(dashboardPanel, homePanel, userName, purpose.getItemAt(purpose.getSelectedIndex()),budget.getItemAt(budget.getSelectedIndex())));
 
             });
 
