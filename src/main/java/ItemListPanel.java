@@ -20,6 +20,7 @@ public class ItemListPanel extends JPanel {
     JLabel[] itemImage;
     String userName;
     JPanel forItems, forFilter, forItemsAndNavbar, forNavbar;
+    Buttons[] saveButtons;
 
     String purpose, budget;
     JScrollPane scrollPane;
@@ -44,7 +45,7 @@ public class ItemListPanel extends JPanel {
 
         forNavbar = new JPanel();
         forNavbar.setBackground(null);
-        forNavbar.setPreferredSize(new Dimension(ComHard.WIDTH,50));
+        forNavbar.setPreferredSize(new Dimension(ComHard.WIDTH,35));
         setForNavbar();
         forItemsAndNavbar = new JPanel();
         forItemsAndNavbar.setLayout(new BorderLayout());
@@ -60,10 +61,11 @@ public class ItemListPanel extends JPanel {
         System.out.println(Arrays.toString(content));
         itemPanels = new JPanel[content.length];
         itemImage = new JLabel[content.length];
+        saveButtons = new Buttons[content.length];
         System.out.println((fileContent(content[1])[1]));
         JPanel insidePanel = new JPanel();
         insidePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 50 , 30));
-        insidePanel.setBackground(null);
+        insidePanel.setBackground(new Color(236,236,236));
         insidePanel.setBorder(null);
         insidePanel.setPreferredSize(new Dimension(ComHard.WIDTH/3,ComHard.LENGTH*3));
         for (int i = 0; i < itemPanels.length; i++) {
@@ -92,7 +94,7 @@ public class ItemListPanel extends JPanel {
             itemNames[i].setFocusable(false);
             itemNames[i].setEditable(false);
             itemNames[i].setFont(new Font("",Font.BOLD,14));
-            itemNames[i].setPreferredSize(new Dimension(190, 50));
+            itemNames[i].setPreferredSize(new Dimension(210, 45));
             itemPanels[i].add(itemNames[i]);
 
             JTextPane[] itemPrice = new JTextPane[content.length];
@@ -107,7 +109,7 @@ public class ItemListPanel extends JPanel {
             itemPrice[i].setFocusable(false);
             itemPrice[i].setEditable(false);
             itemPrice[i].setFont(new Font("",Font.BOLD,14));
-            itemPrice[i].setPreferredSize(new Dimension(190, 50));
+            itemPrice[i].setPreferredSize(new Dimension(210, 25));
             itemPanels[i].add(itemPrice[i]);
 
             JTextPane[] storeAddresses = new JTextPane[content.length];
@@ -121,15 +123,31 @@ public class ItemListPanel extends JPanel {
             storeAddresses[i].setEditable(false);
             storeAddresses[i].setLayout(new FlowLayout(FlowLayout.CENTER));
             storeAddresses[i].setFont(new Font("",Font.PLAIN,14));
-            storeAddresses[i].setPreferredSize(new Dimension(190, 70));
+            storeAddresses[i].setPreferredSize(new Dimension(210, 65));
             itemPanels[i].add(storeAddresses[i]);
-            insidePanel.add(itemPanels[i]);
+
+            saveButtons[i] = new Buttons("Save");
+            saveButtons[i].setCursor(new Cursor(Cursor.HAND_CURSOR));
+            saveButtons[i].setDimension(75,25);
+            saveButtons[i].setColor(new Color(53,118,172));
+            saveButtons[i].setFontSize(12);
+            saveButtons[i].setBorderRadius(25);
+            saveButtons[i].addTextPosition(0,-2);
+            saveButtons[i].setOpaque(false);
+            saveButtons[i].setTextColor(new Color(236,236,236));
+            itemPanels[i].add(saveButtons[i]);
+
+        insidePanel.add(itemPanels[i]);
         }
         scrollPane = new JScrollPane(insidePanel,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setBorder(null);
+        scrollPane.setBackground(new Color(236,236,236));
         scrollPane.getVerticalScrollBar().setUnitIncrement(5);
+        SwingUtilities.invokeLater(() -> {
+            scrollPane.getViewport().setViewPosition(new Point(0,0));
+        });
         forItemsAndNavbar.add(scrollPane);
 
     }
@@ -140,10 +158,24 @@ public class ItemListPanel extends JPanel {
     }
     public void setForNavbar(){
         forNavbar.setLayout(new FlowLayout(FlowLayout.LEFT));
-        backButton = new JLabel("Back");
+        forNavbar.setBackground(new Color(236,236,236));
+        backButton = new JLabel("     Back"){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                BufferedImage bufferedImage;
+                try {
+                    bufferedImage = ImageIO.read(new File("resources/img/backIcon.png"));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                g.drawImage(bufferedImage,0,0,bufferedImage.getWidth()/4,bufferedImage.getHeight()/4,null);
+                g.dispose();
+            }
+        };
         backButton.setFont(new Font("",Font.BOLD,20));
-        backButton.setIcon(new ImageIcon(new ImageIcon("resources/img/backIcon.png").
-                getImage().getScaledInstance(20, 20,Image.SCALE_SMOOTH)));
+        //backButton.setIcon(new ImageIcon(new ImageIcon("resources/img/backIcon.png").
+        //        getImage().getScaledInstance(20, 20,Image.SCALE_SMOOTH)));
         backButton.setHorizontalTextPosition(SwingConstants.RIGHT);
         backButton.addMouseListener(new BackButtonListener(this, homePanel, dashboardPanel,userName));
         forNavbar.add(backButton);

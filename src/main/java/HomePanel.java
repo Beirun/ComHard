@@ -79,14 +79,13 @@ public class HomePanel extends JPanel {
         budget.addItem("41,000 - 60,000");
         budget.addItem("61,000 - 80,000");
         budget.addItem("81,000 - 100,000");
-        budget.addItem("100k above");
+        budget.addItem("100,000 Above");
 
 
         searchBox.add(purpose);
         searchBox.add(Box.createRigidArea(new Dimension(150,25)));
         searchBox.add(budget);
         button = new Buttons("Apply");
-        button.setColor(new Color(250,250,250));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setDimension(125,45);
         button.setColor(new Color(53,118,172));
