@@ -4,7 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Buttons extends JPanel {
-    final private String Label;
+    private String Label;
     private int width = 100, height = 50, arc = 45, buttonX = 0, buttonY = 0, fontSize = 13;
     private Color colorSelect = new Color(117,210,104), colorNormal, colorEntered, foreground = new Color(38,38,38);
     boolean isMousePressed = false, isMouseReleased = false, isMouseEntered = false;
@@ -24,6 +24,13 @@ public class Buttons extends JPanel {
         this.buttonX = buttonX;
         this.buttonY = buttonY;
     }
+    public void setLabel(String Label){
+        this.Label = Label;
+    }
+    public String getText(){
+        return Label;
+    }
+
     public void setTextColor(Color foreground){
         this.foreground = foreground;
     }

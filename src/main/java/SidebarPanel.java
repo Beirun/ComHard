@@ -78,10 +78,16 @@ public class SidebarPanel extends JPanel implements ActionListener {
             sidebarButtons[i].addMouseListener(new ChangeColorButton(sidebarButtons[i]));
             this.add(sidebarButtons[i]);
         }
+
+    }
+    public void isHomePanel(){
         sidebarButtons[0].setEnabled(false);
         sidebarButtons[0].setBackground(new Color(23,88,142));
     }
-
+    public void isAccountPanel(){
+        sidebarButtons[1].setEnabled(false);
+        sidebarButtons[1].setBackground(new Color(23,88,142));
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -95,6 +101,9 @@ public class SidebarPanel extends JPanel implements ActionListener {
                     sidebarButtons[i].setBackground(null);
                 } else {
                     if(i!=4) {
+                        if(i==0) panels[i] = new HomePanel(dashboardPanel,userName);
+                        else if(i==1)panels[i] = new AccountPanel(frame,signPanel,dashboardPanel,userName);
+                        else if(i==2) panels[i] = new FavoritesPanel(this,userName);
                         dashboardPanel.add(panels[i], BorderLayout.CENTER);
                         panels[i].setVisible(true);
                     }else{

@@ -31,7 +31,9 @@ public class LoginOperation {
         }else {
             password = user.getPassword(user.fileContent());
             if(isPasswordCorrect()){
-                frame.add(new DashboardPanel(frame,panel,user.getUserName(user.fileContent())));
+                DashboardPanel dashboardPanel = new DashboardPanel(frame,panel,user.getUserName(user.fileContent()));
+                dashboardPanel.setHomePanel();
+                frame.add(dashboardPanel);
                 panel.setVisible(false);
             }else{
                 userField.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.RED),
