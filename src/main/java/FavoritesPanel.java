@@ -6,11 +6,7 @@ import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.sql.SQLOutput;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class FavoritesPanel extends JPanel {

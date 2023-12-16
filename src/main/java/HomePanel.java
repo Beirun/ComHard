@@ -4,7 +4,6 @@ import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.metal.MetalButtonUI;
 import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
@@ -173,7 +172,7 @@ public class HomePanel extends JPanel {
         }
 
     }
-    class ComboBox extends BasicComboBoxUI{
+    static class ComboBox extends BasicComboBoxUI{
         public ComboBox(){
 
         }
