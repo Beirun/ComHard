@@ -8,26 +8,25 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
+
 
 public class ItemListPanel extends JPanel {
-    JPanel dashboardPanel;
+    JPanel semiHonePanel;
     JLabel backButton;
     JPanel homePanel;
     JPanel[] itemPanels;
     JLabel[] itemImage;
     String userName;
-    JPanel forItems, forFilter, forItemsAndNavbar, forNavbar;
+    JPanel forItemsAndNavbar, forNavbar;
     Buttons[] saveButtons;
 
     String purpose, budget;
     JScrollPane scrollPane;
     BufferedImage bufferedImage;
 
-    public ItemListPanel(JPanel dashboardPanel, JPanel homePanel, String userName, String purpose, String budget){
-        this.dashboardPanel = dashboardPanel;
+    public ItemListPanel(JPanel semiHomePanel, JPanel homePanel, String userName, String purpose, String budget){
+        this.semiHonePanel = semiHomePanel;
         this.homePanel = homePanel;
         this.userName = userName;
         this.purpose = purpose;
@@ -39,10 +38,6 @@ public class ItemListPanel extends JPanel {
         filterItemsPanel();
     }
     public void filterItemsPanel(){
-        forItems = new JPanel();
-        forItems.setBackground(null);
-        forItems.setPreferredSize(new Dimension(800,600));
-
         forNavbar = new JPanel();
         forNavbar.setBackground(null);
         forNavbar.setPreferredSize(new Dimension(ComHard.WIDTH,35));
@@ -51,110 +46,130 @@ public class ItemListPanel extends JPanel {
         forItemsAndNavbar.setLayout(new BorderLayout());
         forItemsAndNavbar.setBackground(new Color(236,236,236));
         forItemsAndNavbar.add(forNavbar,BorderLayout.NORTH);
-        forItemsAndNavbar.add(forItems,BorderLayout.CENTER);
         setForItems();
-        this.add(forItemsAndNavbar,BorderLayout.CENTER);
     }
 
     public void setForItems(){
-        String[] content = listTxtFiles("assets/items/"+purpose+"/1. "+budget);
-        System.out.println(Arrays.toString(content));
-        itemPanels = new JPanel[content.length];
-        itemImage = new JLabel[content.length];
-        saveButtons = new Buttons[content.length];
-        System.out.println((fileContent(content[1])[1]));
+        int set = 1;
+
+        String[] content = DuplicateClasses.listTxtFiles("assets/items/" + purpose + "/"+set+". " + budget);
+        String[] fileContent;
         JPanel insidePanel = new JPanel();
-        insidePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 50 , 30));
-        insidePanel.setBackground(new Color(236,236,236));
+        insidePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 30));
+        insidePanel.setBackground(new Color(236, 236, 236));
         insidePanel.setBorder(null);
-        insidePanel.setPreferredSize(new Dimension(ComHard.WIDTH/3,ComHard.LENGTH*3));
-        for (int i = 0; i < itemPanels.length; i++) {
-            itemPanels[i] = new JPanel();
-            itemPanels[i].setBackground(Color.green);
-            itemPanels[i].setPreferredSize(new Dimension(264, 176+300));
-            itemPanels[i].setLayout(new FlowLayout(FlowLayout.CENTER));
-            itemImage[i] = new JLabel();
-            itemImage[i].setIcon(new ImageIcon(imageItems(getItemName(fileContent(content[i])))));
-            itemImage[i].setHorizontalAlignment(SwingConstants.LEFT);
-            itemImage[i].setPreferredSize(new Dimension(imageItems(getItemName(fileContent(content[i]))).getWidth(),
-                    imageItems(getItemName(fileContent(content[i]))).getHeight()));
-            itemImage[i].add(Box.createHorizontalGlue());
+        insidePanel.setPreferredSize(new Dimension(ComHard.WIDTH / 3, ComHard.LENGTH ));
 
-            itemPanels[i].add(itemImage[i]);
+        int length = 505 *(content.length/3);
+        int remainder = content.length%3;
+        if(remainder!=0) length+=500;
+        do {
+            insidePanel.setPreferredSize(new Dimension(ComHard.WIDTH / 3, length+50));
+            itemPanels = new JPanel[content.length];
+            itemImage = new JLabel[content.length];
+            saveButtons = new Buttons[content.length];
 
-            JTextPane[] itemNames = new JTextPane[content.length];
-            itemNames[i] = new JTextPane();
-            itemNames[i].add(Box.createHorizontalGlue());
-            itemNames[i].setText(getItemName(fileContent(content[i])));
-            StyledDocument documentStyle = itemNames[i].getStyledDocument();
-            SimpleAttributeSet centerAttribute = new SimpleAttributeSet();
-            StyleConstants.setAlignment(centerAttribute, StyleConstants.ALIGN_CENTER);
-            documentStyle.setParagraphAttributes(0, documentStyle.getLength(), centerAttribute, false);
+            for (int i = 0; i < itemPanels.length; i++) {
+                fileContent = DuplicateClasses.fileContent(purpose,budget,content[i],set);
+                itemPanels[i] = new JPanel();
+                itemPanels[i].setBackground(Color.green);
+                itemPanels[i].setPreferredSize(new Dimension(264, 476));
+                itemPanels[i].setLayout(new FlowLayout(FlowLayout.CENTER));
+                itemImage[i] = new JLabel();
+                itemImage[i].setIcon(new ImageIcon(imageItems(getItemName(fileContent))));
+                itemImage[i].setHorizontalAlignment(SwingConstants.LEFT);
+                itemImage[i].setPreferredSize(new Dimension(imageItems(getItemName(fileContent)).getWidth(),
+                        imageItems(getItemName(fileContent)).getHeight()));
+                itemImage[i].add(Box.createHorizontalGlue());
 
-            itemNames[i].setFocusable(false);
-            itemNames[i].setEditable(false);
-            itemNames[i].setFont(new Font("",Font.BOLD,14));
-            itemNames[i].setPreferredSize(new Dimension(210, 45));
-            itemPanels[i].add(itemNames[i]);
+                itemPanels[i].add(itemImage[i]);
 
-            JTextPane[] itemPrice = new JTextPane[content.length];
-            itemPrice[i] = new JTextPane();
-            itemPrice[i].add(Box.createHorizontalGlue());
-            itemPrice[i].setText(getItemPrice(fileContent(content[i])));
-            documentStyle = itemPrice[i].getStyledDocument();
-            centerAttribute = new SimpleAttributeSet();
-            StyleConstants.setAlignment(centerAttribute, StyleConstants.ALIGN_CENTER);
-            documentStyle.setParagraphAttributes(0, documentStyle.getLength(), centerAttribute, false);
+                JTextPane[] itemNames = new JTextPane[content.length];
+                itemNames[i] = new JTextPane();
+                itemNames[i].add(Box.createHorizontalGlue());
+                itemNames[i].setText(getItemName(fileContent));
+                StyledDocument documentStyle = itemNames[i].getStyledDocument();
+                SimpleAttributeSet centerAttribute = new SimpleAttributeSet();
+                StyleConstants.setAlignment(centerAttribute, StyleConstants.ALIGN_CENTER);
+                documentStyle.setParagraphAttributes(0, documentStyle.getLength(), centerAttribute, false);
 
-            itemPrice[i].setFocusable(false);
-            itemPrice[i].setEditable(false);
-            itemPrice[i].setFont(new Font("",Font.BOLD,14));
-            itemPrice[i].setPreferredSize(new Dimension(210, 25));
-            itemPanels[i].add(itemPrice[i]);
+                itemNames[i].setFocusable(false);
+                itemNames[i].setEditable(false);
+                itemNames[i].setFont(new Font("", Font.BOLD, 14));
+                itemNames[i].setPreferredSize(new Dimension(210, 45));
+                itemPanels[i].add(itemNames[i]);
 
-            JTextPane[] storeAddresses = new JTextPane[content.length];
-            storeAddresses[i] = new JTextPane();
-            storeAddresses[i].setText(getItemAddress(fileContent(content[i])));
-            documentStyle = storeAddresses[i].getStyledDocument();
-            centerAttribute = new SimpleAttributeSet();
-            StyleConstants.setAlignment(centerAttribute, StyleConstants.ALIGN_CENTER);
-            documentStyle.setParagraphAttributes(0, documentStyle.getLength(), centerAttribute, false);
-            storeAddresses[i].setFocusable(false);
-            storeAddresses[i].setEditable(false);
-            storeAddresses[i].setLayout(new FlowLayout(FlowLayout.CENTER));
-            storeAddresses[i].setFont(new Font("",Font.PLAIN,14));
-            storeAddresses[i].setPreferredSize(new Dimension(210, 65));
-            itemPanels[i].add(storeAddresses[i]);
+                JTextPane[] itemPrice = new JTextPane[content.length];
+                itemPrice[i] = new JTextPane();
+                itemPrice[i].add(Box.createHorizontalGlue());
+                itemPrice[i].setText(getItemPrice(fileContent));
+                documentStyle = itemPrice[i].getStyledDocument();
+                centerAttribute = new SimpleAttributeSet();
+                StyleConstants.setAlignment(centerAttribute, StyleConstants.ALIGN_CENTER);
+                documentStyle.setParagraphAttributes(0, documentStyle.getLength(), centerAttribute, false);
 
-            saveButtons[i] = new Buttons("Save");
-            saveButtons[i].setCursor(new Cursor(Cursor.HAND_CURSOR));
-            saveButtons[i].setDimension(75,25);
-            saveButtons[i].setColor(new Color(53,118,172));
-            saveButtons[i].setFontSize(12);
-            saveButtons[i].setBorderRadius(25);
-            saveButtons[i].addTextPosition(0,-2);
-            saveButtons[i].setOpaque(false);
-            saveButtons[i].setTextColor(new Color(236,236,236));
-            itemPanels[i].add(saveButtons[i]);
+                itemPrice[i].setFocusable(false);
+                itemPrice[i].setEditable(false);
+                itemPrice[i].setFont(new Font("", Font.BOLD, 14));
+                itemPrice[i].setPreferredSize(new Dimension(210, 25));
+                itemPanels[i].add(itemPrice[i]);
 
-        insidePanel.add(itemPanels[i]);
-        }
-        scrollPane = new JScrollPane(insidePanel,
+                JTextPane[] storeAddresses = new JTextPane[content.length];
+                storeAddresses[i] = new JTextPane();
+                storeAddresses[i].setText(getItemAddress(fileContent));
+                documentStyle = storeAddresses[i].getStyledDocument();
+                centerAttribute = new SimpleAttributeSet();
+                StyleConstants.setAlignment(centerAttribute, StyleConstants.ALIGN_CENTER);
+                documentStyle.setParagraphAttributes(0, documentStyle.getLength(), centerAttribute, false);
+                storeAddresses[i].setFocusable(false);
+                storeAddresses[i].setEditable(false);
+                storeAddresses[i].setLayout(new FlowLayout(FlowLayout.CENTER));
+                storeAddresses[i].setFont(new Font("", Font.PLAIN, 14));
+                storeAddresses[i].setPreferredSize(new Dimension(210, 65));
+                itemPanels[i].add(storeAddresses[i]);
+
+                saveButtons[i] = new Buttons("Save");
+                saveButtons[i].setCursor(new Cursor(Cursor.HAND_CURSOR));
+                saveButtons[i].setDimension(75, 25);
+                if(new File("assets/favorites/"+userName+"/"+purpose+"/"+set+". "+budget+"/"+content[i]+".txt").exists()){
+                    saveButtons[i].setLabel("Unsave");
+                    saveButtons[i].setColor(new Color(213, 17, 17));
+                    saveButtons[i].setTextColor(new Color(250,250,250));
+                }else {
+                    saveButtons[i].setColor(new Color(250, 250, 250));
+                    saveButtons[i].setTextColor(new Color(51, 51, 51));
+                }
+                saveButtons[i].setFontSize(12);
+                saveButtons[i].setBorderRadius(25);
+                saveButtons[i].addTextPosition(0, -2);
+                saveButtons[i].setOpaque(false);
+                saveButtons[i].addMouseListener(new DuplicateClasses.SaveButtonListener(saveButtons[i], userName,purpose,set,budget,content[i],
+                        getItemName(fileContent),getItemPrice(fileContent),getItemAddress(fileContent)));
+                itemPanels[i].add(saveButtons[i]);
+                insidePanel.add(itemPanels[i]);
+            }
+            set++;
+            content = DuplicateClasses.listTxtFiles("assets/items/" + purpose + "/"+set+". " + budget);
+            length += 506 * (content.length/3);
+            remainder += content.length%3;
+            if(remainder>3){
+                remainder-=3;
+                length+=506;
+            }
+        }while (content.length!=0);
+        forItemsAndNavbar.add(insidePanel,BorderLayout.CENTER);
+        forItemsAndNavbar.setPreferredSize(new Dimension((int) (insidePanel.getPreferredSize().getWidth()),
+                (int) (insidePanel.getPreferredSize().getHeight()+forNavbar.getPreferredSize().getHeight())));
+        scrollPane = new JScrollPane(forItemsAndNavbar,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setBorder(null);
         scrollPane.setBackground(new Color(236,236,236));
-        scrollPane.getVerticalScrollBar().setUnitIncrement(5);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(10);
         SwingUtilities.invokeLater(() -> {
             scrollPane.getViewport().setViewPosition(new Point(0,0));
         });
-        forItemsAndNavbar.add(scrollPane);
-
-    }
-    public void setForFilter(){
-        forFilter.setBackground(new Color(245,245,245));
-
-
+        this.add(scrollPane,BorderLayout.CENTER);
     }
     public void setForNavbar(){
         forNavbar.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -174,10 +189,8 @@ public class ItemListPanel extends JPanel {
             }
         };
         backButton.setFont(new Font("",Font.BOLD,20));
-        //backButton.setIcon(new ImageIcon(new ImageIcon("resources/img/backIcon.png").
-        //        getImage().getScaledInstance(20, 20,Image.SCALE_SMOOTH)));
         backButton.setHorizontalTextPosition(SwingConstants.RIGHT);
-        backButton.addMouseListener(new BackButtonListener(this, homePanel, dashboardPanel,userName));
+        backButton.addMouseListener(new BackButtonListener(this, homePanel, semiHonePanel,userName));
         forNavbar.add(backButton);
     }
 
@@ -206,54 +219,22 @@ public class ItemListPanel extends JPanel {
         return imageBuffer;
     }
 
-    public String[] listTxtFiles(String directoryPath) {
-        File directory = new File(directoryPath);
-        File[] txtFiles = directory.listFiles();
-        String[] txtFileNames = new String[0];
-        if (txtFiles != null) {
-            txtFileNames = new String[txtFiles.length];
-            for (int i = 0; i < txtFiles.length; i++) txtFileNames[i] = txtFiles[i].getName().substring(0,txtFiles[i].getName().length()-4);
-        }
-        return txtFileNames;
-    }
-
-    public String[] fileContent(String part){
-        String[] content = new String[0];
-        try{
-            File fileCreated = new File("assets/items/"+purpose+"/1. "+budget+"/"+part+".txt");
-            FileReader reader = new FileReader(fileCreated);
-            int data = reader.read();
-            String string = Character.toString ((char) data);
-            data = reader.read();
-            while(data != -1){
-                string += Character.toString((char) data);
-                data = reader.read();
-            }
-            reader.close();
-            content = string.split("\n");
-        }catch (IOException ignored){}
-        //System.out.println(Arrays.toString(content));
-        return content;
-    }
-
     static class BackButtonListener extends MouseAdapter{
-        JPanel panel;
-        JPanel homePanel;
-        JPanel dashboardPanel;
+        JPanel panel, homePanel, semiHomePanel;
         String userName;
 
-        public BackButtonListener(JPanel panel, JPanel homePanel, JPanel dashboardPanel, String userName){
+        public BackButtonListener(JPanel panel, JPanel homePanel, JPanel semiHomePanel, String userName){
             this.panel = panel;
             this.homePanel = homePanel;
-            this.dashboardPanel = dashboardPanel;
+            this.semiHomePanel = semiHomePanel;
             this.userName = userName;
         }
 
         @Override
         public void mouseClicked(MouseEvent e) {
             panel.setVisible(false);
-            dashboardPanel.add(homePanel,BorderLayout.CENTER);
-            homePanel.setVisible(true);
+            homePanel.add(semiHomePanel,BorderLayout.CENTER);
+            semiHomePanel.setVisible(true);
         }
     }
 }

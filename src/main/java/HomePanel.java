@@ -3,15 +3,16 @@ import javax.swing.border.AbstractBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.metal.MetalButtonUI;
 import java.awt.*;
+import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
-import java.io.File;
 
 public class HomePanel extends JPanel {
-    JPanel dashboardPanel;
+    JPanel dashboardPanel, semiHomePanel;
     Buttons button;
     String userName;
+    ItemListPanel itemListPanel;
     JComboBox<String> purpose, budget;
     JLabel backgroundImage;
 
@@ -20,7 +21,7 @@ public class HomePanel extends JPanel {
         this.userName = userName;
         this.setPreferredSize(new Dimension(ComHard.WIDTH,ComHard.LENGTH));
         this.setBackground(new Color(245,245,245));
-        this.setLayout(null);
+        this.setLayout(new BorderLayout());
         searchBox();
         this.setDoubleBuffered(true);
         backGround();
@@ -28,19 +29,21 @@ public class HomePanel extends JPanel {
 
 
     public void backGround(){
+
         backgroundImage = new JLabel();
         backgroundImage.setIcon(new ImageIcon(new ImageIcon("resources/img/dashboard.jpg").
                 getImage().getScaledInstance(1082, 700,Image.SCALE_SMOOTH)));
         backgroundImage.setBounds(0,0,ComHard.WIDTH/2*3,ComHard.LENGTH);
-
-
-        this.add(backgroundImage);
+        semiHomePanel.add(backgroundImage);
     }
 
     public void searchBox(){
-        SwingUtilities.invokeLater(() -> {
+        semiHomePanel = new JPanel();
+        semiHomePanel.setPreferredSize(new Dimension(ComHard.WIDTH,ComHard.LENGTH));
+        semiHomePanel.setBackground(new Color(245,245,245));
+        semiHomePanel.setLayout(null);
+        semiHomePanel.setDoubleBuffered(true);
 
-        });
         JPanel searchBox = new JPanel();
         searchBox.setLayout(new FlowLayout(FlowLayout.CENTER));
         searchBox.setBounds(365,180,300,300);
@@ -64,14 +67,18 @@ public class HomePanel extends JPanel {
         purpose.setOpaque(true);
         purpose.setUI(new ComboBox());
         purpose.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1,1,1,1,new Color(53,118,172)),BorderFactory.createEmptyBorder(0,5,0,0)));
-
+        purpose.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                String selectedItem = (String) purpose.getSelectedItem();
+                updateSecondComboBoxModel(budget, selectedItem);
+            }
+        });
         budget = new JComboBox<>();
         budget.setPreferredSize(new Dimension(230,50));
         budget.setFocusable(false);
         budget.setBackground(Color.WHITE);
         budget.setOpaque(true);
         budget.setUI(new ComboBox());
-        //budget.setBorder(BorderFactory.createMatteBorder(1,1,1,1,new Color(53,118,172)));
         budget.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1,1,1,1,new Color(53,118,172)),BorderFactory.createEmptyBorder(0,5,0,0)));
 
 
@@ -93,24 +100,38 @@ public class HomePanel extends JPanel {
         button.setBorderRadius(30);
         button.setOpaque(false);
         button.setTextColor(new Color(236,236,236));
-        button.addMouseListener(new ApplyButtonListener(dashboardPanel,this,userName,purpose,budget));
+        button.addMouseListener(new ApplyButtonListener(semiHomePanel,this,userName,purpose,budget));
         searchBox.add(Box.createRigidArea(new Dimension(200,25)));
         searchBox.add(button);
         searchBox.revalidate();
         searchBox.repaint();
-        this.add(searchBox);
-        System.out.println(searchBox.getWidth());
+        semiHomePanel.add(searchBox);
+        this.add(semiHomePanel,BorderLayout.CENTER);
+    }
+    public void updateSecondComboBoxModel(JComboBox<String> comboBox, String selectedItem) {
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        if ("Video Editing".equals(selectedItem) || "Graphics Design".equals(selectedItem)) {
+            model.addElement("41,000 - 60,000");
+            model.addElement("61,000 - 80,000");
+            if("Graphics Design".equals(selectedItem)) model.addElement("81,000 - 100,000");
+            model.addElement("100,000 Above");
+        }else {
+            for (String item : new String[]{"40,000 and Below", "41,000 - 60,000", "61,000 - 80,000", "81,000 - 100,000","100,000 Above"}) {
+                model.addElement(item);
+            }
+        }
+        comboBox.setModel(model);
     }
 
     class ApplyButtonListener extends MouseAdapter{
-        JPanel dashboardPanel;
+        JPanel semiHomePanel;
         JPanel homePanel;
         String userName;
         JComboBox<String> purpose;
         JComboBox<String> budget;
 
-        public ApplyButtonListener(JPanel dashboardPanel, JPanel homePanel, String userName, JComboBox<String> purpose, JComboBox<String> budget){
-            this.dashboardPanel = dashboardPanel;
+        public ApplyButtonListener(JPanel semiHomePanel, JPanel homePanel, String userName, JComboBox<String> purpose, JComboBox<String> budget){
+            this.semiHomePanel = semiHomePanel;
             this.homePanel = homePanel;
             this.userName = userName;
             this.purpose = purpose;
@@ -119,12 +140,10 @@ public class HomePanel extends JPanel {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            System.out.println(purpose.getItemAt(purpose.getSelectedIndex()));
-            System.out.println(budget.getItemAt(budget.getSelectedIndex()));
             SwingUtilities.invokeLater(() -> {
-                homePanel.setVisible(false);
-                dashboardPanel.add(new ItemListPanel(dashboardPanel, homePanel, userName, purpose.getItemAt(purpose.getSelectedIndex()),budget.getItemAt(budget.getSelectedIndex())));
-
+                semiHomePanel.setVisible(false);
+                itemListPanel = new ItemListPanel(semiHomePanel, homePanel, userName, purpose.getItemAt(purpose.getSelectedIndex()),budget.getItemAt(budget.getSelectedIndex()));
+                homePanel.add(itemListPanel,BorderLayout.CENTER);
             });
 
         }
@@ -153,7 +172,7 @@ public class HomePanel extends JPanel {
         }
 
     }
-    class ComboBox extends BasicComboBoxUI{
+    static class ComboBox extends BasicComboBoxUI{
         public ComboBox(){
 
         }

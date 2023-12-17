@@ -1,4 +1,3 @@
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -47,17 +46,12 @@ public class UpdateUserNameOperation extends KeyAdapter {
                 writer.close();
                 dashboardPanel.setVisible(false);
                 DashboardPanel newDashboardPanel = new DashboardPanel(frame,signPanel,userNameField.getText());
-                frame.add(new DashboardPanel(frame,signPanel,userNameField.getText()));
-                newDashboardPanel.homePanel.setVisible(false);
-                AccountPanel accountPanel = new AccountPanel(frame,signPanel, newDashboardPanel,userNameField.getText());
-                newDashboardPanel.sidebarPanel.setVisible(false);
-                SidebarPanel newSideBarPanel = new SidebarPanel(frame, newDashboardPanel.homePanel,accountPanel,newDashboardPanel.favoritesPanel,newDashboardPanel.associatesPanel,newDashboardPanel,signPanel,userNameField.getText());
-                newSideBarPanel.sidebarButtons[0].setEnabled(true);
-                newSideBarPanel.sidebarButtons[0].setBackground(null);
-                newSideBarPanel.sidebarButtons[1].setBackground(new Color(23,88,142));
-                newSideBarPanel.sidebarButtons[1].setEnabled(false);
+                newDashboardPanel.setAccountPanel();
+                frame.add(newDashboardPanel);
+                SidebarPanel newSideBarPanel = new SidebarPanel(frame, newDashboardPanel.homePanel,newDashboardPanel.accountPanel,newDashboardPanel.favoritesPanel,newDashboardPanel.associatesPanel,newDashboardPanel,signPanel,userNameField.getText());
+                newSideBarPanel.isAccountPanel();
                 newDashboardPanel.add(newSideBarPanel,BorderLayout.WEST);
-                newDashboardPanel.add(accountPanel,BorderLayout.CENTER);
+                newDashboardPanel.add(newDashboardPanel.accountPanel,BorderLayout.CENTER);
                 File oldUser = new File("assets/info/"+userName+".txt");
                 Files.delete(Paths.get(oldUser.getPath()));
                 String[] fileExtension = {".png",".jpeg",".jpg"};

@@ -6,7 +6,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class DuplicateClasses {
     static Font font;
@@ -83,4 +86,81 @@ public class DuplicateClasses {
         public String getDateCreated(String[] string){return string[3];}
     }
 
+    static class SaveButtonListener extends MouseAdapter{
+        Buttons button;
+        String userName, purpose, budget, part, itemName, itemPrice, itemLocation;
+        int set;
+
+        public SaveButtonListener(Buttons button, String userName, String purpose, int set, String budget,
+                                  String part, String itemName, String itemPrice, String itemLocation){
+            this.button = button;
+            this.userName = userName;
+            this.purpose = purpose;
+            this.set = set;
+            this.budget = budget;
+            this.part = part;
+            this.itemName = itemName;
+            this.itemPrice = itemPrice;
+            this.itemLocation = itemLocation;
+        }
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            File directory;
+            if(set!=0) directory = new File("assets/favorites/"+userName+"/"+purpose+"/"+set+". "+budget);
+            else directory = new File("assets/favorites/"+userName+"/"+purpose+"/"+budget);
+            if(button.getText().equals("Save")) {
+                button.setLabel("Unsave");
+                button.setColor(new Color(213, 17, 17));
+                button.setTextColor(new Color(250,250,250));
+                directory.mkdirs();
+                File favoriteFile = new File(directory+"/"+part+".txt");
+                try(FileWriter writer = new FileWriter(favoriteFile)){
+                    writer.write(itemName+"\n"+itemPrice+"\n"+itemLocation);
+                }catch (IOException ignored){}
+            }else{
+                button.setLabel("Save");
+                button.setTextColor(new Color(51,51,51));
+                button.setColor(new Color(250,250,250));
+                File favoriteFile = new File(directory+"/"+part+".txt");
+                try{
+                    Files.delete(Paths.get(favoriteFile.getPath()));
+                    Files.delete(Paths.get(directory.getPath()));
+                    Files.delete(Paths.get("assets/favorites/"+userName+"/"+purpose));
+                }catch (IOException ignored){}
+            }
+            button.revalidate();
+            button.repaint();
+        }
+    }
+    public static String[] fileContent(String purpose, String budget, String part, int set){
+        String[] content = new String[0];
+        try{
+            File fileCreated;
+            if(set!=0) fileCreated = new File("assets/items/"+purpose+"/"+set+". "+budget+"/"+part+".txt");
+            else fileCreated = new File("assets/items/"+purpose+"/"+budget+"/"+part+".txt");
+            FileReader reader = new FileReader(fileCreated);
+            int data = reader.read();
+            String string = Character.toString ((char) data);
+            data = reader.read();
+            while(data != -1){
+                string += Character.toString((char) data);
+                data = reader.read();
+            }
+            reader.close();
+            content = string.split("\n");
+        }catch (IOException ignored){}
+        return content;
+    }
+    public static String[] listTxtFiles(String directoryPath) {
+        File directory = new File(directoryPath);
+        File[] txtFiles = directory.listFiles();
+        String[] txtFileNames = new String[0];
+        if (txtFiles != null) {
+            txtFileNames = new String[txtFiles.length];
+            for (int i = 0; i < txtFiles.length; i++) txtFileNames[i] = txtFiles[i].getName().substring(0,txtFiles[i].getName().length()-4);
+        }
+        return txtFileNames;
+    }
+
 }
+
