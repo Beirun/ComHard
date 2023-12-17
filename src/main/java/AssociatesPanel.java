@@ -42,7 +42,7 @@ public class AssociatesPanel extends JPanel {
             if(storeSize%3!=0) row+=1;
             int gap = storeSize/6;
             if(storeSize%6!=0) gap+=1;
-            int height = 330*row + gap*60;
+            int height = 327*row + gap*60;
             insidePanel.setPreferredSize(new Dimension(ComHard.WIDTH/3,height));
             for (int i = 0; i < stores.length; i++) {
                 if( i!=0 && storeName.get(i).equals(storeName.get(i-1))) continue;
