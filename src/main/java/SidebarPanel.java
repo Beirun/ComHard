@@ -103,7 +103,7 @@ public class SidebarPanel extends JPanel implements ActionListener {
                     if(i!=4) {
                         if(i==0) panels[i] = new HomePanel(dashboardPanel,userName);
                         else if(i==1)panels[i] = new AccountPanel(frame,signPanel,dashboardPanel,userName);
-                        else if(i==2) panels[i] = new FavoritesPanel(this,userName);
+                        else if(i==2) panels[i] = new FavoritesPanel(sidebarButtons[0],this,userName);
                         dashboardPanel.add(panels[i], BorderLayout.CENTER);
                         panels[i].setVisible(true);
                     }else{

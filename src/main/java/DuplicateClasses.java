@@ -1,9 +1,11 @@
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -119,8 +121,8 @@ public class DuplicateClasses {
                 }catch (IOException ignored){}
             }else{
                 button.setLabel("Save");
-                button.setTextColor(new Color(51,51,51));
-                button.setColor(new Color(250,250,250));
+                button.setTextColor(new Color(250,250,250));
+                button.setColor(new Color(53,118,172));
                 File favoriteFile = new File(directory+"/"+part+".txt");
                 try{
                     Files.delete(Paths.get(favoriteFile.getPath()));
@@ -161,6 +163,33 @@ public class DuplicateClasses {
         }
         return txtFileNames;
     }
+
+    public static BufferedImage imageItems(String itemName, String folder){
+        itemName = itemName.trim();
+        int width = 10, height = 10;
+        BufferedImage bufferedImage = null;
+        try{
+            bufferedImage = ImageIO.read(new File("resources/"+folder+"/"+itemName+".jpg"));
+            width = bufferedImage.getWidth()/2;
+            height = bufferedImage.getHeight()/2;
+        }catch (IOException ignored){}
+        BufferedImage imageBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = imageBuffer.createGraphics();
+        g2.setClip(0,0, width, height);
+        g2.drawImage(bufferedImage,0,0,width,height,null);
+        g2.dispose();
+        return imageBuffer;
+    }
+    public static String getItemName(String[] string){
+        return string[0];
+    }
+    public static String getItemPrice(String[] string){
+        return string[1];
+    }
+    public static String getItemAddress(String[] string){
+        return string[2];
+    }
+
 
 }
 

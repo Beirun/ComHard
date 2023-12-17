@@ -60,11 +60,8 @@ public class ItemListPanel extends JPanel {
         insidePanel.setBorder(null);
         insidePanel.setPreferredSize(new Dimension(ComHard.WIDTH / 3, ComHard.LENGTH ));
 
-        int length = 505 *(content.length/3);
-        int remainder = content.length%3;
-        if(remainder!=0) length+=500;
+        int totalItems = content.length;
         do {
-            insidePanel.setPreferredSize(new Dimension(ComHard.WIDTH / 3, length+50));
             itemPanels = new JPanel[content.length];
             itemImage = new JLabel[content.length];
             saveButtons = new Buttons[content.length];
@@ -72,22 +69,21 @@ public class ItemListPanel extends JPanel {
             for (int i = 0; i < itemPanels.length; i++) {
                 fileContent = DuplicateClasses.fileContent(purpose,budget,content[i],set);
                 itemPanels[i] = new JPanel();
-                itemPanels[i].setBackground(Color.green);
-                itemPanels[i].setPreferredSize(new Dimension(264, 476));
+                itemPanels[i].setBackground(Color.WHITE);
+                itemPanels[i].setPreferredSize(new Dimension(264, 425));
                 itemPanels[i].setLayout(new FlowLayout(FlowLayout.CENTER));
                 itemImage[i] = new JLabel();
-                itemImage[i].setIcon(new ImageIcon(imageItems(getItemName(fileContent))));
+                itemImage[i].setIcon(new ImageIcon(DuplicateClasses.imageItems(DuplicateClasses.getItemName(fileContent),"items")));
                 itemImage[i].setHorizontalAlignment(SwingConstants.LEFT);
-                itemImage[i].setPreferredSize(new Dimension(imageItems(getItemName(fileContent)).getWidth(),
-                        imageItems(getItemName(fileContent)).getHeight()));
+                itemImage[i].setPreferredSize(new Dimension(DuplicateClasses.imageItems(DuplicateClasses.getItemName(fileContent),"items").getWidth(),
+                        DuplicateClasses.imageItems(DuplicateClasses.getItemName(fileContent),"items").getHeight()));
                 itemImage[i].add(Box.createHorizontalGlue());
-
                 itemPanels[i].add(itemImage[i]);
 
                 JTextPane[] itemNames = new JTextPane[content.length];
                 itemNames[i] = new JTextPane();
                 itemNames[i].add(Box.createHorizontalGlue());
-                itemNames[i].setText(getItemName(fileContent));
+                itemNames[i].setText(DuplicateClasses.getItemName(fileContent));
                 StyledDocument documentStyle = itemNames[i].getStyledDocument();
                 SimpleAttributeSet centerAttribute = new SimpleAttributeSet();
                 StyleConstants.setAlignment(centerAttribute, StyleConstants.ALIGN_CENTER);
@@ -102,7 +98,7 @@ public class ItemListPanel extends JPanel {
                 JTextPane[] itemPrice = new JTextPane[content.length];
                 itemPrice[i] = new JTextPane();
                 itemPrice[i].add(Box.createHorizontalGlue());
-                itemPrice[i].setText(getItemPrice(fileContent));
+                itemPrice[i].setText(DuplicateClasses.getItemPrice(fileContent));
                 documentStyle = itemPrice[i].getStyledDocument();
                 centerAttribute = new SimpleAttributeSet();
                 StyleConstants.setAlignment(centerAttribute, StyleConstants.ALIGN_CENTER);
@@ -116,7 +112,7 @@ public class ItemListPanel extends JPanel {
 
                 JTextPane[] storeAddresses = new JTextPane[content.length];
                 storeAddresses[i] = new JTextPane();
-                storeAddresses[i].setText(getItemAddress(fileContent));
+                storeAddresses[i].setText(DuplicateClasses.getItemAddress(fileContent));
                 documentStyle = storeAddresses[i].getStyledDocument();
                 centerAttribute = new SimpleAttributeSet();
                 StyleConstants.setAlignment(centerAttribute, StyleConstants.ALIGN_CENTER);
@@ -127,7 +123,7 @@ public class ItemListPanel extends JPanel {
                 storeAddresses[i].setFont(new Font("", Font.PLAIN, 14));
                 storeAddresses[i].setPreferredSize(new Dimension(210, 65));
                 itemPanels[i].add(storeAddresses[i]);
-
+                itemPanels[i].add(Box.createRigidArea(new Dimension(220,5)));
                 saveButtons[i] = new Buttons("Save");
                 saveButtons[i].setCursor(new Cursor(Cursor.HAND_CURSOR));
                 saveButtons[i].setDimension(75, 25);
@@ -136,27 +132,28 @@ public class ItemListPanel extends JPanel {
                     saveButtons[i].setColor(new Color(213, 17, 17));
                     saveButtons[i].setTextColor(new Color(250,250,250));
                 }else {
-                    saveButtons[i].setColor(new Color(250, 250, 250));
-                    saveButtons[i].setTextColor(new Color(51, 51, 51));
+                    saveButtons[i].setColor(new Color(53,118,172));
+                    saveButtons[i].setTextColor(new Color(250, 250, 250));
                 }
                 saveButtons[i].setFontSize(12);
                 saveButtons[i].setBorderRadius(25);
                 saveButtons[i].addTextPosition(0, -2);
                 saveButtons[i].setOpaque(false);
                 saveButtons[i].addMouseListener(new DuplicateClasses.SaveButtonListener(saveButtons[i], userName,purpose,set,budget,content[i],
-                        getItemName(fileContent),getItemPrice(fileContent),getItemAddress(fileContent)));
+                        DuplicateClasses.getItemName(fileContent), DuplicateClasses.getItemPrice(fileContent), DuplicateClasses.getItemAddress(fileContent)));
                 itemPanels[i].add(saveButtons[i]);
                 insidePanel.add(itemPanels[i]);
             }
             set++;
             content = DuplicateClasses.listTxtFiles("assets/items/" + purpose + "/"+set+". " + budget);
-            length += 506 * (content.length/3);
-            remainder += content.length%3;
-            if(remainder>3){
-                remainder-=3;
-                length+=506;
-            }
+            totalItems += content.length;
         }while (content.length!=0);
+        int row = totalItems /3;
+        if(totalItems%3!=0) row+=1;
+        int gap = totalItems/6;
+        if(totalItems%6!=0) gap+=1;
+        int height = 426*row + 143/row + gap*60;
+        insidePanel.setPreferredSize(new Dimension(ComHard.WIDTH/3, height));
         forItemsAndNavbar.add(insidePanel,BorderLayout.CENTER);
         forItemsAndNavbar.setPreferredSize(new Dimension((int) (insidePanel.getPreferredSize().getWidth()),
                 (int) (insidePanel.getPreferredSize().getHeight()+forNavbar.getPreferredSize().getHeight())));
@@ -166,9 +163,7 @@ public class ItemListPanel extends JPanel {
         scrollPane.setBorder(null);
         scrollPane.setBackground(new Color(236,236,236));
         scrollPane.getVerticalScrollBar().setUnitIncrement(10);
-        SwingUtilities.invokeLater(() -> {
-            scrollPane.getViewport().setViewPosition(new Point(0,0));
-        });
+        SwingUtilities.invokeLater(() -> scrollPane.getViewport().setViewPosition(new Point(0,0)));
         this.add(scrollPane,BorderLayout.CENTER);
     }
     public void setForNavbar(){
@@ -193,32 +188,6 @@ public class ItemListPanel extends JPanel {
         backButton.addMouseListener(new BackButtonListener(this, homePanel, semiHonePanel,userName));
         forNavbar.add(backButton);
     }
-
-    public String getItemName(String[] string){
-        return string[0];
-    }
-    public String getItemPrice(String[] string){
-        return string[1];
-    }
-    public String getItemAddress(String[] string){
-        return string[2];
-    }
-
-    public BufferedImage imageItems(String itemName){
-        int width = 10, height = 10;
-        try{
-            bufferedImage = ImageIO.read(new File("resources/items/"+itemName+".jpg"));
-            width = bufferedImage.getWidth()/2;
-            height = bufferedImage.getHeight()/2;
-        }catch (IOException ignored){}
-        BufferedImage imageBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = imageBuffer.createGraphics();
-        g2.setClip(0,0, width, height);
-        g2.drawImage(bufferedImage,0,0,width,height,null);
-        g2.dispose();
-        return imageBuffer;
-    }
-
     static class BackButtonListener extends MouseAdapter{
         JPanel panel, homePanel, semiHomePanel;
         String userName;
