@@ -87,7 +87,7 @@ public class FavoritesPanel extends JPanel implements ActionListener {
                         itemPanels[k].setLayout(new FlowLayout(FlowLayout.CENTER));
 
                         itemPart[k] = new JTextPane();
-                        itemPart[k].setText(content[i]);
+                        itemPart[k].setText(content[k]);
                         StyledDocument documentStyle = itemPart[k].getStyledDocument();
                         SimpleAttributeSet centerAttribute = new SimpleAttributeSet();
                         StyleConstants.setAlignment(centerAttribute, StyleConstants.ALIGN_CENTER);
@@ -137,7 +137,7 @@ public class FavoritesPanel extends JPanel implements ActionListener {
                         itemPrice[k].setPreferredSize(new Dimension(210, 25));
                         itemPanels[k].add(itemPrice[k]);
 
-                        itemPanels[i].add(Box.createRigidArea(new Dimension(220,5)));
+                        itemPanels[k].add(Box.createRigidArea(new Dimension(220,5)));
                         saveButtons[k] = new Buttons("Save");
                         saveButtons[k].setCursor(new Cursor(Cursor.HAND_CURSOR));
                         saveButtons[k].setDimension(75, 25);
@@ -146,8 +146,8 @@ public class FavoritesPanel extends JPanel implements ActionListener {
                             saveButtons[k].setColor(new Color(213, 17, 17));
                             saveButtons[k].setTextColor(new Color(250, 250, 250));
                         } else {
-                            saveButtons[i].setColor(new Color(53, 118, 172));
-                            saveButtons[i].setTextColor(new Color(250, 250, 250));
+                            saveButtons[k].setColor(new Color(53, 118, 172));
+                            saveButtons[k].setTextColor(new Color(250, 250, 250));
                         }
                         saveButtons[k].setFontSize(12);
                         saveButtons[k].setBorderRadius(25);

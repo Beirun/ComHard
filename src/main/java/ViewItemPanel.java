@@ -93,7 +93,7 @@ public class ViewItemPanel extends JPanel {
         itemNamePane.setBackground(Color.WHITE);
         itemNamePane.setFont(new Font("",Font.BOLD,36));
         itemNamePane.setForeground(new Color(51,51,51));
-        itemNamePane.setPreferredSize(new Dimension(1010, 90));
+        itemNamePane.setPreferredSize(new Dimension(1010, 100));
         outerSemiView.add(itemNamePane,BorderLayout.NORTH);
 
         itemAndImage = new JPanel();
