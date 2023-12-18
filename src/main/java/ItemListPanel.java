@@ -186,7 +186,18 @@ public class ItemListPanel extends JPanel {
         backButton.setFont(new Font("",Font.BOLD,20));
         backButton.setHorizontalTextPosition(SwingConstants.RIGHT);
         backButton.addMouseListener(new BackButtonListener(this, homePanel, semiHonePanel,userName));
+        JLabel purposeLabel = new JLabel("Purpose: "+purpose);
+        JLabel budgetLabel = new JLabel("Budget: "+budget);
+        purposeLabel.setForeground(new Color(51,51,51));
+        purposeLabel.setFont(new Font("",Font.BOLD,24));
+        budgetLabel.setForeground(new Color(51,51,51));
+        budgetLabel.setFont(new Font("",Font.BOLD,24));
+
         forNavbar.add(backButton);
+        forNavbar.add(Box.createHorizontalStrut(100));
+        forNavbar.add(purposeLabel);
+        forNavbar.add(Box.createHorizontalStrut(100));
+        forNavbar.add(budgetLabel);
     }
     static class BackButtonListener extends MouseAdapter{
         JPanel panel, homePanel, semiHomePanel;

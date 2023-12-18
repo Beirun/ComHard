@@ -3,14 +3,16 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
-import java.awt.image.BufferedImage;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class AssociatesPanel extends JPanel {
-    JPanel dashboardPanel;
+    JPanel dashboardPanel, semiAssociatesPanel;
+    JPanel insidePanel;
     String userName;
     ArrayList<String> storeName;
     ArrayList<String> storeAddress;
@@ -29,7 +31,9 @@ public class AssociatesPanel extends JPanel {
     }
     public void storePanels(){
         SwingUtilities.invokeLater(() -> {
-            JPanel insidePanel = new JPanel();
+            semiAssociatesPanel = new JPanel();
+            semiAssociatesPanel.setLayout(new BoxLayout(semiAssociatesPanel,BoxLayout.Y_AXIS));
+            insidePanel = new JPanel();
             insidePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 50 , 30));
             stores = new JPanel[getStoreName().size()];
             storeName = getStoreName();
@@ -44,6 +48,12 @@ public class AssociatesPanel extends JPanel {
             if(storeSize%6!=0) gap+=1;
             int height = 327*row + gap*60;
             insidePanel.setPreferredSize(new Dimension(ComHard.WIDTH/3,height));
+            scrollPane = new JScrollPane(insidePanel,
+                    ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                    ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            scrollPane.getVerticalScrollBar().setUnitIncrement(10);
+            semiAssociatesPanel.add(scrollPane);
+            this.add(semiAssociatesPanel);
             for (int i = 0; i < stores.length; i++) {
                 if( i!=0 && storeName.get(i).equals(storeName.get(i-1))) continue;
                 stores[i] = new JPanel();
@@ -73,20 +83,7 @@ public class AssociatesPanel extends JPanel {
                 storeNames[i].setFont(new Font("",Font.BOLD,14));
                 storeNames[i].setPreferredSize(new Dimension(190, 50));
                 stores[i].add(storeNames[i]);
-                /*
-                JTextPane[] storeAddresses = new JTextPane[getStoreName().size()];
-                storeAddresses[i] = new JTextPane();
-                storeAddresses[i].setText(storeAddress.get(i));
-                documentStyle = storeAddresses[i].getStyledDocument();
-                centerAttribute = new SimpleAttributeSet();
-                StyleConstants.setAlignment(centerAttribute, StyleConstants.ALIGN_CENTER);
-                documentStyle.setParagraphAttributes(0, documentStyle.getLength(), centerAttribute, false);
-                storeAddresses[i].setFocusable(false);
-                storeAddresses[i].setEditable(false);
-                storeAddresses[i].setLayout(new FlowLayout(FlowLayout.CENTER));
-                storeAddresses[i].setFont(new Font("",Font.PLAIN,14));
-                storeAddresses[i].setPreferredSize(new Dimension(190, 70));
-                stores[i].add(storeAddresses[i]);*/
+
                 stores[i].add(Box.createRigidArea(new Dimension(220,3)));
                 viewButtons[i] = new Buttons("View");
                 viewButtons[i].setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -97,17 +94,14 @@ public class AssociatesPanel extends JPanel {
                 viewButtons[i].setBorderRadius(25);
                 viewButtons[i].addTextPosition(0, -2);
                 viewButtons[i].setOpaque(false);
+                viewButtons[i].addMouseListener(new ViewButtonListener(semiAssociatesPanel,dashboardPanel, this,insidePanel,scrollPane,storeName.get(i)));
                 stores[i].add(viewButtons[i]);
                 insidePanel.add(stores[i]);
             }
-            scrollPane = new JScrollPane(insidePanel,
-                    ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                    ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            scrollPane.getVerticalScrollBar().setUnitIncrement(10);
-            this.add(scrollPane);
+
         });
     }
-    public String fileContent(){
+    public static String fileContent(){
         String string = null;
         File associateFile = new File("assets/misc/associates.txt");
         try{
@@ -138,5 +132,30 @@ public class AssociatesPanel extends JPanel {
             arrayList.add(storeData.split(":")[1]);
         }
         return arrayList;
+    }
+    static class ViewButtonListener extends MouseAdapter{
+        JPanel semiAssociates;
+        JPanel dashboardPanel;
+        JPanel associatesPanel;
+        JPanel insidePanel;
+        JScrollPane scrollPane;
+        String storeName;
+
+        public ViewButtonListener(JPanel semiAssociates, JPanel dashboardPanel, JPanel associatesPanel,JPanel insidePanel, JScrollPane scrollPane, String storeName){
+            this.semiAssociates = semiAssociates;
+            this.dashboardPanel = dashboardPanel;
+            this.associatesPanel = associatesPanel;
+            this.insidePanel = insidePanel;
+            this.scrollPane = scrollPane;
+            this.storeName = storeName;
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            semiAssociates.setVisible(false);
+            associatesPanel.add(new ViewAssociatePanel(associatesPanel, semiAssociates,storeName),BorderLayout.CENTER);
+
+
+        }
     }
 }
