@@ -78,7 +78,7 @@ public class ViewAssociatePanel extends JPanel {
         nameLabel.setLayout(new FlowLayout(FlowLayout.CENTER));
         nameLabel.setFont(new Font("",Font.BOLD,36));
         nameLabel.setPreferredSize(new Dimension(450, 150));
-        JLabel iconLabel = new JLabel(storeName);
+        JLabel iconLabel = new JLabel();
         iconLabel.setIcon(new ImageIcon(storeImage(storeName,"associates")));
         iconLabel.setPreferredSize(new Dimension(storeImage(storeName,"associates").getWidth(),storeImage(storeName,"associates").getHeight()));
         storeAndName.add(Box.createRigidArea(new Dimension(400,50)));
@@ -116,7 +116,6 @@ public class ViewAssociatePanel extends JPanel {
                 documentStyle.setParagraphAttributes(0, documentStyle.getLength(), justifiedAttribute, false);
                 storeLocations[i].setFocusable(false);
                 storeLocations[i].setEditable(false);
-                storeLocations[i].setLayout(new FlowLayout(FlowLayout.CENTER));
                 storeLocations[i].setFont(new Font("",Font.BOLD,14));
                 storeLocations[i].setPreferredSize(new Dimension(400, 70));
                 locationPanel.add(storeLocations[i]);

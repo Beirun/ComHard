@@ -89,13 +89,14 @@ public class DuplicateClasses {
     }
 
     static class SaveButtonListener extends MouseAdapter{
-        Buttons button;
+        Buttons button, previousButton;
         String userName, purpose, budget, part, itemName, itemPrice, itemLocation;
         int set;
 
-        public SaveButtonListener(Buttons button, String userName, String purpose, int set, String budget,
+        public SaveButtonListener(Buttons button, Buttons previousButton, String userName, String purpose, int set, String budget,
                                   String part, String itemName, String itemPrice, String itemLocation){
             this.button = button;
+            this.previousButton = previousButton;
             this.userName = userName;
             this.purpose = purpose;
             this.set = set;
@@ -114,6 +115,9 @@ public class DuplicateClasses {
                 button.setLabel("Unsave");
                 button.setColor(new Color(213, 17, 17));
                 button.setTextColor(new Color(250,250,250));
+                previousButton.setLabel("Unsave");
+                previousButton.setColor(new Color(213, 17, 17));
+                previousButton.setTextColor(new Color(250,250,250));
                 directory.mkdirs();
                 File favoriteFile = new File(directory+"/"+part+".txt");
                 try(FileWriter writer = new FileWriter(favoriteFile)){
@@ -123,6 +127,9 @@ public class DuplicateClasses {
                 button.setLabel("Save");
                 button.setTextColor(new Color(250,250,250));
                 button.setColor(new Color(53,118,172));
+                previousButton.setLabel("Save");
+                previousButton.setTextColor(new Color(250,250,250));
+                previousButton.setColor(new Color(53,118,172));
                 File favoriteFile = new File(directory+"/"+part+".txt");
                 try{
                     Files.delete(Paths.get(favoriteFile.getPath()));
@@ -130,6 +137,8 @@ public class DuplicateClasses {
                     Files.delete(Paths.get("assets/favorites/"+userName+"/"+purpose));
                 }catch (IOException ignored){}
             }
+            previousButton.revalidate();
+            previousButton.repaint();
             button.revalidate();
             button.repaint();
         }
