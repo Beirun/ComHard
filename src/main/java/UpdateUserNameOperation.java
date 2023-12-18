@@ -58,7 +58,6 @@ public class UpdateUserNameOperation extends KeyAdapter {
                 for(int i = 0; i < fileExtension.length; i++){
                     File imageFile = new File("resources/profiles/"+userName+fileExtension[i]);
                     if(imageFile.exists()){
-                        //imageFile.renameTo(new File("resources/profiles/"+userNameField.getText()+fileExtension[i]));
                         Files.move(Paths.get(imageFile.getPath()),Paths.get("resources/profiles/"+userNameField.getText()+fileExtension[i]), StandardCopyOption.REPLACE_EXISTING);
                     }
                 }
@@ -84,9 +83,9 @@ public class UpdateUserNameOperation extends KeyAdapter {
             userNameField.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createMatteBorder(0, 0, 1, 0, userNameField.getForeground()),
                     BorderFactory.createEmptyBorder(0, 10, 0, 0)));
-            box.setMaximumSize(new Dimension(510 - userNameFieldWidth / 2, 5));
-            box.setPreferredSize(new Dimension(510 - userNameFieldWidth / 2, 5));
-            box.setMinimumSize(new Dimension(510 - userNameFieldWidth / 2, 5));
+            box.setMaximumSize(new Dimension(505     - userNameFieldWidth / 2, 5));
+            box.setPreferredSize(new Dimension(505 - userNameFieldWidth / 2, 5));
+            box.setMinimumSize(new Dimension(505 - userNameFieldWidth / 2, 5));
             box.validate();
             box.repaint();
             userPanel.validate();

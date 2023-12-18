@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileSystemView;
+import javax.swing.filechooser.FileView;
 import javax.swing.plaf.metal.MetalButtonUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,9 +13,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class AccountPanel extends JPanel implements ActionListener {
     Component box;
+    JButton changeProfile;
     JFrame frame;
     UpdatePasswordPanel updatePasswordPanel;
     JButton[] buttons = new JButton[3];
@@ -43,159 +50,201 @@ public class AccountPanel extends JPanel implements ActionListener {
     }
 
     public void profilePanel(){
-            user = new DuplicateClasses.UserFile(userName);
-            graphics = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).getGraphics();
-            graphics.setFont(new Font("",Font.BOLD,16));
-            fontMetrics = graphics.getFontMetrics();
-            textFieldWidth = fontMetrics.stringWidth(user.getEmail(user.fileContent()))+15;
-            this.add(Box.createVerticalStrut(20));
-            AccountLabel accountLabel = new AccountLabel(userName,this,500,210,
-                    155,7,2, false);
-            accountLabel.panel.setAlignmentX(CENTER_ALIGNMENT);
-            accountLabel.setCircularColor(new Color(53,118,172));
-            emailField = new JTextField();
-            emailField.setMaximumSize(new Dimension(textFieldWidth, textFieldHeight));
-            emailField.setMinimumSize(new Dimension(textFieldWidth, textFieldHeight));
-            emailField.setPreferredSize(new Dimension(textFieldWidth, textFieldHeight));
-            emailField.setFont(new Font("",Font.BOLD,16));
-            emailField.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK),
-                    BorderFactory.createEmptyBorder(0,5,0,0)));
-            emailField.setEditable(false);
-            emailField.setBackground(null);
-            emailField.setFocusable(false);
-            emailField.setText(user.getEmail(user.fileContent()));
-            color = emailField.getForeground();
-            emailField.addKeyListener(new EmailListener(user.fileContent(),this, emailField,userName, user.getPassword(user.fileContent())));
-
-            for(int i = 0; i < panels.length; i++){
-                panels[i] = new JPanel();
-                panels[i].setBackground(null);
-                panels[i].setMaximumSize(new Dimension(1050, textFieldHeight+25));
-                panels[i].setMinimumSize(new Dimension(1050, textFieldHeight+25));
-                panels[i].setPreferredSize(new Dimension(1050, textFieldHeight+25));
-                panels[i].setLayout(new FlowLayout(FlowLayout.LEFT));
+        AccountLabel accountLabel = new AccountLabel(userName,this,500,210,
+                155,7,2, false);
+        accountLabel.panel.setAlignmentX(CENTER_ALIGNMENT);
+        accountLabel.setCircularColor(new Color(53,118,172));
+        JPanel changeProfilePanel = new JPanel();
+        changeProfilePanel.setBackground(null);
+        changeProfilePanel.setPreferredSize(new Dimension(500,20));
+        changeProfilePanel.setMaximumSize(new Dimension(500,20));
+        changeProfilePanel.setMinimumSize(new Dimension(500,20));
+        changeProfilePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        changeProfile = new JButton("Change Profile Picture");
+        changeProfile.setUI(new DisableButtonPress());
+        changeProfile.setBackground(null);
+        changeProfile.setBorder(null);
+        changeProfile.addActionListener(e -> {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
+                     UnsupportedLookAndFeelException ex) {
+                throw new RuntimeException(ex);
             }
-            for(int i = 0; i < labels.length; i++){
-                labels[i] = new JLabel(Texts[i]);
-                labels[i].setFont(new Font("",Font.BOLD,20));
-                labels[i].setVerticalAlignment(SwingConstants.BOTTOM);
-                labels[i].setBackground(null);
+            JFileChooser fileChooser = new JFileChooser(){
+                @Override
+                public Dimension getPreferredSize() {
+                    return new Dimension(750, super.getPreferredSize().height);
+                }
+            };
+            Action setToDetails = fileChooser.getActionMap().get("viewTypeDetails");
+            setToDetails.actionPerformed(null);
+            int result = fileChooser.showOpenDialog(frame);
+            if(result == JFileChooser.APPROVE_OPTION){
+                Path source = fileChooser.getSelectedFile().toPath();
+                String fileExtension = fileChooser.getSelectedFile().getPath().substring(fileChooser.getSelectedFile().getPath().length()-4);
+                Path newSource = Paths.get("resources/profiles");
+                Path destinationFolder = newSource.resolve(userName+fileExtension);
+                try{
+                    Files.copy(source,destinationFolder, StandardCopyOption.REPLACE_EXISTING);
+                }catch (IOException ignored){}
+                dashboardPanel.revalidate();
+                dashboardPanel.repaint();
+
             }
-            for(int i = 0; i < buttons.length; i++){
-                buttons[i] = new JButton(Texts[i+3]);
-                buttons[i].setUI(new DisableButtonPress());
-                buttons[i].setBackground(null);
-                buttons[i].setFocusPainted(false);
-                buttons[i].setPreferredSize(new Dimension(100,30));
-                buttons[i].setMinimumSize(new Dimension(100,30));
-                buttons[i].setMaximumSize(new Dimension(100,30));
-                buttons[i].setBorder(null);
-                buttons[i].setFont(new Font("",Font.BOLD,12));
-                buttons[i].addMouseListener(new DuplicateClasses.UnderlinedText(buttons[i].getText(),buttons[i]));
-                buttons[i].addActionListener(this);
-                buttons[i].setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
-            panels[3].setMaximumSize(new Dimension(1050, textFieldHeight+40));
-            panels[3].setMinimumSize(new Dimension(1050, textFieldHeight+40));
-            panels[3].setPreferredSize(new Dimension(1050, textFieldHeight+40));
-            panels[3].setLayout(new FlowLayout(FlowLayout.LEFT));
 
-            userNameField = new JTextField();
-            graphics.setFont(new Font("",Font.BOLD,32));
-            fontMetrics = graphics.getFontMetrics();
-            userNameFieldWidth = fontMetrics.stringWidth(userName)+10;
+        });
+        changeProfile.addMouseListener(new DuplicateClasses.UnderlinedText(changeProfile.getText(),changeProfile));
+        changeProfile.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        changeProfilePanel.add(changeProfile);
+        user = new DuplicateClasses.UserFile(userName);
+        graphics = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).getGraphics();
+        graphics.setFont(new Font("",Font.BOLD,16));
+        fontMetrics = graphics.getFontMetrics();
+        textFieldWidth = fontMetrics.stringWidth(user.getEmail(user.fileContent()))+15;
+        this.add(Box.createVerticalStrut(15));
 
-            invisiblePanel = new JPanel();
-            invisiblePanel.setBackground(null);
-            invisiblePanel.setPreferredSize(new Dimension(510-userNameFieldWidth/2,5));
-            invisiblePanel.setMinimumSize(new Dimension(510-userNameFieldWidth/2,5));
-            invisiblePanel.setMaximumSize(new Dimension(510-userNameFieldWidth/2,5));
+        this.add(changeProfilePanel);
+        emailField = new JTextField();
+        emailField.setMaximumSize(new Dimension(textFieldWidth, textFieldHeight));
+        emailField.setMinimumSize(new Dimension(textFieldWidth, textFieldHeight));
+        emailField.setPreferredSize(new Dimension(textFieldWidth, textFieldHeight));
+        emailField.setFont(new Font("",Font.BOLD,16));
+        emailField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK),
+                BorderFactory.createEmptyBorder(0,5,0,0)));
+        emailField.setEditable(false);
+        emailField.setBackground(null);
+        emailField.setFocusable(false);
+        emailField.setText(user.getEmail(user.fileContent()));
+        color = emailField.getForeground();
+        emailField.addKeyListener(new EmailListener(user.fileContent(),this, emailField,userName, user.getPassword(user.fileContent())));
+        for(int i = 0; i < panels.length; i++){
+            panels[i] = new JPanel();
+            panels[i].setBackground(null);
+            panels[i].setMaximumSize(new Dimension(1050, textFieldHeight+25));
+            panels[i].setMinimumSize(new Dimension(1050, textFieldHeight+25));
+            panels[i].setPreferredSize(new Dimension(1050, textFieldHeight+25));
+            panels[i].setLayout(new FlowLayout(FlowLayout.LEFT));
+        }
+        for(int i = 0; i < labels.length; i++){
+            labels[i] = new JLabel(Texts[i]);
+            labels[i].setFont(new Font("",Font.BOLD,20));
+            labels[i].setVerticalAlignment(SwingConstants.BOTTOM);
+            labels[i].setBackground(null);
+        }
+        for(int i = 0; i < buttons.length; i++){
+            buttons[i] = new JButton(Texts[i+3]);
+            buttons[i].setUI(new DisableButtonPress());
+            buttons[i].setBackground(null);
+            buttons[i].setFocusPainted(false);
+            buttons[i].setPreferredSize(new Dimension(100,30));
+            buttons[i].setMinimumSize(new Dimension(100,30));
+            buttons[i].setMaximumSize(new Dimension(100,30));
+            buttons[i].setBorder(null);
+            buttons[i].setFont(new Font("",Font.BOLD,12));
+            buttons[i].addMouseListener(new DuplicateClasses.UnderlinedText(buttons[i].getText(),buttons[i]));
+            buttons[i].addActionListener(this);
+            buttons[i].setCursor(new Cursor(Cursor.HAND_CURSOR));
+        }
+        panels[3].setMaximumSize(new Dimension(1050, textFieldHeight+40));
+        panels[3].setMinimumSize(new Dimension(1050, textFieldHeight+40));
+        panels[3].setPreferredSize(new Dimension(1050, textFieldHeight+40));
+        panels[3].setLayout(new FlowLayout(FlowLayout.LEFT));
+        userNameField = new JTextField();
+        graphics.setFont(new Font("",Font.BOLD,32));
+        fontMetrics = graphics.getFontMetrics();
+        userNameFieldWidth = fontMetrics.stringWidth(userName)+10;
+        invisiblePanel = new JPanel();
+        invisiblePanel.setBackground(null);
+        invisiblePanel.setPreferredSize(new Dimension(505-userNameFieldWidth/2,5));
+        invisiblePanel.setMinimumSize(new Dimension(505-userNameFieldWidth/2,5));
+        invisiblePanel.setMaximumSize(new Dimension(505-userNameFieldWidth/2,5));
 
-            userNameField.setMaximumSize(new Dimension(userNameFieldWidth, textFieldHeight+25));
-            userNameField.setMinimumSize(new Dimension(userNameFieldWidth, textFieldHeight+25));
-            userNameField.setPreferredSize(new Dimension(userNameFieldWidth, textFieldHeight+25));
-            userNameField.setBorder(BorderFactory.createEmptyBorder(0,5,0,0));
-            userNameField.setText(userName);
-            userNameField.setEditable(false);
-            userNameField.setBackground(null);
-            userNameField.setFocusable(false);
-            userNameField.setFont(new Font("",Font.BOLD,32));
+        userNameField.setMaximumSize(new Dimension(userNameFieldWidth, textFieldHeight+25));
+        userNameField.setMinimumSize(new Dimension(userNameFieldWidth, textFieldHeight+25));
+        userNameField.setPreferredSize(new Dimension(userNameFieldWidth, textFieldHeight+25));
+        userNameField.setBorder(BorderFactory.createEmptyBorder(0,5,0,0));
+        userNameField.setText(userName);
+        userNameField.setEditable(false);
+        userNameField.setBackground(null);
+        userNameField.setFocusable(false);
+        userNameField.setFont(new Font("",Font.BOLD,32));
 
-            editPanel = new JPanel();
-            editPanel.setBackground(null);
-            editPanel.setMaximumSize(new Dimension(30, textFieldHeight+40));
-            editPanel.setMinimumSize(new Dimension(30, textFieldHeight+40));
-            editPanel.setPreferredSize(new Dimension(30, textFieldHeight+40));
-            editPanel.setLayout(new BoxLayout(editPanel,BoxLayout.Y_AXIS));
-            editPanel.add(Box.createVerticalStrut(26));
+        editPanel = new JPanel();
+        editPanel.setBackground(null);
+        editPanel.setMaximumSize(new Dimension(30, textFieldHeight+40));
+        editPanel.setMinimumSize(new Dimension(30, textFieldHeight+40));
+        editPanel.setPreferredSize(new Dimension(30, textFieldHeight+40));
+        editPanel.setLayout(new BoxLayout(editPanel,BoxLayout.Y_AXIS));
+        editPanel.add(Box.createVerticalStrut(26));
 
-            buttons[2].setPreferredSize(new Dimension(30,20));
-            buttons[2].setMinimumSize(new Dimension(30,20));
-            buttons[2].setMaximumSize(new Dimension(30,20));
-            panels[3].add(invisiblePanel);
-            panels[3].add(userNameField);
-            editPanel.add(buttons[2]);
-            panels[3].add(editPanel);
-            this.add(panels[3]);
+        buttons[2].setPreferredSize(new Dimension(30,20));
+        buttons[2].setMinimumSize(new Dimension(30,20));
+        buttons[2].setMaximumSize(new Dimension(30,20));
+        panels[3].add(invisiblePanel);
+        panels[3].add(userNameField);
+        editPanel.add(buttons[2]);
+        panels[3].add(editPanel);
+        this.add(panels[3]);
 
-            this.add(Box.createVerticalStrut(25));
-            panels[0].add(Box.createHorizontalStrut(420-textFieldWidth/2));
-            panels[0].add(labels[0]);
-            panels[0].add(Box.createHorizontalStrut(20));
-            panels[0].add(emailField);
-            panels[0].add(Box.createHorizontalStrut(20));
-            panels[0].add(buttons[0]);
-            this.add(panels[0]);
+        this.add(Box.createVerticalStrut(25));
+        panels[0].add(Box.createHorizontalStrut(420-textFieldWidth/2));
+        panels[0].add(labels[0]);
+        panels[0].add(Box.createHorizontalStrut(20));
+        panels[0].add(emailField);
+        panels[0].add(Box.createHorizontalStrut(20));
+        panels[0].add(buttons[0]);
+        this.add(panels[0]);
 
-            graphics.setFont(new Font("",Font.BOLD,16));
-            fontMetrics = graphics.getFontMetrics();
-            emptySpace = textFieldWidth;
-            passwordFieldWidth = fontMetrics.stringWidth(user.getPassword(user.fileContent()))+10;
-            passwordField = new JPasswordField();
-            passwordField.setMaximumSize(new Dimension(passwordFieldWidth, textFieldHeight));
-            passwordField.setMinimumSize(new Dimension(passwordFieldWidth, textFieldHeight));
-            passwordField.setPreferredSize(new Dimension(passwordFieldWidth, textFieldHeight));
-            passwordField.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK),
-                    BorderFactory.createEmptyBorder(0,10,0,0)));
-            passwordField.setEditable(false);
-            passwordField.setBackground(null);
-            passwordField.setFocusable(false);
-            passwordField.setText(user.getPassword(user.fileContent()));
-            passwordField.setFont(new Font("",Font.BOLD,20));
-            passwordField.setEchoChar('*');
-            this.add(Box.createVerticalStrut(25));
-            panels[1].add(Box.createHorizontalStrut(379-emptySpace/2));
-            panels[1].add(labels[1]);
-            panels[1].add(Box.createHorizontalStrut(20));
-            panels[1].add(passwordField);
-            panels[1].add(Box.createHorizontalStrut(20));
-            panels[1].add(buttons[1]);
+        graphics.setFont(new Font("",Font.BOLD,16));
+        fontMetrics = graphics.getFontMetrics();
+        emptySpace = textFieldWidth;
+        passwordFieldWidth = fontMetrics.stringWidth(user.getPassword(user.fileContent()))+10;
+        passwordField = new JPasswordField();
+        passwordField.setMaximumSize(new Dimension(passwordFieldWidth, textFieldHeight));
+        passwordField.setMinimumSize(new Dimension(passwordFieldWidth, textFieldHeight));
+        passwordField.setPreferredSize(new Dimension(passwordFieldWidth, textFieldHeight));
+        passwordField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0,0,1,0,Color.BLACK),
+                BorderFactory.createEmptyBorder(0,10,0,0)));
+        passwordField.setEditable(false);
+        passwordField.setBackground(null);
+        passwordField.setFocusable(false);
+        passwordField.setText(user.getPassword(user.fileContent()));
+        passwordField.setFont(new Font("",Font.BOLD,20));
+        passwordField.setEchoChar('*');
+        this.add(Box.createVerticalStrut(25));
+        panels[1].add(Box.createHorizontalStrut(379-emptySpace/2));
+        panels[1].add(labels[1]);
+        panels[1].add(Box.createHorizontalStrut(20));
+        panels[1].add(passwordField);
+        panels[1].add(Box.createHorizontalStrut(20));
+        panels[1].add(buttons[1]);
 
-            JButton invisibleButton = new JButton();
-            invisibleButton.setFocusPainted(false);
-            invisibleButton.setFocusable(false);
-            invisibleButton.setUI(new DisableButtonPress());
-            invisibleButton.setBackground(null);
-            invisibleButton.setPreferredSize(new Dimension(100,30));
-            invisibleButton.setMinimumSize(new Dimension(100,30));
-            invisibleButton.setMaximumSize(new Dimension(100,30));
-            invisibleButton.setBorder(null);
-            panels[1].add(invisibleButton);
-            this.add(panels[1]);
-            box = Box.createVerticalStrut(25);
-            this.add(box);
+        JButton invisibleButton = new JButton();
+        invisibleButton.setFocusPainted(false);
+        invisibleButton.setFocusable(false);
+        invisibleButton.setUI(new DisableButtonPress());
+        invisibleButton.setBackground(null);
+        invisibleButton.setPreferredSize(new Dimension(100,30));
+        invisibleButton.setMinimumSize(new Dimension(100,30));
+        invisibleButton.setMaximumSize(new Dimension(100,30));
+        invisibleButton.setBorder(null);
+        panels[1].add(invisibleButton);
+        this.add(panels[1]);
+        box = Box.createVerticalStrut(25);
+        this.add(box);
 
-            dateCreated = new JLabel(user.getDateCreated(user.fileContent()));
-            dateCreated.setFont(new Font("",Font.BOLD,16));
-            dateCreated.setBorder(null);
-            panels[2].add(Box.createHorizontalStrut(315-emptySpace/2));
-            panels[2].add(labels[2]);
-            panels[2].add(Box.createHorizontalStrut(20));
-            panels[2].add(dateCreated);
-            this.add(panels[2]);
-            graphics.dispose();
+        dateCreated = new JLabel(user.getDateCreated(user.fileContent()));
+        dateCreated.setFont(new Font("",Font.BOLD,16));
+        dateCreated.setBorder(null);
+        panels[2].add(Box.createHorizontalStrut(315-emptySpace/2));
+        panels[2].add(labels[2]);
+        panels[2].add(Box.createHorizontalStrut(20));
+        panels[2].add(dateCreated);
+        this.add(panels[2]);
+        graphics.dispose();
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -318,9 +367,9 @@ public class AccountPanel extends JPanel implements ActionListener {
             userNameField.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createMatteBorder(0, 0, 1, 0, userNameField.getForeground()),
                     BorderFactory.createEmptyBorder(0, 5, 0, 0)));
-            box.setMaximumSize(new Dimension(510 - userNameFieldWidth / 2, 5));
-            box.setPreferredSize(new Dimension(510 - userNameFieldWidth / 2, 5));
-            box.setMinimumSize(new Dimension(510 - userNameFieldWidth / 2, 5));
+            box.setMaximumSize(new Dimension(505 - userNameFieldWidth / 2, 5));
+            box.setPreferredSize(new Dimension(505 - userNameFieldWidth / 2, 5));
+            box.setMinimumSize(new Dimension(505 - userNameFieldWidth / 2, 5));
             graphics.dispose();
             userPanel.repaint();
             userPanel.validate();

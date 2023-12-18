@@ -168,7 +168,9 @@ public class FavoritesPanel extends JPanel implements ActionListener {
                         viewButtons[k].setCursor(new Cursor(Cursor.HAND_CURSOR));
                         viewButtons[k].addMouseListener(new DuplicateClasses.UnderlinedText(viewButtons[k].getText(),viewButtons[k]));
                         viewButtons[k].setFont(new Font("",Font.BOLD,14));
-                        viewButtons[k].addMouseListener(new ItemListPanel.ViewButtonListener(semiFavoritesPanel,this, saveButtons[k], userName,purpose[i],set,budget[j],content[k],
+                        int initialSet = Integer.parseInt(budget[j].substring(0,1));
+                        String subBudget = budget[j].substring(3);
+                        viewButtons[k].addMouseListener(new ItemListPanel.ViewButtonListener(semiFavoritesPanel,this, saveButtons[k], userName,purpose[i],initialSet,subBudget,content[k],
                                 DuplicateClasses.getItemName(fileContent),DuplicateClasses.getItemPrice(fileContent),DuplicateClasses.getItemAddress(fileContent)));
                         viewButtonPanel[k].add(viewButtons[k]);
                         itemPanels[k].add(viewButtonPanel[k]);

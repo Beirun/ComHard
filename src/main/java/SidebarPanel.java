@@ -24,6 +24,7 @@ public class SidebarPanel extends JPanel implements ActionListener {
     JPanel signPanel;
     JPanel[] panels = new JPanel[4];
     String userName;
+    AccountLabel accountLabel;
     Color buttonFontColor = new Color(245, 245, 245);
     public SidebarPanel(JFrame frame, JPanel homePanel, JPanel accountPanel, JPanel favoritesPanel, JPanel associatesPanel, JPanel dashboardPanel, JPanel signPanel, String userName){
         this.frame = frame;
@@ -46,7 +47,8 @@ public class SidebarPanel extends JPanel implements ActionListener {
         panels[2] = favoritesPanel;
         panels[3] = associatesPanel;
         this.add(new LogoClass(164,71,164,46, 0,15));
-        this.add(new AccountLabel(userName,this,200,100,50,0,1,true));
+        accountLabel = new AccountLabel(userName,this,200,100,50,0,1,true);
+        this.add(accountLabel);
         for (int i = 0; i< sidebarButtons.length; i++){
             int finalI = i;
             sidebarButtons[i] = new JButton(){
